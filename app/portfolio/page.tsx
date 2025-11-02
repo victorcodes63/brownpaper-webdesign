@@ -351,6 +351,22 @@ export default function PortfolioPage() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const [selectedCategory, setSelectedCategory] = useState('All')
   const [isFAQHovered, setIsFAQHovered] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Mobile detection for FAQ
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  // Pre-calculate FAQ animation values
+  const cardWidth = 400
+  const gap = 24
+  const totalWidth = cardWidth + gap
+  const singleSetWidth = totalWidth * portfolioFAQs.length
+  const duplicatedFAQs = [...portfolioFAQs, ...portfolioFAQs]
 
   const { scrollYProgress: heroScrollProgress } = useScroll({
     target: heroRef,
@@ -834,59 +850,85 @@ export default function PortfolioPage() {
             </div>
           </motion.div>
 
-          {/* Moving FAQ Cards */}
-          <div 
-            className="relative overflow-hidden"
-            onMouseEnter={() => setIsFAQHovered(true)}
-            onMouseLeave={() => setIsFAQHovered(false)}
-          >
-            <motion.div
-              className="flex gap-6"
-              animate={
-                !isFAQHovered
-                  ? {
-                      x: [0, -((400 + 24) * portfolioFAQs.length)],
-                    }
-                  : {}
-              }
-              transition={
-                !isFAQHovered
-                  ? {
-                      duration: 40,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    }
-                  : {}
-              }
-              style={{ willChange: 'transform' }}
-            >
-              {[...portfolioFAQs, ...portfolioFAQs, ...portfolioFAQs].map((faq, index) => (
-                <motion.div
-                  key={`${faq.question}-${index}`}
-                  whileHover={{ scale: 1.02, y: -4 }}
-                  className="flex-shrink-0 w-[380px] md:w-[400px] p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl"
+          {/* Moving FAQ Cards - Simplified for mobile */}
+          {isMobile ? (
+            // Simplified static layout for mobile - no animations
+            <div className="space-y-4">
+              {portfolioFAQs.map((faq, index) => (
+                <div
+                  key={index}
+                  className="w-full p-6 rounded-2xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 shadow-lg"
                 >
-                  <div className="flex items-start gap-4 mb-4">
+                  <div className="flex items-start gap-4">
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                       <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg md:text-xl font-normal text-gray-900 mb-3">{faq.question}</h3>
-                      <p className="text-sm md:text-base font-light text-gray-600 leading-relaxed">
+                      <h3 className="text-lg font-normal text-gray-900 mb-3">{faq.question}</h3>
+                      <p className="text-sm font-light text-gray-600 leading-relaxed">
                         {faq.answer}
                       </p>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
-            </motion.div>
-            
-            {/* Gradient fade edges */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white via-white/50 to-transparent pointer-events-none z-10" />
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white via-white/50 to-transparent pointer-events-none z-10" />
-          </div>
+            </div>
+          ) : (
+            // Desktop moving animation - pre-calculated values
+            <div 
+              className="relative overflow-hidden"
+              onMouseEnter={() => setIsFAQHovered(true)}
+              onMouseLeave={() => setIsFAQHovered(false)}
+            >
+              <motion.div
+                className="flex gap-6"
+                animate={
+                  !isFAQHovered
+                    ? {
+                        x: [0, -singleSetWidth],
+                      }
+                    : {}
+                }
+                transition={
+                  !isFAQHovered
+                    ? {
+                        duration: 40,
+                        repeat: Infinity,
+                        ease: 'linear',
+                      }
+                    : {}
+                }
+              >
+                {duplicatedFAQs.map((faq, index) => (
+                  <motion.div
+                    key={`${faq.question}-${index}`}
+                    whileHover={{ scale: 1.02, y: -4 }}
+                    className="flex-shrink-0 w-[400px] p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl"
+                  >
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg md:text-xl font-normal text-gray-900 mb-3">{faq.question}</h3>
+                        <p className="text-sm md:text-base font-light text-gray-600 leading-relaxed">
+                          {faq.answer}
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+              
+              {/* Gradient fade edges */}
+              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white via-white/50 to-transparent pointer-events-none z-10" />
+              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white via-white/50 to-transparent pointer-events-none z-10" />
+            </div>
+          )}
         </div>
       </section>
 
