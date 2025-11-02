@@ -40,6 +40,15 @@ const services = [
 // Horizontal Scrolling Showcase Component
 function ShowcaseGallery({ items, isInView }: { items: Array<{ image: string; service: string }>, isInView: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+  
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
   
   const { scrollYProgress } = useScroll({
     target: containerRef,
