@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #008080;
+  --secondary: #91785d;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-gray-900;
+    font-weight: 300;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-light;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .gradient-primary {
+    background: linear-gradient(135deg, #008080 0%, #91785d 100%);
+  }
+  
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #008080 0%, #91785d 100%);
+  }
+}
+
+/* Custom Select Dropdown Styling */
+select {
+  font-family: inherit;
+  font-weight: 300;
+}
+
+select option {
+  font-family: inherit;
+  font-weight: 300;
+  padding: 0.5rem;
+  background-color: white;
+  color: #111827;
+}
+
+select:focus option:checked {
+  background: #008080;
+  color: white;
+}
+
+select option:hover {
+  background-color: #f3f4f6;
+}
+
