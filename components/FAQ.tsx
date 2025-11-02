@@ -201,10 +201,10 @@ export default function FAQ() {
             whileHover={{ scale: 1.01 }}
             transition={{ duration: 0.3 }}
           >
-            {/* Animated background effects */}
+            {/* Animated background effects - lighter blur on mobile */}
             <div className="absolute inset-0 opacity-20">
-              <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-              <div className="absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+              <div className={`absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full ${isMobile ? 'blur-xl' : 'blur-3xl'}`} />
+              <div className={`absolute bottom-0 left-0 w-96 h-96 bg-white/10 rounded-full ${isMobile ? 'blur-xl' : 'blur-3xl'}`} />
             </div>
             
             <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
