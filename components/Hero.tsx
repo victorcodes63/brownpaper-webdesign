@@ -1,13 +1,28 @@
 'use client'
 
-import { motion, useScroll, useTransform, useMotionValue, useSpring, useMotionValueEvent } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValue, useSpring, useMotionValueEvent, useReducedMotion } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
 import ClientTicker from './ClientTicker'
 
-// Split text component for word-by-word animation
+// Split text component for word-by-word animation - simplified on mobile
 const SplitText = ({ text, className, delay = 0 }: { text: string; className?: string; delay?: number }) => {
   const words = text.split(' ')
+  const shouldReduceMotion = useReducedMotion()
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768)
+  }, [])
+
+  // Simpler animation on mobile and for reduced motion
+  if (shouldReduceMotion || isMobile) {
+    return (
+      <span className={className}>
+        {text}
+      </span>
+    )
+  }
   
   return (
     <span className={className}>
@@ -79,27 +94,42 @@ const MagneticButton = ({ children, href, variant = 'primary' }: { children: Rea
   )
 }
 
-// Interactive gradient mesh that follows cursor
+// Interactive gradient mesh that follows cursor - disabled on mobile
 const InteractiveGradientMesh = () => {
   const [gradientPos, setGradientPos] = useState({ x: 50, y: 50 })
   const [isMounted, setIsMounted] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
-    const handleMouseMove = (e: MouseEvent) => {
-      if (typeof window === 'undefined') return
-      const screenWidth = window.innerWidth
-      const screenHeight = window.innerHeight
-      const xPercent = ((e.clientX / screenWidth) * 60) + 20 // Map to 20-80%
-      const yPercent = ((e.clientY / screenHeight) * 40) + 30 // Map to 30-70%
-      setGradientPos({ x: xPercent, y: yPercent })
+    // Check if mobile device
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024 || 'ontouchstart' in window)
     }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
 
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
+    // Only add mousemove on desktop
+    if (!isMobile) {
+      const handleMouseMove = (e: MouseEvent) => {
+        if (typeof window === 'undefined') return
+        const screenWidth = window.innerWidth
+        const screenHeight = window.innerHeight
+        const xPercent = ((e.clientX / screenWidth) * 60) + 20
+        const yPercent = ((e.clientY / screenHeight) * 40) + 30
+        setGradientPos({ x: xPercent, y: yPercent })
+      }
+      window.addEventListener('mousemove', handleMouseMove)
+      return () => {
+        window.removeEventListener('mousemove', handleMouseMove)
+        window.removeEventListener('resize', checkMobile)
+      }
     }
-  }, [])
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile)
+    }
+  }, [isMobile])
 
   return (
     <motion.div
@@ -119,8 +149,10 @@ const InteractiveGradientMesh = () => {
   )
 }
 
-// Hero image component with static image
+// Hero image component with static image - optimized for performance
 const HeroImage = () => {
+  const shouldReduceMotion = useReducedMotion()
+  
   return (
     <motion.div
       className="relative w-full h-full rounded-3xl overflow-hidden shadow-2xl"
@@ -131,34 +163,48 @@ const HeroImage = () => {
         fill
         className="object-cover"
         priority
-        quality={90}
+        quality={85}
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
       />
       {/* White overlay for visibility */}
       <div className="absolute inset-0 bg-white/30" />
       <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent" />
       
-      {/* Subtle shimmer effect */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none"
-        animate={{
-          x: ['-100%', '100%'],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: 'linear',
-          repeatDelay: 2,
-        }}
-      />
+      {/* Subtle shimmer effect - disabled for reduced motion */}
+      {!shouldReduceMotion && (
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none"
+          animate={{
+            x: ['-100%', '100%'],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: 'linear',
+            repeatDelay: 2,
+          }}
+        />
+      )}
     </motion.div>
   )
 }
 
-// Floating geometric shapes
+// Floating geometric shapes - simplified on mobile
 const FloatingGeometricShape = ({ delay, position, size }: { delay: number; position: { x: string; y: string }; size: string }) => {
+  const shouldReduceMotion = useReducedMotion()
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 1024)
+  }, [])
+
+  if (shouldReduceMotion || isMobile) {
+    return null // Hide on mobile and for reduced motion preference
+  }
+
   return (
     <motion.div
-      className={`absolute ${position.x} ${position.y} ${size} opacity-20`}
+      className={`absolute ${position.x} ${position.y} ${size} opacity-20 hidden lg:block`}
       initial={{ opacity: 0, scale: 0 }}
       animate={{
         opacity: [0.2, 0.3, 0.2],
@@ -182,15 +228,26 @@ const FloatingGeometricShape = ({ delay, position, size }: { delay: number; posi
   )
 }
 
-// Animated grid background
+// Animated grid background - static on mobile for performance
 const AnimatedGrid = () => {
   const ref = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 1024)
+  }, [])
+
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
   })
-  const gridY = useTransform(scrollYProgress, [0, 1], [0, 100])
+  
+  // Always call hooks unconditionally, then conditionally use values
+  const gridYDesktop = useTransform(scrollYProgress, [0, 1], [0, 100])
+  const gridYMobile = useTransform(scrollYProgress, [0, 1], [0, 0])
+  const gridY = (isMobile || shouldReduceMotion) ? gridYMobile : gridYDesktop
   
   return (
     <>
@@ -215,15 +272,31 @@ const AnimatedGrid = () => {
 
 export default function Hero() {
   const ref = useRef<HTMLDivElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+  const shouldReduceMotion = useReducedMotion()
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 1024)
+    const handleResize = () => setIsMobile(window.innerWidth < 1024)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start start', 'end start'],
   })
 
-  const y = useTransform(scrollYProgress, [0, 1], [0, 300])
+  // Always call hooks unconditionally, then conditionally use values
+  const yDesktop = useTransform(scrollYProgress, [0, 1], [0, 300])
+  const yMobile = useTransform(scrollYProgress, [0, 1], [0, 0])
+  const y = (isMobile || shouldReduceMotion) ? yMobile : yDesktop
+  
   const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [1, 0.8, 0])
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.95])
-
+  
+  const scaleDesktop = useTransform(scrollYProgress, [0, 1], [1, 0.95])
+  const scaleMobile = useTransform(scrollYProgress, [0, 1], [1, 1])
+  const scale = (isMobile || shouldReduceMotion) ? scaleMobile : scaleDesktop
 
   return (
     <section
@@ -242,9 +315,9 @@ export default function Hero() {
         {/* Interactive gradient mesh - more vibrant */}
         <InteractiveGradientMesh />
         
-        {/* Additional subtle mesh layers */}
+        {/* Additional subtle mesh layers - static on mobile */}
         <motion.div
-          className="absolute inset-0 opacity-20 pointer-events-none"
+          className="absolute inset-0 opacity-20 pointer-events-none hidden lg:block"
           animate={{
             background: [
               'radial-gradient(circle at 20% 30%, rgba(0, 128, 128, 0.2) 0%, transparent 50%)',
@@ -259,9 +332,9 @@ export default function Hero() {
           }}
         />
 
-        {/* Animated orbs */}
+        {/* Animated orbs - hidden on mobile for performance */}
         <motion.div
-          className="absolute top-20 left-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+          className="absolute top-20 left-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl hidden lg:block"
           animate={{
             scale: [1, 1.3, 1],
             x: [0, 120, 0],
@@ -274,7 +347,7 @@ export default function Hero() {
           }}
         />
         <motion.div
-          className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-3xl"
+          className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-3xl hidden lg:block"
           animate={{
             scale: [1, 1.4, 1],
             x: [0, -100, 0],
@@ -294,21 +367,21 @@ export default function Hero() {
       </motion.div>
 
       {/* Main Content Container - Optimized for viewport */}
-      <div className="relative z-10 flex flex-col h-screen">
-        <div className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-16 flex-1 flex items-center py-12 md:py-16 overflow-visible">
+      <div className="relative z-10 flex flex-col min-h-screen lg:h-screen">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-12 lg:px-16 flex-1 flex items-center py-8 sm:py-12 md:py-16 overflow-visible">
           <div className="relative grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start lg:items-center w-full overflow-visible">
             
             {/* Left Column - Text Content (7 columns on desktop) */}
             <motion.div
-              className="lg:col-span-7 relative z-20 flex flex-col justify-center min-h-[80vh] lg:min-h-0 overflow-visible"
+              className="lg:col-span-7 relative z-20 flex flex-col justify-center min-h-[60vh] sm:min-h-[70vh] lg:min-h-0 overflow-visible"
               style={{ y }}
-              initial={{ opacity: 0, x: -30 }}
+              initial={{ opacity: 0, x: isMobile ? 0 : -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             >
-              {/* Headline - balanced size */}
+              {/* Headline - balanced size, optimized for mobile */}
               <motion.h1
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light tracking-[-0.02em] leading-[1.2] mb-3 md:mb-4 overflow-visible"
+                className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-light tracking-[-0.02em] leading-[1.15] sm:leading-[1.2] mb-2 sm:mb-3 md:mb-4 overflow-visible"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.6 }}
@@ -365,9 +438,9 @@ export default function Hero() {
 
             </motion.div>
 
-            {/* Right Column - Hero Image (5 columns, rectangular) */}
+            {/* Right Column - Hero Image (5 columns, rectangular) - Hidden on mobile for better performance */}
             <motion.div
-              className="lg:col-span-5 relative z-10 flex items-center"
+              className="lg:col-span-5 relative z-10 items-center hidden lg:flex"
               initial={{ opacity: 0, x: 50, scale: 0.95 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               transition={{ duration: 1, delay: 0.5, ease: [0.6, -0.05, 0.01, 0.99] }}

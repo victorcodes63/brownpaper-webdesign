@@ -465,12 +465,15 @@ export default function Navigation() {
 
               {/* Mobile Services Section */}
               <div className="border-b border-gray-100 pb-4">
-                <motion.a
-                  href="/services"
+                <motion.button
+                  type="button"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.1 }}
-                  onClick={() => setIsMobileMenuOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setIsServicesOpen(!isServicesOpen)
+                  }}
                   className="w-full flex items-center justify-between text-sm font-light text-gray-600 hover:text-primary transition-colors py-2"
                 >
                   <span>Services</span>
@@ -490,7 +493,16 @@ export default function Navigation() {
                       strokeLinejoin="round"
                     />
                   </motion.svg>
-                </motion.a>
+                </motion.button>
+                
+                {/* Services Link - Clickable to go to services page */}
+                <a
+                  href="/services"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block text-xs font-light text-primary hover:underline py-1 pl-2"
+                >
+                  View All Services →
+                </a>
                 
                 <AnimatePresence>
                   {isServicesOpen && (
