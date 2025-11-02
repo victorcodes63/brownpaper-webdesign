@@ -222,7 +222,8 @@ export default function About() {
                 alt="Brown Paper workspace"
                 fill
                 className="object-cover"
-                quality={90}
+                quality={75}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
               <div className="absolute bottom-8 left-8 right-8">

@@ -90,7 +90,8 @@ function PortfolioCard({
           alt={project.title}
           fill
           className="object-cover"
-          quality={90}
+                      quality={75}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </motion.div>
       

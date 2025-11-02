@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useScroll, useTransform, useMotionValue, useMotionValueEvent } from 'framer-motion'
+import { motion, useScroll, useTransform, useMotionValue, useMotionValueEvent, useReducedMotion } from 'framer-motion'
 import { useInView } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
@@ -61,16 +61,32 @@ const duplicatedSecondRow = [...secondRow, ...secondRow, ...secondRow]
 export default function Testimonials() {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const shouldReduceMotion = useReducedMotion()
+  const [isMobile, setIsMobile] = useState(false)
   
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+  
+  // Disable parallax and heavy animations on mobile
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
   })
 
-  const y = useTransform(scrollYProgress, [0, 1], [30, -30])
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
+  const yDesktop = useTransform(scrollYProgress, [0, 1], [30, -30])
+  const yMobile = useTransform(scrollYProgress, [0, 1], [0, 0])
+  const y = (isMobile || shouldReduceMotion) ? yMobile : yDesktop
+  
+  const opacityDesktop = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
+  const opacityMobile = useTransform(scrollYProgress, [0, 1], [1, 1])
+  const opacity = (isMobile || shouldReduceMotion) ? opacityMobile : opacityDesktop
 
-  // Motion values to track current positions
+  // Motion values to track current positions - only for desktop
   const firstRowX = useMotionValue(-((360 + 24) * firstRow.length))
   const secondRowX = useMotionValue(0)
   
@@ -78,26 +94,33 @@ export default function Testimonials() {
   const [isFirstRowHovered, setIsFirstRowHovered] = useState(false)
   const [isSecondRowHovered, setIsSecondRowHovered] = useState(false)
   
-  // Animation state
+  // Animation state - disabled on mobile
   const [shouldAnimateFirst, setShouldAnimateFirst] = useState(false)
   const [shouldAnimateSecond, setShouldAnimateSecond] = useState(false)
 
-  // Start animations when in view
+  // Start animations when in view - only on desktop
   useEffect(() => {
-    if (isInView) {
+    if (isInView && !isMobile && !shouldReduceMotion) {
       setShouldAnimateFirst(true)
       setShouldAnimateSecond(true)
+    } else {
+      setShouldAnimateFirst(false)
+      setShouldAnimateSecond(false)
     }
-  }, [isInView])
+  }, [isInView, isMobile, shouldReduceMotion])
 
-  // Update animation based on hover state
+  // Update animation based on hover state - desktop only
   useEffect(() => {
-    setShouldAnimateFirst(isInView && !isFirstRowHovered)
-  }, [isInView, isFirstRowHovered])
+    if (!isMobile && !shouldReduceMotion) {
+      setShouldAnimateFirst(isInView && !isFirstRowHovered)
+    }
+  }, [isInView, isFirstRowHovered, isMobile, shouldReduceMotion])
 
   useEffect(() => {
-    setShouldAnimateSecond(isInView && !isSecondRowHovered)
-  }, [isInView, isSecondRowHovered])
+    if (!isMobile && !shouldReduceMotion) {
+      setShouldAnimateSecond(isInView && !isSecondRowHovered)
+    }
+  }, [isInView, isSecondRowHovered, isMobile, shouldReduceMotion])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -171,37 +194,90 @@ export default function Testimonials() {
         </motion.div>
 
         <div className="space-y-8 md:space-y-12">
-          {/* First Row - Sliding Right (Left to Right) */}
-          <div 
-            className="overflow-hidden"
-            onMouseEnter={() => setIsFirstRowHovered(true)}
-            onMouseLeave={() => setIsFirstRowHovered(false)}
-          >
-            <motion.div
-              className="flex gap-6 md:gap-8"
-              style={{ x: firstRowX }}
-              animate={
-                shouldAnimateFirst
-                  ? {
-                      x: [-((360 + 24) * firstRow.length), 0],
-                    }
-                  : false
-              }
-              transition={
-                shouldAnimateFirst
-                  ? {
-                      duration: 35,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    }
-                  : undefined
-              }
-              onUpdate={(latest) => {
-                if (typeof latest === 'object' && 'x' in latest && typeof latest.x === 'number') {
-                  firstRowX.set(latest.x)
-                }
-              }}
+          {/* First Row - Static on mobile, animated on desktop */}
+          {isMobile || shouldReduceMotion ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              {firstRow.map((testimonial, index) => (
+                <motion.div
+                  key={`mobile-first-${index}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="flex flex-col flex-shrink-0 w-full min-h-[280px] p-6 md:p-7 rounded-2xl bg-white border border-gray-200/50 shadow-lg"
+                >
+                  {/* Quote icon */}
+                  <div className="absolute top-6 right-6 text-primary/10 text-5xl font-serif">&quot;</div>
+                  
+                  {/* Stars */}
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <svg
+                        key={i}
+                        className="w-4 h-4 text-primary"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+
+                  {/* Quote */}
+                  <p className="text-gray-700 font-light text-base md:text-lg leading-relaxed mb-6 relative z-10 flex-grow">
+                    {testimonial.quote}
+                  </p>
+
+                  {/* Author */}
+                  <div className="flex items-center gap-3 pt-4 border-t border-gray-100 mt-auto">
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                      <Image
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        width={48}
+                        height={48}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <h4 className="font-light text-base text-gray-900">{testimonial.name}</h4>
+                      <p className="font-light text-xs text-gray-500">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div 
+              className="overflow-hidden"
+              onMouseEnter={() => setIsFirstRowHovered(true)}
+              onMouseLeave={() => setIsFirstRowHovered(false)}
             >
+              <motion.div
+                className="flex gap-6 md:gap-8"
+                style={{ x: firstRowX }}
+                animate={
+                  shouldAnimateFirst
+                    ? {
+                        x: [-((360 + 24) * firstRow.length), 0],
+                      }
+                    : false
+                }
+                transition={
+                  shouldAnimateFirst
+                    ? {
+                        duration: 35,
+                        repeat: Infinity,
+                        ease: 'linear',
+                      }
+                    : undefined
+                }
+                onUpdate={(latest) => {
+                  if (typeof latest === 'object' && 'x' in latest && typeof latest.x === 'number') {
+                    firstRowX.set(latest.x)
+                  }
+                }}
+              >
               {duplicatedFirstRow.map((testimonial, index) => (
                 <motion.div
                   key={`first-${index}`}
@@ -254,29 +330,83 @@ export default function Testimonials() {
               ))}
             </motion.div>
           </div>
+          )}
 
-          {/* Second Row - Sliding Left (Right to Left) */}
-          <div 
-            className="overflow-hidden"
-            onMouseEnter={() => setIsSecondRowHovered(true)}
-            onMouseLeave={() => setIsSecondRowHovered(false)}
-          >
-            <motion.div
-              className="flex gap-6 md:gap-8"
-              style={{ x: secondRowX }}
-              animate={
-                shouldAnimateSecond
-                  ? {
-                      x: [0, -((360 + 24) * secondRow.length)],
-                    }
-                  : false
-              }
-              transition={
-                shouldAnimateSecond
-                  ? {
-                      duration: 35,
-                      repeat: Infinity,
-                      ease: 'linear',
+          {/* Second Row - Static on mobile, animated on desktop */}
+          {isMobile || shouldReduceMotion ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+              {secondRow.map((testimonial, index) => (
+                <motion.div
+                  key={`mobile-second-${index}`}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="flex flex-col flex-shrink-0 w-full min-h-[280px] p-6 md:p-7 rounded-2xl bg-white border border-gray-200/50 shadow-lg"
+                >
+                  {/* Quote icon */}
+                  <div className="absolute top-6 right-6 text-primary/10 text-5xl font-serif">&quot;</div>
+                  
+                  {/* Stars */}
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <svg
+                        key={i}
+                        className="w-4 h-4 text-primary"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+
+                  {/* Quote */}
+                  <p className="text-gray-700 font-light text-base md:text-lg leading-relaxed mb-6 relative z-10 flex-grow">
+                    {testimonial.quote}
+                  </p>
+
+                  {/* Author */}
+                  <div className="flex items-center gap-3 pt-4 border-t border-gray-100 mt-auto">
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                      <Image
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        width={48}
+                        height={48}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div>
+                      <h4 className="font-light text-base text-gray-900">{testimonial.name}</h4>
+                      <p className="font-light text-xs text-gray-500">{testimonial.role}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div 
+              className="overflow-hidden"
+              onMouseEnter={() => setIsSecondRowHovered(true)}
+              onMouseLeave={() => setIsSecondRowHovered(false)}
+            >
+              <motion.div
+                className="flex gap-6 md:gap-8"
+                style={{ x: secondRowX }}
+                animate={
+                  shouldAnimateSecond
+                    ? {
+                        x: [0, -((360 + 24) * secondRow.length)],
+                      }
+                    : false
+                }
+                transition={
+                  shouldAnimateSecond
+                    ? {
+                        duration: 35,
+                        repeat: Infinity,
+                        ease: 'linear',
                     }
                   : undefined
               }
@@ -338,6 +468,7 @@ export default function Testimonials() {
               ))}
             </motion.div>
           </div>
+          )}
         </div>
       </div>
     </section>

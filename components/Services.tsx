@@ -1,8 +1,8 @@
 'use client'
 
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { useInView } from 'framer-motion'
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -84,7 +84,8 @@ function ShowcaseGallery({ items, isInView }: { items: Array<{ image: string; se
                 alt={`${item.service} showcase`}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
-                quality={90}
+                quality={isMobile ? 75 : 90}
+                sizes="(max-width: 768px) 280px, 380px"
               />
               {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
@@ -113,14 +114,30 @@ function ShowcaseGallery({ items, isInView }: { items: Array<{ image: string; se
 export default function Services() {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const shouldReduceMotion = useReducedMotion()
+  const [isMobile, setIsMobile] = useState(false)
+  
+  // Mobile detection
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
   
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
   })
 
-  const y = useTransform(scrollYProgress, [0, 1], [50, -50])
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
+  // Disable parallax on mobile
+  const yDesktop = useTransform(scrollYProgress, [0, 1], [50, -50])
+  const yMobile = useTransform(scrollYProgress, [0, 1], [0, 0])
+  const y = (isMobile || shouldReduceMotion) ? yMobile : yDesktop
+  
+  const opacityDesktop = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
+  const opacityMobile = useTransform(scrollYProgress, [0, 1], [1, 1])
+  const opacity = (isMobile || shouldReduceMotion) ? opacityMobile : opacityDesktop
   
 
   const containerVariants = {
@@ -216,7 +233,8 @@ export default function Services() {
                   alt={service.title}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  quality={90}
+                  quality={isMobile ? 75 : 90}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 />
               </div>
 

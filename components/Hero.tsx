@@ -45,18 +45,29 @@ const SplitText = ({ text, className, delay = 0 }: { text: string; className?: s
   )
 }
 
-// Magnetic button component
+// Magnetic button component - simplified on mobile
 const MagneticButton = ({ children, href, variant = 'primary' }: { children: React.ReactNode; href: string; variant?: 'primary' | 'secondary' }) => {
   const ref = useRef<HTMLAnchorElement>(null)
+  const shouldReduceMotion = useReducedMotion()
+  const [isMobile, setIsMobile] = useState(false)
+  
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window)
+  }, [])
   
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   
+  // Always call hooks unconditionally
   const springX = useSpring(x, { stiffness: 150, damping: 15 })
   const springY = useSpring(y, { stiffness: 150, damping: 15 })
+  
+  // Use springs only on desktop, otherwise use motion values directly
+  const finalX = (isMobile || shouldReduceMotion) ? x : springX
+  const finalY = (isMobile || shouldReduceMotion) ? y : springY
 
   const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!ref.current) return
+    if (!ref.current || isMobile || shouldReduceMotion) return
     
     const rect = ref.current.getBoundingClientRect()
     const centerX = rect.left + rect.width / 2
@@ -70,19 +81,33 @@ const MagneticButton = ({ children, href, variant = 'primary' }: { children: Rea
   }
 
   const handleMouseLeave = () => {
-    x.set(0)
-    y.set(0)
+    if (!isMobile && !shouldReduceMotion) {
+      x.set(0)
+      y.set(0)
+    }
   }
 
   const baseClasses = variant === 'primary' 
     ? "px-6 sm:px-8 py-3 sm:py-4 bg-primary text-white font-light text-base sm:text-lg rounded-full hover:bg-opacity-90 transition-all shadow-lg shadow-primary/30 text-center"
     : "px-6 sm:px-8 py-3 sm:py-4 border-2 border-primary text-primary font-light text-base sm:text-lg rounded-full hover:bg-primary hover:text-white transition-all text-center"
 
+  // Simplified mobile button
+  if (isMobile || shouldReduceMotion) {
+    return (
+      <a
+        href={href}
+        className={baseClasses}
+      >
+        {children}
+      </a>
+    )
+  }
+
   return (
     <motion.a
       ref={ref}
       href={href}
-      style={{ x: springX, y: springY }}
+      style={{ x: finalX, y: finalY }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       whileHover={{ scale: 1.05 }}
