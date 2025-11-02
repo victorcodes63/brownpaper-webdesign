@@ -513,36 +513,23 @@ export default function Navigation() {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <div className="pl-4 pt-2 space-y-3">
+                      <div className="pl-4 pt-2 space-y-2">
                         {serviceCategories.map((category, index) => (
-                          <motion.div
+                          <motion.a
                             key={category.category}
+                            href={category.href}
                             initial={{ opacity: 0, x: -10 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.05 }}
-                            className="border-l border-gray-200 pl-3"
+                            onClick={() => {
+                              setIsMobileMenuOpen(false)
+                              setIsServicesOpen(false)
+                            }}
+                            className="flex items-center gap-3 py-2 hover:text-primary transition-colors cursor-pointer"
                           >
-                            <a
-                              href={category.href}
-                              onClick={() => {
-                                setIsMobileMenuOpen(false)
-                                setIsServicesOpen(false)
-                              }}
-                              className="flex items-center gap-2 mb-2 hover:text-primary transition-colors cursor-pointer"
-                            >
-                              <category.icon />
-                              <h4 className="text-xs font-light text-gray-700 uppercase tracking-wide">{category.category}</h4>
-                            </a>
-                            <ul className="space-y-1">
-                              {category.services.map((service) => (
-                                <li key={service}>
-                                  <span className="text-xs font-light text-gray-600 block py-1 cursor-default">
-                                    {service}
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-                          </motion.div>
+                            <category.icon />
+                            <span className="text-sm font-light text-gray-700">{category.category}</span>
+                          </motion.a>
                         ))}
                       </div>
                     </motion.div>
