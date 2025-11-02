@@ -429,6 +429,15 @@ export default function ServicesPage() {
 
   // Industries ticker hover state
   const [isIndustriesHovered, setIsIndustriesHovered] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Mobile detection for performance optimization
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const { scrollYProgress: heroScrollProgress } = useScroll({
     target: heroRef,
@@ -930,33 +939,37 @@ export default function ServicesPage() {
 
       {/* Enhanced CTA Section */}
       <section className="py-24 md:py-32 px-6 md:px-12 bg-gradient-to-b from-gray-50/30 via-white to-gray-50/30 relative overflow-hidden">
-        {/* Animated Background Orbs */}
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none"
-          animate={{
-            x: [0, 50, 0],
-            y: [0, 30, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-300/10 rounded-full blur-3xl pointer-events-none"
-          animate={{
-            x: [0, -40, 0],
-            y: [0, -50, 0],
-            scale: [1, 1.3, 1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
+        {/* Animated Background Orbs - Disabled on mobile for performance */}
+        {!isMobile && (
+          <>
+            <motion.div
+              className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl pointer-events-none hidden md:block"
+              animate={{
+                x: [0, 50, 0],
+                y: [0, 30, 0],
+                scale: [1, 1.2, 1],
+              }}
+              transition={{
+                duration: 20,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+            <motion.div
+              className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-amber-300/10 rounded-full blur-3xl pointer-events-none hidden md:block"
+              animate={{
+                x: [0, -40, 0],
+                y: [0, -50, 0],
+                scale: [1, 1.3, 1],
+              }}
+              transition={{
+                duration: 25,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+          </>
+        )}
 
         <div className="max-w-5xl mx-auto relative z-10">
           <motion.div
@@ -1011,7 +1024,7 @@ export default function ServicesPage() {
               Let&apos;s discuss your project and create something extraordinary together.
             </motion.p>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons - Simplified animations on mobile */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -1019,41 +1032,74 @@ export default function ServicesPage() {
               transition={{ duration: 0.8, delay: 0.5 }}
               className="flex flex-col sm:flex-row justify-center items-center gap-4 md:gap-6 mb-12"
             >
-              <motion.a
-                href="/contact"
-                whileHover={{ scale: 1.05, y: -3 }}
-                whileTap={{ scale: 0.98 }}
-                className="group relative inline-flex items-center justify-center gap-2 px-8 md:px-12 py-4 md:py-5 bg-primary text-white font-light text-base md:text-lg rounded-full hover:bg-opacity-90 transition-all shadow-lg shadow-primary/30 overflow-hidden"
-              >
-                <span className="relative z-10">Start Your Project</span>
-                <motion.svg
-                  className="relative z-10 w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  initial={{ x: 0 }}
-                  whileHover={{ x: 5 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </motion.svg>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80 opacity-0 group-hover:opacity-100 transition-opacity"
-                  initial={false}
-                />
-              </motion.a>
-              <motion.a
-                href="/portfolio"
-                whileHover={{ scale: 1.05, y: -3 }}
-                whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center justify-center gap-2 px-8 md:px-12 py-4 md:py-5 border-2 border-primary text-primary font-light text-base md:text-lg rounded-full hover:bg-primary hover:text-white transition-all bg-white/50 backdrop-blur-sm"
-              >
-                View Our Work
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-              </motion.a>
+              {isMobile ? (
+                // Simplified mobile buttons - no complex animations
+                <>
+                  <a
+                    href="/contact"
+                    className="group relative inline-flex items-center justify-center gap-2 px-8 md:px-12 py-4 md:py-5 bg-primary text-white font-light text-base md:text-lg rounded-full hover:bg-opacity-90 transition-opacity shadow-lg shadow-primary/30"
+                  >
+                    <span>Start Your Project</span>
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </a>
+                  <a
+                    href="/portfolio"
+                    className="inline-flex items-center justify-center gap-2 px-8 md:px-12 py-4 md:py-5 border-2 border-primary text-primary font-light text-base md:text-lg rounded-full hover:bg-primary hover:text-white transition-colors bg-white/50 backdrop-blur-sm"
+                  >
+                    View Our Work
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </a>
+                </>
+              ) : (
+                // Desktop with full animations
+                <>
+                  <motion.a
+                    href="/contact"
+                    whileHover={{ scale: 1.05, y: -3 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="group relative inline-flex items-center justify-center gap-2 px-8 md:px-12 py-4 md:py-5 bg-primary text-white font-light text-base md:text-lg rounded-full hover:bg-opacity-90 transition-all shadow-lg shadow-primary/30 overflow-hidden"
+                  >
+                    <span className="relative z-10">Start Your Project</span>
+                    <motion.svg
+                      className="relative z-10 w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      initial={{ x: 0 }}
+                      whileHover={{ x: 5 }}
+                      transition={{ type: 'spring', stiffness: 300 }}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </motion.svg>
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-primary to-primary/80 opacity-0 group-hover:opacity-100 transition-opacity"
+                      initial={false}
+                    />
+                  </motion.a>
+                  <motion.a
+                    href="/portfolio"
+                    whileHover={{ scale: 1.05, y: -3 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="inline-flex items-center justify-center gap-2 px-8 md:px-12 py-4 md:py-5 border-2 border-primary text-primary font-light text-base md:text-lg rounded-full hover:bg-primary hover:text-white transition-all bg-white/50 backdrop-blur-sm"
+                  >
+                    View Our Work
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                  </motion.a>
+                </>
+              )}
             </motion.div>
 
             {/* Additional Value Props */}
