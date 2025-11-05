@@ -89,8 +89,49 @@ const designServices = [
     icon: GraphicDesignIcon,
   },
   {
-    title: 'Social Media Graphics',
-    description: 'Consistent, on-brand graphics for all your social media platforms that capture attention and build your presence. We create templates and assets optimized for Instagram, Facebook, LinkedIn, Twitter, and more, ensuring your brand looks professional across all digital channels.',
+    title: 'Social Media Management',
+    description: 'Comprehensive social media management packages designed to maximize your online presence. Choose from our Private, Sergent, or General packages, each tailored to different business needs. We create consistent, on-brand graphics optimized for Instagram, Facebook, LinkedIn, Twitter, and more, ensuring your brand looks professional across all digital channels. Our packages include regular content creation, holiday posters, and strategic posting schedules that drive engagement and build your online community.',
+    icon: GraphicDesignIcon,
+    packages: [
+      {
+        name: 'Private',
+        features: [
+          '1 Post per day (Weekdays)',
+          '1 Saturday Poster',
+          '1 Special Holiday Poster',
+        ],
+      },
+      {
+        name: 'Sergent',
+        features: [
+          '2 Posts per day (Weekdays)',
+          '1 Saturday Poster',
+          '1 Special Holiday Poster',
+        ],
+      },
+      {
+        name: 'General',
+        features: [
+          '2 Posts per day (Weekdays)',
+          '1 Saturday & Sunday Posters',
+          '2 Special Holiday Posters',
+        ],
+      },
+    ],
+  },
+  {
+    title: 'Unlimited Graphic Design Support',
+    description: 'Get unlimited graphic design support for all your branding and marketing needs. This comprehensive service ensures you always have access to professional design services whenever you need them. Perfect for businesses that require frequent design updates, new marketing materials, or ongoing creative support without the overhead of an in-house design team.',
+    icon: GraphicDesignIcon,
+  },
+  {
+    title: 'Business Listing & Advertisement',
+    description: 'Enhance your business visibility with our professional business listing and advertisement services. We help you get discovered by creating compelling listings and advertisements that showcase your business effectively. Our team ensures your business information is presented professionally across various platforms, helping you attract new customers and grow your reach.',
+    icon: GraphicDesignIcon,
+  },
+  {
+    title: 'Tailor-Made Packages',
+    description: 'We understand that every business has unique needs. Our tailor-made packages are designed to fit your specific requirements, budget, and goals. Whether you need a combination of services or a custom solution, we work with you to create a package that perfectly aligns with your business objectives. Contact us today to discuss your needs and discover how we can help elevate your brand.',
     icon: GraphicDesignIcon,
   },
   {
@@ -99,18 +140,8 @@ const designServices = [
     icon: GraphicDesignIcon,
   },
   {
-    title: 'Web Design',
-    description: 'Modern, responsive web designs that provide exceptional user experiences and drive business goals. From landing pages to complete website redesigns, we create intuitive interfaces that balance aesthetics with functionality, ensuring your site converts visitors into customers.',
-    icon: GraphicDesignIcon,
-  },
-  {
     title: 'Presentation Design',
     description: 'Professional presentations that communicate your message powerfully and leave a lasting impression. Whether for client pitches, investor meetings, or internal communications, we design slides that enhance your narrative and support your objectives with compelling visuals.',
-    icon: GraphicDesignIcon,
-  },
-  {
-    title: 'Digital Assets',
-    description: 'Complete digital asset libraries including icons, illustrations, and graphics for all your digital needs. We create cohesive visual systems with custom graphics that maintain brand consistency across websites, apps, social media, and marketing materials, saving you time and ensuring quality.',
     icon: GraphicDesignIcon,
   },
 ]
@@ -280,7 +311,7 @@ export default function GraphicDesignPage() {
               className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl"
             >
               <Image
-                src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80"
+                src="/images/indiv_services/design.jpg"
                 alt="Graphic design services"
                 fill
                 className="object-cover"
@@ -321,29 +352,76 @@ export default function GraphicDesignPage() {
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {designServices.map((service, index) => {
-              const IconComponent = service.icon
-              return (
-                <motion.div
-                  key={service.title}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl"
-                >
-                  <div className="flex items-center gap-3 mb-4">
-                    <IconComponent />
-                    <h3 className="text-xl md:text-2xl font-normal text-gray-900">{service.title}</h3>
+          {/* Social Media Management - Full Width Card */}
+          {(() => {
+            const socialMediaService = designServices.find(s => s.title === 'Social Media Management')
+            if (!socialMediaService) return null
+            const IconComponent = socialMediaService.icon
+            return (
+              <motion.div
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="mb-8 p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <IconComponent />
+                  <h3 className="text-xl md:text-2xl font-normal text-gray-900">{socialMediaService.title}</h3>
+                </div>
+                <p className="text-gray-600 font-light leading-relaxed text-sm md:text-base mb-4">
+                  {socialMediaService.description}
+                </p>
+                {socialMediaService.packages && (
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <h4 className="text-sm font-medium text-gray-900 mb-3">Available Packages:</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {socialMediaService.packages.map((pkg, pkgIndex) => (
+                        <div key={pkgIndex} className="bg-gray-50 rounded-lg p-3">
+                          <h5 className="text-xs font-semibold text-primary mb-2 uppercase">{pkg.name}</h5>
+                          <ul className="space-y-1">
+                            {pkg.features.map((feature, featureIndex) => (
+                              <li key={featureIndex} className="text-xs text-gray-600 flex items-start">
+                                <span className="w-1 h-1 rounded-full bg-primary mr-2 mt-1.5 flex-shrink-0" />
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <p className="text-gray-600 font-light leading-relaxed text-sm md:text-base">
-                    {service.description}
-                  </p>
-                </motion.div>
-              )
-            })}
+                )}
+              </motion.div>
+            )
+          })()}
+
+          {/* Other Services Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {designServices
+              .filter(service => service.title !== 'Social Media Management')
+              .map((service, index) => {
+                const IconComponent = service.icon
+                return (
+                  <motion.div
+                    key={service.title}
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className="p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl"
+                  >
+                    <div className="flex items-center gap-3 mb-4">
+                      <IconComponent />
+                      <h3 className="text-xl md:text-2xl font-normal text-gray-900">{service.title}</h3>
+                    </div>
+                    <p className="text-gray-600 font-light leading-relaxed text-sm md:text-base">
+                      {service.description}
+                    </p>
+                  </motion.div>
+                )
+              })}
           </div>
         </div>
       </section>

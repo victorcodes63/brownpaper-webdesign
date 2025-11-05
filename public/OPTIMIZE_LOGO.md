@@ -43,3 +43,5 @@ After adding optimized files, test:
 
 The current setup will work for basic favicon display using the existing logo.
 
+
+

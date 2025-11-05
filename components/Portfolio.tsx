@@ -24,34 +24,34 @@ import Image from 'next/image'
 
 const projects = [
   {
-    title: 'Luxury Brand Identity',
-    category: 'Branding',
-    image: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=800&q=80', // Luxury brand materials, business cards
+    title: 'Graphic Design Solutions',
+    category: 'Graphic Design',
+    image: '/images/indiv_services/design.jpg',
   },
   {
-    title: 'Corporate Stationery',
-    category: 'Print Design',
-    image: 'https://images.unsplash.com/photo-1612817288484-6f916006741a?w=800&q=80', // Corporate letterhead and stationery
+    title: 'Printing Services',
+    category: 'Printing',
+    image: '/images/indiv_services/printing.png',
   },
   {
-    title: 'Product Packaging',
+    title: 'Packaging Design',
     category: 'Packaging',
-    image: 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=800&q=80', // Product packaging boxes
+    image: '/images/indiv_services/product_packaging.png',
   },
   {
-    title: 'Marketing Collateral',
-    category: 'Print Design',
-    image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&q=80', // Brochures and marketing materials
+    title: 'Display Solutions',
+    category: 'Display',
+    image: '/images/indiv_services/display.png',
   },
   {
-    title: 'Restaurant Branding',
-    category: 'Branding',
-    image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&q=80', // Restaurant menu and branding materials
+    title: 'Workwear & Uniforms',
+    category: 'Workwear',
+    image: '/images/indiv_services/workwear.png',
   },
   {
-    title: 'E-commerce Packaging',
-    category: 'Packaging',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80', // E-commerce shipping boxes and packaging
+    title: 'Promotional Items',
+    category: 'Promotional Items',
+    image: '/images/indiv_services/promotional items .jpg',
   },
 ]
 

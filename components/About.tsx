@@ -6,147 +6,22 @@ import { useRef } from 'react'
 import Image from 'next/image'
 
 const currentYear = new Date().getFullYear()
-const foundedYear = 2018
+const foundedYear = 2022
 const yearsExperience = currentYear - foundedYear
 
 const stats = [
-  { number: '100+', label: 'Projects Completed' },
-  { number: '200+', label: 'Happy Clients' },
+  { number: '150+', label: 'Projects Completed' },
+  { number: '100+', label: 'Happy Clients' },
   { number: `${yearsExperience}+`, label: 'Years Experience' },
   { number: '100%', label: 'Client Satisfaction' },
 ]
 
-// Icon Components - Solid Teal Color, Side by Side with Title
-const ExcellenceIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
-    <path
-      d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-      fill="#008080"
-      stroke="#008080"
-      strokeWidth="1.5"
-    />
-  </svg>
-)
-
-const PartnershipIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
-    <path
-      d="M9 11C9 12.6569 7.65685 14 6 14C4.34315 14 3 12.6569 3 11C3 9.34315 4.34315 8 6 8C7.65685 8 9 9.34315 9 11Z"
-      fill="#008080"
-      stroke="#008080"
-      strokeWidth="1.5"
-    />
-    <path
-      d="M21 11C21 12.6569 19.6569 14 18 14C16.3431 14 15 12.6569 15 11C15 9.34315 16.3431 8 18 8C19.6569 8 21 9.34315 21 11Z"
-      fill="#008080"
-      stroke="#008080"
-      strokeWidth="1.5"
-    />
-    <path
-      d="M12 14V18C12 19.1046 12.8954 20 14 20H16"
-      stroke="#008080"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
-    <path
-      d="M12 14V18C12 19.1046 11.1046 20 10 20H8"
-      stroke="#008080"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
-    <path
-      d="M12 10L15 14L12 18L9 14L12 10Z"
-      fill="#008080"
-      opacity="0.3"
-    />
-  </svg>
-)
-
-const InnovationIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
-    <path
-      d="M9.5 2C10.8807 2 12 3.11929 12 4.5C12 5.88071 10.8807 7 9.5 7C8.11929 7 7 5.88071 7 4.5C7 3.11929 8.11929 2 9.5 2Z"
-      fill="#008080"
-    />
-    <path
-      d="M17 12C17 13.6569 15.6569 15 14 15C12.3431 15 11 13.6569 11 12C11 10.3431 12.3431 9 14 9C15.6569 9 17 10.3431 17 12Z"
-      fill="#008080"
-    />
-    <path
-      d="M9 18C9 19.6569 7.65685 21 6 21C4.34315 21 3 19.6569 3 18C3 16.3431 4.34315 15 6 15C7.65685 15 9 16.3431 9 18Z"
-      fill="#008080"
-    />
-    <path
-      d="M9.5 7L11 12L9.5 17M14 9L11 12M14 15L11 12"
-      stroke="#008080"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-)
-
-const ResultsIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
-    <circle
-      cx="12"
-      cy="12"
-      r="9"
-      stroke="#008080"
-      strokeWidth="1.5"
-      fill="none"
-    />
-    <circle
-      cx="12"
-      cy="12"
-      r="6"
-      stroke="#008080"
-      strokeWidth="1.5"
-      fill="none"
-    />
-    <circle
-      cx="12"
-      cy="12"
-      r="3"
-      fill="#008080"
-    />
-    <path
-      d="M12 3V12M12 12L15 9"
-      stroke="#008080"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
-  </svg>
-)
-
-const values = [
-  {
-    icon: ExcellenceIcon,
-    title: 'Excellence',
-    description: 'We strive for perfection in every detail, ensuring the highest quality in design and print.',
-  },
-  {
-    icon: PartnershipIcon,
-    title: 'Partnership',
-    description: 'Your success is our success. We work closely with you to bring your vision to life.',
-  },
-  {
-    icon: InnovationIcon,
-    title: 'Innovation',
-    description: 'Combining traditional craftsmanship with cutting-edge technology and creative solutions.',
-  },
-  {
-    icon: ResultsIcon,
-    title: 'Results-Driven',
-    description: 'Every project is designed to deliver measurable impact and drive your business forward.',
-  },
-]
-
 const timeline = [
-  { year: '2018', milestone: 'Founded', description: 'Started with a vision to revolutionize printing and design in Kenya' },
-  { year: '2020', milestone: 'Expansion', description: 'Opened our state-of-the-art facility and expanded our team' },
-  { year: '2022', milestone: '100+ Projects', description: 'Reached a major milestone of completing over 100 successful projects' },
-  { year: '2024', milestone: 'Industry Leader', description: 'Recognized as a leading design and printing agency in East Africa' },
+  { year: '2022', milestone: 'Founded', description: 'Started in June 2022 with a vision to revolutionize printing and design in Kenya' },
+  { year: '2023', milestone: 'Growth', description: 'Expanded our team and services, building strong client relationships' },
+  { year: '2024', milestone: '150+ Projects', description: 'Reached a major milestone of completing over 150 successful projects' },
+  { year: '2024', milestone: '100+ Clients', description: 'Proudly serving over 100 satisfied clients across Kenya and East Africa' },
+  { year: '2025', milestone: 'Industry Leader', description: 'Recognized as a leading design and printing agency in East Africa' },
 ]
 
 export default function About() {
@@ -218,8 +93,8 @@ export default function About() {
           >
             <div className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl">
               <Image
-                src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80"
-                alt="Brown Paper workspace"
+                src="/images/hero/team.jpg"
+                alt="Brown Paper team"
                 fill
                 className="object-cover"
                 quality={75}
@@ -227,7 +102,7 @@ export default function About() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
               <div className="absolute bottom-8 left-8 right-8">
-                <p className="text-white text-sm uppercase tracking-wider mb-2 font-light">Our Workspace</p>
+                <p className="text-white text-sm uppercase tracking-wider mb-2 font-light">Our Team</p>
                 <p className="text-white text-2xl font-light">Where Creativity Meets Craft</p>
               </div>
             </div>
@@ -246,7 +121,7 @@ export default function About() {
               dedicated to transforming your ideas into powerful visual experiences.
             </p>
             <p className="text-lg font-light text-gray-600 mb-8 leading-relaxed">
-              With over {yearsExperience} years of excellence, we combine traditional craftsmanship with 
+              Since our founding in June {foundedYear}, we combine traditional craftsmanship with 
               modern innovation to deliver solutions that not only look stunning but drive measurable results 
               for your business.
             </p>
@@ -347,37 +222,61 @@ export default function About() {
           </div>
         </motion.div>
 
-        {/* Values Section */}
+        {/* Clients Section */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
           transition={{ duration: 0.8, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
         >
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.6, delay: 0.9 }}
+            className="text-sm font-light text-gray-500 uppercase tracking-widest mb-4 block text-center"
+          >
+            Trusted By
+          </motion.span>
           <h3 className="text-3xl md:text-4xl font-light mb-12 text-center">
-            Our <span className="gradient-text">Values</span>
+            Our <span className="gradient-text">Clients</span>
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((value, index) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-12">
+            {[
+              { name: 'Kengen', logo: '/images/clients/Kengen Logo.png' },
+              { name: 'KIPPRA', logo: '/images/clients/KIPPRA-LOGO-.webp' },
+              { name: 'Nation Media Group', logo: '/images/clients/Nation Media Group Logo.png' },
+              { name: 'Baraka', logo: '/images/clients/baraka.png' },
+              { name: 'Ikigai', logo: '/images/clients/Ikigai Logo Black.png' },
+              { name: 'Verto', logo: '/images/clients/verto.svg' },
+              { name: 'Bar Next Door', logo: '/images/clients/barnextdoor.jpg' },
+              { name: 'Civil Registration Services', logo: '/images/clients/civilregservices.jpg' },
+              { name: 'Crown Dent', logo: '/images/clients/crowndent.png' },
+              { name: 'Dida', logo: '/images/clients/Dida-150x150.png' },
+              { name: 'JAZA', logo: '/images/clients/JAZA-150x150.png' },
+              { name: 'KAAA', logo: '/images/clients/KAAA-150x150.png' },
+              { name: 'KAWI', logo: '/images/clients/KAWI-150x150.png' },
+              { name: 'Eagle HR Consultants', logo: '/images/clients/logo_dark_ubxaCll.png' },
+              { name: 'Riara', logo: '/images/clients/riara.png' },
+              { name: 'ESSA', logo: '/images/clients/ESSA Logo.png' },
+            ].map((client, index) => (
               <motion.div
-                key={value.title}
-                initial={{ opacity: 0, y: 40 }}
-                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-                transition={{ duration: 0.7, delay: 0.9 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                className="p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl"
+                key={client.name}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                transition={{ duration: 0.6, delay: 0.9 + index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ scale: 1.05, y: -4 }}
+                className="flex items-center justify-center p-6 rounded-2xl bg-white border border-gray-200/50 hover:border-primary/30 transition-all duration-300 shadow-sm hover:shadow-md"
               >
-                <div className="flex items-center gap-3 mb-4">
-                  <motion.div
-                    whileHover={{ scale: 1.1, rotate: 5 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  >
-                    <value.icon />
-                  </motion.div>
-                  <h4 className="text-xl font-light text-gray-900">{value.title}</h4>
-                </div>
-                <p className="text-gray-600 font-light leading-relaxed text-sm md:text-base">
-                  {value.description}
-                </p>
+                <Image
+                  src={client.logo}
+                  alt={client.name}
+                  width={150}
+                  height={60}
+                  className="object-contain grayscale hover:grayscale-0 transition-all max-h-12 md:max-h-16 w-auto"
+                  style={{ 
+                    maxWidth: '150px',
+                    height: 'auto',
+                  }}
+                />
               </motion.div>
             ))}
           </div>

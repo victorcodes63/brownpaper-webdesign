@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
-  const foundedYear = 2018
+  const foundedYear = 2022
   const [email, setEmail] = useState('')
 
   const handleNewsletterSubmit = (e: React.FormEvent) => {
@@ -20,7 +20,7 @@ export default function Footer() {
     <footer className="bg-gray-900 text-gray-300 border-t border-gray-800">
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-16">
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
           {/* Company Info */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -76,7 +76,7 @@ export default function Footer() {
               </a>
             </div>
           </motion.div>
-
+          
           {/* Quick Links */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -124,23 +124,86 @@ export default function Footer() {
             <h3 className="font-light text-white text-lg mb-6">Services</h3>
             <ul className="space-y-3">
               <li>
-                <a href="/services/printing-services" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
-                  Printing Services
-                </a>
-              </li>
-              <li>
-                <a href="/services/brand-identity" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
-                  Brand Identity
-                </a>
-              </li>
-              <li>
                 <a href="/services/graphic-design" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
                   Graphic Design
                 </a>
               </li>
               <li>
+                <a href="/services/printing-services" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
+                  Printing
+                </a>
+              </li>
+              <li>
                 <a href="/services/packaging-design" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
-                  Packaging Design
+                  Packaging
+                </a>
+              </li>
+              <li>
+                <a href="/services/display" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
+                  Display
+                </a>
+              </li>
+              <li>
+                <a href="/services/workwear" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
+                  Workwear
+                </a>
+              </li>
+              <li>
+                <a href="/services/promotional-items" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
+                  Promotional Items
+                </a>
+              </li>
+              <li>
+                <a href="/services/office-stationery" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
+                  Office Stationery
+                </a>
+              </li>
+              <li>
+                <a href="/services/fun-times" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
+                  Fun Times
+                </a>
+              </li>
+            </ul>
+          </motion.div>
+
+          {/* Sauti Audio Events */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.25 }}
+            className="lg:col-span-1"
+          >
+            <h3 className="font-light text-white text-lg mb-6">Sauti Audio Events</h3>
+            <ul className="space-y-3">
+              <li>
+                <a href="/sauti-audio-events" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
+                  Home
+                </a>
+              </li>
+              <li>
+                <a href="/sauti-audio-events/event-gear" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
+                  Event Gear
+                </a>
+              </li>
+              <li>
+                <a href="/sauti-audio-events/photography-videography" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
+                  Media Production
+                </a>
+              </li>
+              <li>
+                <a href="/sauti-audio-events/instrumentalists" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
+                  Instrumentalists
+                </a>
+              </li>
+              <li>
+                <a href="/sauti-audio-events/event-branding" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
+                  Event Branding
+                </a>
+              </li>
+              <li>
+                <a href="/sauti-audio-events/event-planning" className="font-light text-sm text-gray-400 hover:text-primary transition-colors">
+                  Event Planning
                 </a>
               </li>
             </ul>

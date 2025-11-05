@@ -85,3 +85,5 @@ After adding the files, test:
 3. Social media sharing preview (use [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/))
 4. PWA installation (if enabled)
 
+
+

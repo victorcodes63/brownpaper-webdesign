@@ -8,32 +8,32 @@ import Image from 'next/image'
 
 const services = [
   {
-    title: 'Printing Services',
-    description: 'Elevated printing solutions that bring your designs to life with precision and quality.',
-    tags: ['Printing', 'Design'],
-    slug: 'printing-services',
-    mainImage: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80',
-  },
-  {
-    title: 'Brand Identity',
-    description: 'Complete brand identity packages that establish your visual presence and elevate your brand.',
-    tags: ['Branding', 'Identity'],
-    slug: 'brand-identity',
-    mainImage: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=800&q=80',
-  },
-  {
     title: 'Graphic Design',
-    description: 'Creative graphic design that transforms ideas into impactful visual communications.',
+    description: 'Creative graphic design services for marketing materials, packaging, and digital assets that capture attention and communicate effectively.',
     tags: ['Design', 'Creative'],
     slug: 'graphic-design',
-    mainImage: 'https://images.unsplash.com/photo-1586717799252-bd134ad00e26?w=800&q=80',
+    mainImage: '/images/services/design.jpg',
   },
   {
-    title: 'Packaging Design',
-    description: 'Innovative packaging solutions that make your products stand out and engage customers.',
+    title: 'Printing',
+    description: 'High-quality offset and digital printing solutions that bring your designs to life with precision and quality.',
+    tags: ['Printing', 'Quality'],
+    slug: 'printing-services',
+    mainImage: '/images/services/printing.jpg',
+  },
+  {
+    title: 'Packaging',
+    description: 'Innovative packaging solutions that make your products stand out on the shelf and engage customers.',
     tags: ['Packaging', 'Design'],
     slug: 'packaging-design',
-    mainImage: 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=800&q=80',
+    mainImage: '/images/services/packaging.jpg',
+  },
+  {
+    title: 'Display',
+    description: 'Custom display solutions for retail, trade shows, and exhibitions that showcase your brand effectively.',
+    tags: ['Display', 'Retail'],
+    slug: 'display',
+    mainImage: '/images/services/display.jpg',
   },
 ]
 

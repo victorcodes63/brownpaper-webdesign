@@ -64,3 +64,5 @@ echo ""
 echo "Note: The logo is wide (216x37), so it's been centered with padding."
 echo "For best results, consider creating a square icon version of your logo."
 
+
+

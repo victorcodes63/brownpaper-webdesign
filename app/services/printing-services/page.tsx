@@ -136,32 +136,92 @@ const DeliveryIcon = () => (
 const printingServices = [
   {
     title: 'Business Cards',
-    description: 'Professional business cards that make a lasting first impression. Available in various finishes including matte, gloss, textured, and premium card stocks ranging from standard 350gsm to luxury 500gsm. Custom finishing options include rounded corners, spot UV, foil stamping, and embossing.',
+    description: 'Professional business cards that make a lasting first impression. Available in various finishes including matte, gloss, textured, and premium card stocks. Custom finishing options include rounded corners, spot UV, foil stamping, and embossing.',
     icon: PrintingIcon,
   },
   {
-    title: 'Brochures & Flyers',
-    description: 'Eye-catching marketing materials designed to grab attention and communicate your message effectively. From tri-fold brochures to A4 flyers, we handle everything from concept to print. Options include various paper weights, finishes, and folding techniques to maximize impact.',
+    title: 'Custom Made Spiral Notebooks',
+    description: 'Custom spiral-bound notebooks tailored to your brand and specifications. Available in various sizes, paper types, and cover materials. Perfect for corporate gifts, promotional items, or internal use with your logo and branding.',
     icon: PrintingIcon,
   },
   {
-    title: 'Banners & Signage',
-    description: 'Large format printing for events, trade shows, and retail spaces. Durable and high-quality visual displays using weather-resistant materials. Services include vinyl banners, fabric displays, retractable banners, and custom-sized signage with precision color matching.',
+    title: 'Hard Cover Notebooks',
+    description: 'Premium hard cover notebooks with custom designs and branding. Durable hard covers protect your content while showcasing your brand. Available in various sizes with options for lined, blank, or custom-designed pages.',
     icon: PrintingIcon,
   },
   {
-    title: 'Stationery',
-    description: 'Complete stationery sets including letterheads, envelopes, and business forms that reflect your brand identity. Coordinated designs across all stationery items ensure consistent brand representation. Available in multiple paper stocks and printing methods.',
+    title: 'Letterheads',
+    description: 'Professional letterheads that establish your brand identity in every business communication. Available in various paper stocks and finishes, ensuring consistent brand representation across all correspondence.',
     icon: PrintingIcon,
   },
   {
-    title: 'Catalogs',
-    description: 'Professional product catalogs that showcase your offerings with stunning photography and elegant layouts. Perfect binding, saddle stitching, or wire binding options available. Custom covers with various finishing options including soft-touch lamination and spot UV.',
+    title: 'Branded Envelopes',
+    description: 'Matching branded envelopes designed to complement your letterheads and maintain brand consistency. Available in standard sizes with custom printing options for window envelopes and custom addressing.',
     icon: PrintingIcon,
   },
   {
-    title: 'Posters',
-    description: 'Vibrant poster printing for advertising, events, and promotional purposes in various sizes and finishes. From A4 to large format, printed on premium paper or vinyl depending on your needs. UV protection available for outdoor display longevity.',
+    title: 'Company Profiles',
+    description: 'Professional company profile documents that showcase your business, services, and achievements. Comprehensive printing solutions for corporate presentations, investor materials, and marketing collateral.',
+    icon: PrintingIcon,
+  },
+  {
+    title: 'Menus',
+    description: 'Restaurant and cafe menus designed to showcase your offerings attractively. Durable printing with various binding options including spiral, perfect binding, or laminated single sheets. Custom sizes and finishes available.',
+    icon: PrintingIcon,
+  },
+  {
+    title: 'Vouchers',
+    description: 'Custom-printed vouchers for promotions, gift certificates, and special offers. Available in various sizes with security features and professional finishing options to prevent duplication.',
+    icon: PrintingIcon,
+  },
+  {
+    title: 'Flyers',
+    description: 'Eye-catching flyers designed to grab attention and communicate your message effectively. Available in various sizes, paper weights, and finishes to maximize impact for your marketing campaigns.',
+    icon: PrintingIcon,
+  },
+  {
+    title: 'Invoice Books',
+    description: 'Professional invoice books with custom branding and sequential numbering. Available in various formats including duplicate and triplicate books with carbonless paper for efficient record-keeping.',
+    icon: PrintingIcon,
+  },
+  {
+    title: 'Delivery Books',
+    description: 'Custom delivery books for tracking shipments and deliveries. Professional printing with custom branding and sequential numbering. Perfect for logistics and delivery businesses.',
+    icon: PrintingIcon,
+  },
+  {
+    title: 'Certificates',
+    description: 'Elegant certificates for awards, achievements, and recognition. Printed on premium paper with custom designs and professional finishing options including embossing and foil stamping.',
+    icon: PrintingIcon,
+  },
+  {
+    title: 'Receipt Books',
+    description: 'Professional receipt books with custom branding and sequential numbering. Available in duplicate and triplicate formats with carbonless paper for efficient transaction recording.',
+    icon: PrintingIcon,
+  },
+  {
+    title: 'Stickers',
+    description: 'Custom stickers in various shapes, sizes, and finishes. Weather-resistant options available for outdoor use. Perfect for product labeling, branding, and promotional purposes.',
+    icon: PrintingIcon,
+  },
+  {
+    title: 'Exam Booklets',
+    description: 'Professional exam booklets for educational institutions. Custom-designed covers with secure binding and various page counts. Available in standard or custom sizes.',
+    icon: PrintingIcon,
+  },
+  {
+    title: 'Brochures',
+    description: 'Professional brochures designed to showcase your services and products effectively. From tri-fold to multi-page brochures, we handle everything from concept to print with various paper weights and finishes.',
+    icon: PrintingIcon,
+  },
+  {
+    title: 'Invitation Cards',
+    description: 'Elegant invitation cards for weddings, corporate events, and special occasions. Premium printing with various finishing options including embossing, foil stamping, and rounded corners.',
+    icon: PrintingIcon,
+  },
+  {
+    title: 'Calendars',
+    description: 'Custom calendars with your branding and imagery. Available in various formats including wall calendars, desk calendars, and pocket calendars. Perfect for corporate gifts and promotional items.',
     icon: PrintingIcon,
   },
 ]
@@ -343,7 +403,7 @@ export default function PrintingServicesPage() {
               className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl"
             >
               <Image
-                src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=800&q=80"
+                src="/images/hero/hero5.jpg"
                 alt="Professional printing services"
                 fill
                 className="object-cover"
@@ -384,29 +444,32 @@ export default function PrintingServicesPage() {
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {printingServices.map((service, index) => {
-              const IconComponent = service.icon
-              return (
-                <motion.div
-                  key={service.title}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl"
-                >
-                  <div className="flex items-center gap-3 mb-4">
-                    <IconComponent />
-                    <h3 className="text-xl md:text-2xl font-normal text-gray-900">{service.title}</h3>
-                  </div>
-                  <p className="text-gray-600 font-light leading-relaxed text-sm md:text-base">
-                    {service.description}
-                  </p>
-                </motion.div>
-              )
-            })}
+          <div className="bg-white rounded-3xl p-8 md:p-12 border border-gray-200/50 shadow-lg">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-4">
+              {printingServices.map((service, index) => {
+                const IconComponent = service.icon
+                return (
+                  <motion.div
+                    key={service.title}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex items-start gap-4 py-3 border-b border-gray-100 last:border-b-0"
+                  >
+                    <div className="flex-shrink-0 mt-1">
+                      <IconComponent />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-lg md:text-xl font-normal text-gray-900 mb-1">{service.title}</h3>
+                      <p className="text-sm text-gray-600 font-light leading-relaxed">
+                        {service.description}
+                      </p>
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </div>
           </div>
         </div>
       </section>

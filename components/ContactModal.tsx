@@ -225,7 +225,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                       id="modal-name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all text-sm sm:text-base"
+                      className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all text-base"
                       required
                       disabled={isSubmitting}
                     />
@@ -245,7 +245,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         id="modal-email"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all text-sm sm:text-base"
+                        className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all text-base"
                         required
                         disabled={isSubmitting}
                       />
@@ -264,7 +264,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         placeholder="+254 XXX XXX XXX"
-                        className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all text-sm sm:text-base"
+                        className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all text-base"
                         disabled={isSubmitting}
                       />
                     </motion.div>
@@ -283,7 +283,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                         id="modal-interest"
                         value={formData.interest}
                         onChange={(e) => setFormData({ ...formData, interest: e.target.value })}
-                        className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all appearance-none cursor-pointer pr-10 sm:pr-12 text-sm sm:text-base text-gray-900"
+                        className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all appearance-none cursor-pointer pr-10 sm:pr-12 text-base text-gray-900 min-h-[44px]"
                         style={{
                           backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
                           backgroundRepeat: 'no-repeat',
@@ -319,7 +319,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       rows={3}
                       placeholder="Tell us about your project, timeline, budget, or any specific requirements..."
-                      className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all resize-none text-sm sm:text-base"
+                      className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all resize-none text-base"
                       required
                       disabled={isSubmitting}
                     />

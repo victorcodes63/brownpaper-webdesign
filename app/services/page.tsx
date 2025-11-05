@@ -124,6 +124,110 @@ const PackagingIcon = () => (
   </svg>
 )
 
+const DisplayIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
+    <path
+      d="M2 6H22V18C22 19.1046 21.1046 20 20 20H4C2.89543 20 2 19.1046 2 18V6Z"
+      stroke="#008080"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M8 2V6M16 2V6"
+      stroke="#008080"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <path
+      d="M12 10V14M10 12H14"
+      stroke="#008080"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+)
+
+const WorkwearIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
+    <path
+      d="M12 2C10.3431 2 9 3.34315 9 5V7H7C5.89543 7 5 7.89543 5 9V19C5 20.1046 5.89543 21 7 21H17C18.1046 21 19 20.1046 19 19V9C19 7.89543 18.1046 7 17 7H15V5C15 3.34315 13.6569 2 12 2Z"
+      stroke="#008080"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M9 7H15V5C15 3.34315 13.6569 2 12 2C10.3431 2 9 3.34315 9 5V7Z"
+      stroke="#008080"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M12 11V13M12 15V17"
+      stroke="#008080"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </svg>
+)
+
+const PromotionalItemsIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
+    <path
+      d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+      stroke="#008080"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <circle cx="12" cy="12" r="2" fill="#008080" fillOpacity="0.3" />
+  </svg>
+)
+
+const StationeryIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
+    <path
+      d="M4 6H20V18C20 19.1046 19.1046 20 18 20H6C4.89543 20 4 19.1046 4 18V6Z"
+      stroke="#008080"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M8 4V6M16 4V6M8 10H16M8 14H12"
+      stroke="#008080"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </svg>
+)
+
+const FunTimesIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6">
+    <path
+      d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z"
+      stroke="#008080"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M8 12C8 14.2091 9.79086 16 12 16C14.2091 16 16 14.2091 16 12C16 9.79086 14.2091 8 12 8C9.79086 8 8 9.79086 8 12Z"
+      stroke="#008080"
+      strokeWidth="1.5"
+    />
+    <path
+      d="M8 8V8.01M16 8V8.01"
+      stroke="#008080"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </svg>
+)
+
 // Process Step Icons - Solid Teal Color
 const ConsultationIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
@@ -202,43 +306,11 @@ const ProductionIcon = () => (
 
 const services = [
   {
-    title: 'Printing',
-    description: 'High-quality offset and digital printing for business cards, brochures, banners, and more. We offer comprehensive printing solutions that bring your designs to life with precision and quality.',
-    icon: PrintingIcon,
-    slug: 'printing-services',
-    image: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&q=80',
-    shortDescription: 'High-quality offset and digital printing solutions that bring your designs to life.',
-    features: [
-      'Business Cards',
-      'Brochures & Flyers',
-      'Banners & Signage',
-      'Stationery',
-      'Catalogs',
-      'Posters',
-    ],
-  },
-  {
-    title: 'Branding',
-    description: 'Complete brand identity packages including logos, color palettes, typography, and style guides. We help you build a cohesive brand that resonates with your audience.',
-    icon: BrandingIcon,
-    slug: 'brand-identity',
-    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80',
-    shortDescription: 'Bold, strategic identities that define and differentiate your brand.',
-    features: [
-      'Logo Design',
-      'Brand Guidelines',
-      'Color Palettes',
-      'Typography',
-      'Visual Language',
-      'Brand Strategy',
-    ],
-  },
-  {
-    title: 'Design',
+    title: 'Graphic Design',
     description: 'Creative graphic design services for marketing materials, packaging, and digital assets. We create visually stunning designs that capture attention and communicate your message effectively.',
     icon: DesignIcon,
     slug: 'graphic-design',
-    image: 'https://images.unsplash.com/photo-1586717799252-bd134ad00e26?w=800&q=80',
+    image: '/images/services/design.jpg',
     shortDescription: 'Creative designs that capture attention and communicate effectively.',
     features: [
       'Marketing Materials',
@@ -250,11 +322,27 @@ const services = [
     ],
   },
   {
+    title: 'Printing',
+    description: 'High-quality offset and digital printing for business cards, brochures, banners, and more. We offer comprehensive printing solutions that bring your designs to life with precision and quality.',
+    icon: PrintingIcon,
+    slug: 'printing-services',
+    image: '/images/services/printing.jpg',
+    shortDescription: 'High-quality offset and digital printing solutions that bring your designs to life.',
+    features: [
+      'Business Cards',
+      'Brochures & Flyers',
+      'Banners & Signage',
+      'Catalogs',
+      'Posters',
+      'Large Format',
+    ],
+  },
+  {
     title: 'Packaging',
     description: 'Innovative packaging solutions that make your products stand out on the shelf. We combine creativity with functionality to create packaging that protects and promotes.',
     icon: PackagingIcon,
     slug: 'packaging-design',
-    image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
+    image: '/images/services/packaging.jpg',
     shortDescription: 'Innovative packaging that makes products stand out on the shelf.',
     features: [
       'Product Packaging',
@@ -263,6 +351,84 @@ const services = [
       'Sustainable Packaging',
       'Retail Packaging',
       'Custom Solutions',
+    ],
+  },
+  {
+    title: 'Display',
+    description: 'Professional display solutions that showcase your products and brand. From retail displays to trade show booths, we create impactful visual experiences that attract attention and drive engagement.',
+    icon: DisplayIcon,
+    slug: 'display',
+    image: '/images/services/display.jpg',
+    shortDescription: 'Custom display solutions for maximum visual impact and brand presence.',
+    features: [
+      'Retail Displays',
+      'Trade Show Booths',
+      'Exhibition Stands',
+      'Point of Sale',
+      'Window Displays',
+      'Custom Displays',
+    ],
+  },
+  {
+    title: 'Workwear',
+    description: 'Professional branded workwear and corporate uniforms that represent your brand with style. From safety wear to team apparel, we create comfortable and durable workwear solutions.',
+    icon: WorkwearIcon,
+    slug: 'workwear',
+    image: '/images/services/workwear.jpg',
+    shortDescription: 'Professional branded workwear and corporate uniforms for your team.',
+    features: [
+      'Corporate Uniforms',
+      'Branded Apparel',
+      'Safety Wear',
+      'Custom Embroidery',
+      'Team Shirts',
+      'Professional Attire',
+    ],
+  },
+  {
+    title: 'Promotional Items',
+    description: 'High-quality branded merchandise and promotional products that increase brand visibility and customer loyalty. From corporate gifts to event giveaways, we help you create memorable brand experiences.',
+    icon: PromotionalItemsIcon,
+    slug: 'promotional-items',
+    image: '/images/services/promotional_items.jpg',
+    shortDescription: 'Branded merchandise and promotional products that increase brand visibility.',
+    features: [
+      'Branded Merchandise',
+      'Corporate Gifts',
+      'Event Giveaways',
+      'Custom Products',
+      'Logo Items',
+      'Marketing Swag',
+    ],
+  },
+  {
+    title: 'Office Stationery',
+    description: 'Professional office stationery sets that create a cohesive brand identity across all business communications. From letterheads to business cards, we ensure consistent brand representation.',
+    icon: StationeryIcon,
+    slug: 'office-stationery',
+    image: '/images/services/stationery.jpg',
+    shortDescription: 'Professional stationery sets that create a cohesive brand identity.',
+    features: [
+      'Letterheads',
+      'Business Cards',
+      'Envelopes',
+      'Notepads',
+      'Folders',
+      'Complete Sets',
+    ],
+  },
+  {
+    title: 'Fun Times',
+    description: 'Complete event planning and management services for corporate events, team building, conferences, and outdoor activities. We make your events memorable and engaging.',
+    icon: FunTimesIcon,
+    slug: 'fun-times',
+    image: '/images/services/funtimes.jpg',
+    shortDescription: 'Complete event planning and management for memorable corporate experiences.',
+    features: [
+      'Office Parties',
+      'Team Buildings',
+      'Conference and Expos',
+      'Outdoor Events',
     ],
   },
 ]
@@ -666,6 +832,7 @@ export default function ServicesPage() {
                           alt={service.title}
                           fill
                           className="object-cover"
+                          style={service.slug === 'workwear' ? { objectPosition: 'center 75%' } : undefined}
                           quality={90}
                         />
                       </div>
@@ -681,6 +848,7 @@ export default function ServicesPage() {
                           alt={service.title}
                           fill
                           className="object-cover"
+                          style={service.slug === 'workwear' ? { objectPosition: 'center 75%' } : undefined}
                           quality={90}
                         />
                       </div>

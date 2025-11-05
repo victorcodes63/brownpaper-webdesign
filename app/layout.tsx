@@ -108,16 +108,19 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        {/* Favicons - Using bp_1.png logo, with fallbacks for optimized versions */}
+        {/* Favicons - Using optimized icons from Favicon Converter */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        {/* Fallback to logo if optimized versions don't exist */}
-        <link rel="icon" type="image/png" href="/logo/bp_1.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         
         {/* Manifest */}
         <link rel="manifest" href="/manifest.json" />
+        
+        {/* Resource hints for performance */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         
         {/* Theme and colors */}
         <meta name="theme-color" content="#008080" />
