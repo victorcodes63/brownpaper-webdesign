@@ -451,7 +451,11 @@ const serviceCategories = [
   },
 ]
 
-export default function Navigation() {
+interface NavigationProps {
+  customLogo?: string
+}
+
+export default function Navigation({ customLogo }: NavigationProps) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isServicesOpen, setIsServicesOpen] = useState(false)
   const [isSautiOpen, setIsSautiOpen] = useState(false)
@@ -523,8 +527,8 @@ export default function Navigation() {
           className="relative w-auto flex items-center"
         >
           <Image
-            src="/logo/bp_1.png"
-            alt="Brown Paper Logo"
+            src={customLogo || "/logo/bp_1.png"}
+            alt={customLogo ? "Sauti Audio Logo" : "Brown Paper Logo"}
             width={110}
             height={44}
             className="h-[20px] md:h-[24px] w-auto object-contain"

@@ -7,16 +7,16 @@ import Footer from '@/components/Footer'
 
 // SVG Icon
 const BrandingIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
+  <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 flex-shrink-0">
     <path
       d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-      stroke="#008080"
+      stroke="#f69001"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
-    <circle cx="12" cy="12" r="3" fill="#008080" fillOpacity="0.2" />
-    <circle cx="12" cy="12" r="1.5" fill="#008080" />
+    <circle cx="12" cy="12" r="3" fill="#f69001" fillOpacity="0.2" />
+    <circle cx="12" cy="12" r="1.5" fill="#f69001" />
   </svg>
 )
 
@@ -33,7 +33,7 @@ export default function EventBrandingPage() {
 
   return (
     <main className="relative overflow-hidden min-h-screen">
-      <Navigation />
+      <Navigation customLogo="/logo/sauti_audio_logo.png" />
       
       {/* Hero Section */}
       <section 
@@ -49,8 +49,8 @@ export default function EventBrandingPage() {
             className="absolute inset-0"
             style={{
               background: `
-                radial-gradient(circle at 20% 30%, rgba(0, 128, 128, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(145, 120, 93, 0.15) 0%, transparent 50%)
+                radial-gradient(circle at 20% 30%, rgba(246, 144, 1, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(1, 1, 1, 0.15) 0%, transparent 50%)
               `
             }}
           />
@@ -100,7 +100,7 @@ export default function EventBrandingPage() {
               <BrandingIcon />
             </motion.div>
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-light mb-6">
-              Event <span className="gradient-text">Branding</span>
+              Event <span className="sauti-gradient-text">Branding</span>
             </h1>
             <p className="text-xl md:text-2xl font-light text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Comprehensive event branding solutions that help create a cohesive and impactful identity for your events.
@@ -130,7 +130,7 @@ export default function EventBrandingPage() {
             </motion.span>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-8 pb-8">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-left md:flex-1">
-                Branding <span className="gradient-text">Solutions</span>
+                Branding <span className="sauti-gradient-text">Solutions</span>
               </h2>
               <p className="text-lg md:text-xl font-light text-gray-600 leading-relaxed text-left md:border-b md:border-gray-200 md:pb-2 md:w-[20%]">
                 Create a cohesive event identity
@@ -201,7 +201,7 @@ export default function EventBrandingPage() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-4xl md:text-5xl lg:text-6xl font-normal mb-6"
             >
-              Ready to Brand Your <span className="gradient-text">Event?</span>
+              Ready to Brand Your <span className="sauti-gradient-text">Event?</span>
             </motion.h2>
 
             <motion.p
@@ -253,7 +253,7 @@ export default function EventBrandingPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer customLogo="/logo/sauti_audio_logo.png" />
     </main>
   )
 }

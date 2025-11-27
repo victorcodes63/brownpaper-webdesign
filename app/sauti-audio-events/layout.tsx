@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import './sauti-audio.css'
 
 export const metadata: Metadata = {
   title: 'Sauti Audio Events | Professional Audio & Event Solutions',
@@ -34,7 +35,7 @@ export default function SautiAudioEventsLayout({
 }: {
   children: React.ReactNode
 }) {
-  return children
+  return <div className="sauti-audio-page">{children}</div>
 }
 
 

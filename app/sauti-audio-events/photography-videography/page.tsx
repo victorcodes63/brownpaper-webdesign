@@ -8,15 +8,15 @@ import Footer from '@/components/Footer'
 
 // SVG Icon
 const CameraIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
+  <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 flex-shrink-0">
     <path
       d="M3 9C3 7.89543 3.89543 7 5 7H7.5L9 5H15L16.5 7H19C20.1046 7 21 7.89543 21 9V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V9Z"
-      stroke="#008080"
+      stroke="#f69001"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
-    <circle cx="12" cy="13" r="3" stroke="#008080" strokeWidth="1.5" />
+    <circle cx="12" cy="13" r="3" stroke="#f69001" strokeWidth="1.5" />
   </svg>
 )
 
@@ -46,7 +46,7 @@ export default function PhotographyVideographyPage() {
 
   return (
     <main className="relative overflow-hidden min-h-screen">
-      <Navigation />
+      <Navigation customLogo="/logo/sauti_audio_logo.png" />
       
       {/* Hero Section */}
       <section 
@@ -62,8 +62,8 @@ export default function PhotographyVideographyPage() {
             className="absolute inset-0"
             style={{
               background: `
-                radial-gradient(circle at 20% 30%, rgba(0, 128, 128, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(145, 120, 93, 0.15) 0%, transparent 50%)
+                radial-gradient(circle at 20% 30%, rgba(246, 144, 1, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(1, 1, 1, 0.15) 0%, transparent 50%)
               `
             }}
           />
@@ -113,7 +113,7 @@ export default function PhotographyVideographyPage() {
               <CameraIcon />
             </motion.div>
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-light mb-6">
-              Media <span className="gradient-text">Production</span>
+              Media <span className="sauti-gradient-text">Production</span>
             </h1>
             <p className="text-xl md:text-2xl font-light text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Professional media production services including photography, videography, and livestreaming that capture every moment with creativity and precision.
@@ -143,7 +143,7 @@ export default function PhotographyVideographyPage() {
             </motion.span>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-8 pb-8">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-left md:flex-1">
-                Visual <span className="gradient-text">Documentation</span>
+                Visual <span className="sauti-gradient-text">Documentation</span>
               </h2>
               <p className="text-lg md:text-xl font-light text-gray-600 leading-relaxed text-left md:border-b md:border-gray-200 md:pb-2 md:w-[20%]">
                 Capturing moments that matter
@@ -193,7 +193,7 @@ export default function PhotographyVideographyPage() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-4xl md:text-5xl lg:text-6xl font-normal mb-6"
             >
-              Ready to Capture Your <span className="gradient-text">Event?</span>
+              Ready to Capture Your <span className="sauti-gradient-text">Event?</span>
             </motion.h2>
 
             <motion.p
@@ -245,7 +245,7 @@ export default function PhotographyVideographyPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer customLogo="/logo/sauti_audio_logo.png" />
     </main>
   )
 }

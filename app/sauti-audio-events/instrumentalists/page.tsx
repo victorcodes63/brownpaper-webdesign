@@ -7,16 +7,16 @@ import Footer from '@/components/Footer'
 
 // SVG Icon
 const MusicIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
+  <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 flex-shrink-0">
     <path
       d="M9 18V5L21 3V16"
-      stroke="#008080"
+      stroke="#f69001"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
-    <circle cx="6" cy="18" r="3" stroke="#008080" strokeWidth="1.5" />
-    <circle cx="18" cy="16" r="3" stroke="#008080" strokeWidth="1.5" />
+    <circle cx="6" cy="18" r="3" stroke="#f69001" strokeWidth="1.5" />
+    <circle cx="18" cy="16" r="3" stroke="#f69001" strokeWidth="1.5" />
   </svg>
 )
 
@@ -56,7 +56,7 @@ export default function InstrumentalistsPage() {
 
   return (
     <main className="relative overflow-hidden min-h-screen">
-      <Navigation />
+      <Navigation customLogo="/logo/sauti_audio_logo.png" />
       
       {/* Hero Section */}
       <section 
@@ -72,8 +72,8 @@ export default function InstrumentalistsPage() {
             className="absolute inset-0"
             style={{
               background: `
-                radial-gradient(circle at 20% 30%, rgba(0, 128, 128, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(145, 120, 93, 0.15) 0%, transparent 50%)
+                radial-gradient(circle at 20% 30%, rgba(246, 144, 1, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(1, 1, 1, 0.15) 0%, transparent 50%)
               `
             }}
           />
@@ -123,7 +123,7 @@ export default function InstrumentalistsPage() {
               <MusicIcon />
             </motion.div>
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-light mb-6">
-              <span className="gradient-text">Instrumentalists</span>
+              <span className="sauti-gradient-text">Instrumentalists</span>
             </h1>
             <p className="text-xl md:text-2xl font-light text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Talented musicians and performers to elevate your event experience with professional entertainment.
@@ -153,7 +153,7 @@ export default function InstrumentalistsPage() {
             </motion.span>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-8 pb-8">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-left md:flex-1">
-                Entertainment <span className="gradient-text">Services</span>
+                Entertainment <span className="sauti-gradient-text">Services</span>
               </h2>
               <p className="text-lg md:text-xl font-light text-gray-600 leading-relaxed text-left md:border-b md:border-gray-200 md:pb-2 md:w-[20%]">
                 Elevate your event atmosphere
@@ -200,7 +200,7 @@ export default function InstrumentalistsPage() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-4xl md:text-5xl lg:text-6xl font-normal mb-6"
             >
-              Ready to Elevate Your <span className="gradient-text">Event?</span>
+              Ready to Elevate Your <span className="sauti-gradient-text">Event?</span>
             </motion.h2>
 
             <motion.p
@@ -252,7 +252,7 @@ export default function InstrumentalistsPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer customLogo="/logo/sauti_audio_logo.png" />
     </main>
   )
 }

@@ -8,24 +8,24 @@ import Footer from '@/components/Footer'
 
 // SVG Icons
 const GearIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
+  <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 flex-shrink-0">
     <path
       d="M12 2L2 7L12 12L22 7L12 2Z"
-      stroke="#008080"
+      stroke="#f69001"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M2 17L12 22L22 17"
-      stroke="#008080"
+      stroke="#f69001"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M2 12L12 17L22 12"
-      stroke="#008080"
+      stroke="#f69001"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -94,7 +94,7 @@ export default function EventGearPage() {
 
   return (
     <main className="relative overflow-hidden min-h-screen">
-      <Navigation />
+      <Navigation customLogo="/logo/sauti_audio_logo.png" />
       
       {/* Hero Section */}
       <section 
@@ -110,8 +110,8 @@ export default function EventGearPage() {
             className="absolute inset-0"
             style={{
               background: `
-                radial-gradient(circle at 20% 30%, rgba(0, 128, 128, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(145, 120, 93, 0.15) 0%, transparent 50%)
+                radial-gradient(circle at 20% 30%, rgba(246, 144, 1, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(1, 1, 1, 0.15) 0%, transparent 50%)
               `
             }}
           />
@@ -161,7 +161,7 @@ export default function EventGearPage() {
               <GearIcon />
             </motion.div>
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-light mb-6">
-              Event <span className="gradient-text">Gear</span>
+              Event <span className="sauti-gradient-text">Gear</span>
             </h1>
             <p className="text-xl md:text-2xl font-light text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Complete audio, lighting, and stage equipment solutions for events of all sizes. Professional-grade equipment to ensure your event looks and sounds exceptional.
@@ -191,7 +191,7 @@ export default function EventGearPage() {
             </motion.span>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-8 pb-8">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-left md:flex-1">
-                Event Gear <span className="gradient-text">Solutions</span>
+                Event Gear <span className="sauti-gradient-text">Solutions</span>
               </h2>
               <p className="text-lg md:text-xl font-light text-gray-600 leading-relaxed text-left md:border-b md:border-gray-200 md:pb-2 md:w-[20%]">
                 Professional equipment for every need
@@ -255,7 +255,7 @@ export default function EventGearPage() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-4xl md:text-5xl lg:text-6xl font-normal mb-6"
             >
-              Ready to Equip Your <span className="gradient-text">Event?</span>
+              Ready to Equip Your <span className="sauti-gradient-text">Event?</span>
             </motion.h2>
 
             <motion.p
@@ -307,7 +307,7 @@ export default function EventGearPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer customLogo="/logo/sauti_audio_logo.png" />
     </main>
   )
 }

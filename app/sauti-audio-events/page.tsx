@@ -6,20 +6,45 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
+import SautiAudioClientTicker from '@/components/SautiAudioClientTicker'
 
 // SVG Icon for Audio Events
 const AudioIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 flex-shrink-0">
     <path
       d="M12 2V22M8 6V18M16 6V18M4 10V14M20 10V14"
-      stroke="#008080"
+      stroke="#f69001"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
-    <circle cx="12" cy="12" r="2" fill="#008080" fillOpacity="0.3" />
+    <circle cx="12" cy="12" r="2" fill="#f69001" fillOpacity="0.3" />
   </svg>
 )
+
+const stats = [
+  { value: '50+', label: 'Events' },
+  { value: '10+', label: 'Brands' },
+  { value: '20+', label: 'Cities' },
+]
+
+const experiencePillars = [
+  {
+    title: 'Signature Sound Design',
+    description:
+      'Audiophile-grade PA systems, custom stage plots, and smart mixing ensure clarity for conferences, concerts, and hybrid experiences.',
+  },
+  {
+    title: 'Immersive Visuals',
+    description:
+      'LED walls, intelligent lighting, scenic builds, and content direction bring stories to life with cinematic precision.',
+  },
+  {
+    title: 'End-to-End Production',
+    description:
+      'Producers, technical directors, and on-site crews manage every detail—from rehearsals to show-call—to guarantee seamless execution.',
+  },
+]
 
 const services = [
   {
@@ -67,7 +92,7 @@ export default function SautiAudioEventsPage() {
 
   return (
     <main className="relative overflow-hidden min-h-screen">
-      <Navigation />
+      <Navigation customLogo="/logo/sauti_audio_logo.png" />
       
       {/* Hero Section */}
       <section 
@@ -83,8 +108,8 @@ export default function SautiAudioEventsPage() {
             className="absolute inset-0"
             style={{
               background: `
-                radial-gradient(circle at 20% 30%, rgba(0, 128, 128, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(145, 120, 93, 0.15) 0%, transparent 50%)
+                radial-gradient(circle at 20% 30%, rgba(246, 144, 1, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(1, 1, 1, 0.15) 0%, transparent 50%)
               `
             }}
           />
@@ -134,12 +159,61 @@ export default function SautiAudioEventsPage() {
               <AudioIcon />
             </motion.div>
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-light mb-6">
-              Sauti <span className="gradient-text">Audio Events</span>
+              Sauti <span className="sauti-gradient-text">Audio Events</span>
             </h1>
             <p className="text-xl md:text-2xl font-light text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Creating unforgettable and immersive audio experiences through expertly curated events, blending cutting-edge sound technology with creativity.
             </p>
+            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + index * 0.1, duration: 0.6 }}
+                  className="p-6 rounded-2xl bg-white/70 backdrop-blur border border-white/60 shadow-lg"
+                >
+                  <p className="text-4xl md:text-5xl font-light text-gray-900 mb-2">{stat.value}</p>
+                  <p className="text-sm uppercase tracking-[0.35em] text-gray-500">{stat.label}</p>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* Why Sauti Audio */}
+      <section className="pt-12 md:pt-16 pb-28 px-6 md:px-12 bg-white relative overflow-hidden">
+        <div className="max-w-6xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12"
+          >
+            <p className="text-sm font-light text-gray-500 uppercase tracking-[0.4em]">Why Sauti Audio</p>
+            <h2 className="text-4xl md:text-5xl font-light mt-4">
+              Experience the <span className="sauti-gradient-text">difference</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {experiencePillars.map((pillar, index) => (
+              <motion.div
+                key={pillar.title}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.7 }}
+                className="p-8 rounded-3xl bg-neutral-900 text-white shadow-2xl"
+              >
+                <div className="w-12 h-1 rounded-full mb-5" style={{ background: 'linear-gradient(135deg,#f69001,#010101)' }} />
+                <h3 className="text-2xl font-medium mb-4">{pillar.title}</h3>
+                <p className="text-sm text-gray-200 leading-relaxed">{pillar.description}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -156,7 +230,7 @@ export default function SautiAudioEventsPage() {
               className="p-8 md:p-12 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 shadow-lg"
             >
               <h2 className="text-3xl md:text-4xl font-light mb-6 text-gray-900">
-                Our <span className="gradient-text">Mission</span>
+                Our <span className="sauti-gradient-text">Mission</span>
               </h2>
               <p className="text-lg md:text-xl font-light text-gray-700 leading-relaxed">
                 To create unforgettable and immersive audio experiences through expertly curated events, blending cutting-edge sound technology with creativity, ensuring every occasion resonates with lasting memories.
@@ -172,7 +246,7 @@ export default function SautiAudioEventsPage() {
               className="p-8 md:p-12 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 shadow-lg"
             >
               <h2 className="text-3xl md:text-4xl font-light mb-6 text-gray-900">
-                Our <span className="gradient-text">Vision</span>
+                Our <span className="sauti-gradient-text">Vision</span>
               </h2>
               <p className="text-lg md:text-xl font-light text-gray-700 leading-relaxed">
                 To be the leading event company in transforming the way people experience sound, setting new benchmarks in audio innovation, and delivering exceptional quality for every event globally.
@@ -202,12 +276,13 @@ export default function SautiAudioEventsPage() {
               What We Offer
             </motion.span>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-center mb-6">
-              Our <span className="gradient-text">Services</span>
+              Our <span className="sauti-gradient-text">Services</span>
             </h2>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {services.map((service, index) => (
+          {/* Top Row: First 2 services */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-6 lg:mb-8 max-w-4xl mx-auto">
+            {services.slice(0, 2).map((service, index) => (
               <motion.div
                 key={service.title}
                 initial={{ opacity: 0, y: 50 }}
@@ -217,7 +292,31 @@ export default function SautiAudioEventsPage() {
                 whileHover={{ y: -8, scale: 1.02 }}
               >
                 <Link href={service.href}>
-                  <div className="p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl h-full cursor-pointer">
+                  <div className="p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl h-full cursor-pointer flex flex-col items-center text-center">
+                    <div className="text-4xl md:text-5xl mb-4">{service.icon}</div>
+                    <h3 className="text-xl md:text-2xl font-normal text-gray-900 mb-3">{service.title}</h3>
+                    <p className="text-gray-600 font-light leading-relaxed text-sm md:text-base">
+                      {service.description}
+                    </p>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+          
+          {/* Bottom Row: Last 3 services, centered */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+            {services.slice(2).map((service, index) => (
+              <motion.div
+                key={service.title}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: (index + 2) * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -8, scale: 1.02 }}
+              >
+                <Link href={service.href}>
+                  <div className="p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl h-full cursor-pointer flex flex-col items-center text-center">
                     <div className="text-4xl md:text-5xl mb-4">{service.icon}</div>
                     <h3 className="text-xl md:text-2xl font-normal text-gray-900 mb-3">{service.title}</h3>
                     <p className="text-gray-600 font-light leading-relaxed text-sm md:text-base">
@@ -229,6 +328,11 @@ export default function SautiAudioEventsPage() {
             ))}
           </div>
         </div>
+      </section>
+
+      {/* Client Ticker Section */}
+      <section className="py-16 md:py-20 px-6 md:px-12 bg-white border-t border-gray-100">
+        <SautiAudioClientTicker />
       </section>
 
       {/* CTA Section */}
@@ -248,7 +352,7 @@ export default function SautiAudioEventsPage() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-4xl md:text-5xl lg:text-6xl font-normal mb-6"
             >
-              Ready to Create <span className="gradient-text">Unforgettable Events?</span>
+              Ready to Create <span className="sauti-gradient-text">Unforgettable Events?</span>
             </motion.h2>
 
             <motion.p
@@ -300,7 +404,7 @@ export default function SautiAudioEventsPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer customLogo="/logo/sauti_audio_logo.png" />
     </main>
   )
 }

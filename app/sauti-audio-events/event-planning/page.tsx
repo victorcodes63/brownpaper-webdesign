@@ -2,22 +2,23 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useRef } from 'react'
+import Image from 'next/image'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 
 // SVG Icon
 const PlanningIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
+  <svg viewBox="0 0 24 24" fill="none" className="w-8 h-8 flex-shrink-0">
     <path
       d="M8 2V6M16 2V6M3 10H21M5 4H19C20.1046 4 21 4.89543 21 6V20C21 21.1046 20.1046 22 19 22H5C3.89543 22 3 21.1046 3 20V6C3 4.89543 3.89543 4 5 4Z"
-      stroke="#008080"
+      stroke="#f69001"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
       d="M8 14H8.01M12 14H12.01M16 14H16.01M8 18H8.01M12 18H12.01"
-      stroke="#008080"
+      stroke="#f69001"
       strokeWidth="1.5"
       strokeLinecap="round"
     />
@@ -45,14 +46,14 @@ const socialEvents = [
 ]
 
 const clients = [
-  'Exinity',
-  'Simon Page - College of Marketing',
-  'Ministry of Health',
-  'Resource Global',
-  'Konza Technopolis',
-  'JKUAT',
-  'IKIGAI',
-  'TATU CITY',
+  { name: 'Exinity', logo: '/logo/sauti_audio_clients/exinity.png' },
+  { name: 'Simon Page - College of Marketing', logo: '/logo/sauti_audio_clients/simon_page.png' },
+  { name: 'Ministry of Health', logo: '/logo/sauti_audio_clients/moh.png' },
+  { name: 'Konza Technopolis', logo: '/logo/sauti_audio_clients/Konza.png' },
+  { name: 'JKUAT', logo: '/logo/sauti_audio_clients/jkuat.png' },
+  { name: 'IKIGAI', logo: '/logo/sauti_audio_clients/ikigai.png' },
+  { name: 'TATU CITY', logo: '/logo/sauti_audio_clients/tatu.png' },
+  { name: 'Resource Global', logo: '/logo/sauti_audio_clients/resource_global.png' },
 ]
 
 export default function EventPlanningPage() {
@@ -68,7 +69,7 @@ export default function EventPlanningPage() {
 
   return (
     <main className="relative overflow-hidden min-h-screen">
-      <Navigation />
+      <Navigation customLogo="/logo/sauti_audio_logo.png" />
       
       {/* Hero Section */}
       <section 
@@ -84,8 +85,8 @@ export default function EventPlanningPage() {
             className="absolute inset-0"
             style={{
               background: `
-                radial-gradient(circle at 20% 30%, rgba(0, 128, 128, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(145, 120, 93, 0.15) 0%, transparent 50%)
+                radial-gradient(circle at 20% 30%, rgba(246, 144, 1, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(1, 1, 1, 0.15) 0%, transparent 50%)
               `
             }}
           />
@@ -135,7 +136,7 @@ export default function EventPlanningPage() {
               <PlanningIcon />
             </motion.div>
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-light mb-6">
-              Event Planning <span className="gradient-text">& Management</span>
+              Event Planning <span className="sauti-gradient-text">& Management</span>
             </h1>
             <p className="text-xl md:text-2xl font-light text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Comprehensive event planning and management services to ensure your event is flawlessly executed from start to finish.
@@ -165,7 +166,7 @@ export default function EventPlanningPage() {
             </motion.span>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-8 pb-8">
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-left md:flex-1">
-                Complete Event <span className="gradient-text">Management</span>
+                Complete Event <span className="sauti-gradient-text">Management</span>
               </h2>
               <p className="text-lg md:text-xl font-light text-gray-600 leading-relaxed text-left md:border-b md:border-gray-200 md:pb-2 md:w-[20%]">
                 From planning to execution
@@ -234,7 +235,7 @@ export default function EventPlanningPage() {
             className="mb-20"
           >
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-left mb-6">
-              Corporate <span className="gradient-text">Events</span>
+              Corporate <span className="sauti-gradient-text">Events</span>
             </h2>
             <p className="text-lg md:text-xl font-light text-gray-600 leading-relaxed max-w-3xl">
               At Sauti Audio, we cater to a wide range of corporate events, providing tailored solutions to meet your specific needs.
@@ -272,7 +273,7 @@ export default function EventPlanningPage() {
             className="mb-20"
           >
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-left mb-6">
-              Social <span className="gradient-text">Events</span>
+              Social <span className="sauti-gradient-text">Events</span>
             </h2>
             <p className="text-lg md:text-xl font-light text-gray-600 leading-relaxed max-w-3xl">
               At Sauti Audio, we provide professional services for a wide range of social events, ensuring a memorable and enjoyable experience for your guests.
@@ -319,24 +320,35 @@ export default function EventPlanningPage() {
               Trusted By
             </motion.span>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-center mb-6">
-              Our <span className="gradient-text">Clients</span>
+              Our <span className="sauti-gradient-text">Clients</span>
             </h2>
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 lg:gap-8">
             {clients.map((client, index) => (
               <motion.div
-                key={client}
+                key={`${client.name}-${index}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
                 whileHover={{ y: -5, scale: 1.05 }}
-                className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-md hover:shadow-lg text-center"
+                className="p-6 md:p-8 rounded-2xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-md hover:shadow-lg flex items-center justify-center min-h-[120px]"
               >
-                <p className="text-gray-800 font-light text-sm md:text-base leading-relaxed">
-                  {client}
-                </p>
+                {client.logo && client.logo.length > 0 ? (
+                  <Image
+                    src={client.logo}
+                    alt={client.name || 'Client logo'}
+                    width={150}
+                    height={80}
+                    className="object-contain grayscale hover:grayscale-0 transition-all w-full h-auto max-h-[80px]"
+                    style={{ maxWidth: '150px', maxHeight: '80px' }}
+                  />
+                ) : (
+                  <p className="text-gray-800 font-light text-sm md:text-base leading-relaxed text-center">
+                    {client.name || 'Client'}
+                  </p>
+                )}
               </motion.div>
             ))}
           </div>
@@ -360,7 +372,7 @@ export default function EventPlanningPage() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="text-4xl md:text-5xl lg:text-6xl font-normal mb-6"
             >
-              Ready to Plan Your <span className="gradient-text">Event?</span>
+              Ready to Plan Your <span className="sauti-gradient-text">Event?</span>
             </motion.h2>
 
             <motion.p
@@ -412,7 +424,7 @@ export default function EventPlanningPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer customLogo="/logo/sauti_audio_logo.png" />
     </main>
   )
 }

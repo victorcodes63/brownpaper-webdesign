@@ -13,6 +13,9 @@ const config: Config = {
         secondary: '#91785d',
         teal: '#008080',
         taupe: '#91785d',
+        // Sauti Audio brand colors
+        'sauti-orange': '#f69001',
+        'sauti-black': '#010101',
       },
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],

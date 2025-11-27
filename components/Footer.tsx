@@ -4,7 +4,11 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useState } from 'react'
 
-export default function Footer() {
+interface FooterProps {
+  customLogo?: string
+}
+
+export default function Footer({ customLogo }: FooterProps) {
   const currentYear = new Date().getFullYear()
   const foundedYear = 2022
   const [email, setEmail] = useState('')
@@ -30,8 +34,8 @@ export default function Footer() {
             className="lg:col-span-1"
           >
             <Image
-              src="/logo/bp_1.png"
-              alt="Brown Paper Logo"
+              src={customLogo || "/logo/bp_1.png"}
+              alt={customLogo ? "Sauti Audio Logo" : "Brown Paper Logo"}
               width={140}
               height={56}
               className="h-8 md:h-10 w-auto object-contain mb-6 brightness-0 invert opacity-90"
