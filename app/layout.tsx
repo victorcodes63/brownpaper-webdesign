@@ -1,12 +1,25 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Figtree, Plus_Jakarta_Sans, Fragment_Mono } from 'next/font/google'
 import './globals.css'
 import StructuredData from './structured-data'
+import SmoothScroll from '@/components/SmoothScroll'
 
-const inter = Inter({
+const figtree = Figtree({
   subsets: ['latin'],
-  weight: ['100', '200', '300', '400', '500', '600', '700'],
-  variable: '--font-inter',
+  variable: '--font-figtree',
+  display: 'swap',
+})
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-plus-jakarta',
+  display: 'swap',
+})
+
+const fragmentMono = Fragment_Mono({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-fragment-mono',
   display: 'swap',
 })
 
@@ -87,12 +100,7 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  verification: {
-    // Add these when you have verification codes
-    // google: 'your-google-verification-code',
-    // yandex: 'your-yandex-verification-code',
-    // bing: 'your-bing-verification-code',
-  },
+  verification: {},
   other: {
     'contact:phone_number': '+254 716 286 489',
     'contact:email': 'info@brownpaper.co.ke',
@@ -106,32 +114,20 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className={`${figtree.variable} ${plusJakarta.variable} ${fragmentMono.variable}`}>
       <head>
-        {/* Favicons - Using optimized icons from Favicon Converter */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        
-        {/* Manifest */}
         <link rel="manifest" href="/manifest.json" />
-        
-        {/* Resource hints for performance */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        
-        {/* Theme and colors */}
         <meta name="theme-color" content="#008080" />
         <meta name="msapplication-TileColor" content="#008080" />
-        
         <StructuredData />
       </head>
-      <body className={`${inter.variable} font-sans antialiased`}>
-        {children}
+      <body className="font-sans antialiased">
+        <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
   )
 }
-

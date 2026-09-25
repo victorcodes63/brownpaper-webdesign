@@ -22,11 +22,10 @@ export default function manifest(): MetadataRoute.Manifest {
         type: 'image/png',
         purpose: 'any',
       },
-      // Fallback to logo
       {
-        src: '/logo/bp_1.png',
+        src: '/logo/bp-mark.svg',
         sizes: 'any',
-        type: 'image/png',
+        type: 'image/svg+xml',
         purpose: 'any',
       },
     ],

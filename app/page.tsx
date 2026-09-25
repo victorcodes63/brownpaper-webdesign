@@ -2,46 +2,69 @@
 
 import { lazy, Suspense } from 'react'
 import Hero from '@/components/Hero'
-import Navigation from '@/components/Navigation'
+import Philosophy from '@/components/Philosophy'
 import Footer from '@/components/Footer'
 
-// Lazy load below-the-fold components for better initial load performance
 const Services = lazy(() => import('@/components/Services'))
-const Portfolio = lazy(() => import('@/components/Portfolio'))
-const About = lazy(() => import('@/components/About'))
-const Testimonials = lazy(() => import('@/components/Testimonials'))
+const Work = lazy(() => import('@/components/home/Work'))
+const Impact = lazy(() => import('@/components/home/Impact'))
+const Process = lazy(() => import('@/components/home/Process'))
+const WhyUs = lazy(() => import('@/components/home/WhyUs'))
+const Journey = lazy(() => import('@/components/home/Journey'))
 const FAQ = lazy(() => import('@/components/FAQ'))
+const HomeContact = lazy(() => import('@/components/home/HomeContact'))
+const Principles = lazy(() => import('@/components/home/Principles'))
 
-// Loading fallback component
 const SectionLoader = () => (
-  <div className="w-full h-96 flex items-center justify-center">
-    <div className="animate-pulse text-gray-400">Loading...</div>
+  <div className="flex w-full items-center justify-center bg-paper py-32">
+    <div className="h-px w-16 animate-pulse bg-ink/15" />
   </div>
 )
 
 export default function Home() {
   return (
-    <main className="relative overflow-hidden">
-      <Navigation />
+    <main className="min-h-svh bg-chrome">
+      {/* Layered hero sits directly on chrome */}
       <Hero />
-      <Suspense fallback={<SectionLoader />}>
-        <Services />
-      </Suspense>
-      <Suspense fallback={<SectionLoader />}>
-        <Portfolio />
-      </Suspense>
-      <Suspense fallback={<SectionLoader />}>
-        <About />
-      </Suspense>
-      <Suspense fallback={<SectionLoader />}>
-        <Testimonials />
-      </Suspense>
-      <Suspense fallback={<SectionLoader />}>
-        <FAQ />
-      </Suspense>
+
+      {/* Dark statement section — how we think about brands */}
+      <Philosophy />
+
+      {/* Remaining site content in the rounded paper shell */}
+      <div className="px-2.5 pb-2.5 md:px-3 md:pb-3 lg:px-3.5 lg:pb-3.5">
+        <div className="page-shell">
+          <Suspense fallback={<SectionLoader />}>
+            <Services />
+          </Suspense>
+          <Suspense fallback={<SectionLoader />}>
+            <Work />
+          </Suspense>
+          <Suspense fallback={<SectionLoader />}>
+            <Impact />
+          </Suspense>
+          <Suspense fallback={<SectionLoader />}>
+            <Process />
+          </Suspense>
+          <Suspense fallback={<SectionLoader />}>
+            <WhyUs />
+          </Suspense>
+          <Suspense fallback={<SectionLoader />}>
+            <Journey />
+          </Suspense>
+          <Suspense fallback={<SectionLoader />}>
+            <FAQ />
+          </Suspense>
+          <Suspense fallback={<SectionLoader />}>
+            <HomeContact />
+          </Suspense>
+          <Suspense fallback={<SectionLoader />}>
+            <Principles />
+          </Suspense>
+        </div>
+      </div>
+
+      {/* Closing frame sits on chrome, outside the paper shell */}
       <Footer />
     </main>
   )
 }
-
-

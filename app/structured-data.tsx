@@ -5,7 +5,7 @@ export default function StructuredData() {
     name: 'Brown Paper',
     alternateName: 'Brown Paper Design & Printing',
     url: 'https://brownpaper.co.ke',
-    logo: 'https://brownpaper.co.ke/logo/bp_1.png',
+    logo: 'https://brownpaper.co.ke/android-chrome-512x512.png',
     image: 'https://brownpaper.co.ke/og-image.jpg',
     description: 'Premium printing, design, and branding solutions in Kenya. Since 2018, transforming ideas into impactful visual experiences.',
     foundingDate: '2018',

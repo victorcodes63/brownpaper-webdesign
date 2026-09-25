@@ -1,7 +1,7 @@
 'use client'
 
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { useInView } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'motion/react'
+import { useInView } from 'motion/react'
 import { useRef, useState } from 'react'
 
 export default function Contact() {
@@ -48,7 +48,7 @@ export default function Contact() {
     <section
       id="contact"
       ref={ref}
-      className="py-32 md:py-40 px-6 md:px-12 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden"
+      className="py-32 md:py-40 px-6 md:px-12 bg-linear-to-b from-white to-gray-50 relative overflow-hidden"
     >
       {/* Parallax background */}
       <motion.div
@@ -108,7 +108,7 @@ export default function Contact() {
                 placeholder="Your Name"
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full px-6 py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all duration-300 hover:border-gray-300"
+                className="w-full px-6 py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-hidden transition-all duration-300 hover:border-gray-300"
                 required
               />
             </motion.div>
@@ -123,7 +123,7 @@ export default function Contact() {
                 placeholder="Your Email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="w-full px-6 py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all duration-300 hover:border-gray-300"
+                className="w-full px-6 py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-hidden transition-all duration-300 hover:border-gray-300"
                 required
               />
             </motion.div>
@@ -139,7 +139,7 @@ export default function Contact() {
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               rows={6}
-              className="w-full px-6 py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-none transition-all duration-300 resize-none hover:border-gray-300"
+              className="w-full px-6 py-4 bg-white border-2 border-gray-200 rounded-xl font-light focus:border-primary focus:outline-hidden transition-all duration-300 resize-none hover:border-gray-300"
               required
             />
           </motion.div>

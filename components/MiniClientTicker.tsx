@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 import Image from 'next/image'
 
 // Client logo images
@@ -37,15 +37,15 @@ export default function MiniClientTicker() {
         {duplicatedLogos.map((client, index) => (
           <div
             key={`${client.name}-${index}`}
-            className="flex-shrink-0 flex items-center justify-center opacity-60 hover:opacity-100 transition-opacity"
+            className="relative shrink-0 opacity-60 hover:opacity-100 transition-opacity"
             style={{ width: '120px', height: '60px' }}
           >
             <Image
               src={client.logo}
               alt={client.name}
-              width={120}
-              height={60}
-              className="w-auto h-8 md:h-10 object-contain grayscale hover:grayscale-0 transition-all"
+              fill
+              sizes="120px"
+              className="object-contain grayscale hover:grayscale-0 transition-all"
               onError={(e) => {
                 // Fallback if image doesn't exist
                 const target = e.target as HTMLImageElement
@@ -57,8 +57,8 @@ export default function MiniClientTicker() {
       </motion.div>
       
       {/* Gradient fade edges */}
-      <div className="absolute left-0 top-8 bottom-0 w-20 bg-gradient-to-r from-white to-transparent pointer-events-none z-10" />
-      <div className="absolute right-0 top-8 bottom-0 w-20 bg-gradient-to-l from-white to-transparent pointer-events-none z-10" />
+      <div className="absolute left-0 top-8 bottom-0 w-20 bg-linear-to-r from-white to-transparent pointer-events-none z-10" />
+      <div className="absolute right-0 top-8 bottom-0 w-20 bg-linear-to-l from-white to-transparent pointer-events-none z-10" />
     </div>
   )
 }

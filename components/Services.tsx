@@ -1,301 +1,294 @@
 'use client'
 
-import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
-import { useInView } from 'framer-motion'
-import { useRef, useState, useEffect } from 'react'
+import { ArrowSwap, CharReveal, ImageReveal, RollText, WordReveal } from './home/ui'
+
+import { useEffect, useRef, useState } from 'react'
+import { motion, AnimatePresence } from 'motion/react'
 import Link from 'next/link'
 import Image from 'next/image'
 
+const ease = [0.16, 1, 0.3, 1] as const
+
 const services = [
   {
-    title: 'Graphic Design',
-    description: 'Creative graphic design services for marketing materials, packaging, and digital assets that capture attention and communicate effectively.',
-    tags: ['Design', 'Creative'],
-    slug: 'graphic-design',
-    mainImage: '/images/services/design.jpg',
+    slug: 'brand-identity',
+    tag: 'Identity systems',
+    title: 'Brand Identity',
+    description:
+      'We define how your brand looks, sounds and behaves, then build the system that keeps it consistent everywhere it appears.',
+    images: [
+      { src: '/images/hero/hero5.jpg', alt: 'Printed brand collateral laid out on a desk', pos: 'center' },
+      { src: '/images/services/stationery.jpg', alt: 'Branded stationery and desk items', pos: 'center' },
+    ],
+    listLabel: 'What we build',
+    items: ['Logo design and marks', 'Colour and typography systems', 'Brand guidelines', 'Visual language and applications'],
+    output: 'A brand system ready for print and screen.',
   },
   {
-    title: 'Printing',
-    description: 'High-quality offset and digital printing solutions that bring your designs to life with precision and quality.',
-    tags: ['Printing', 'Quality'],
-    slug: 'printing-services',
-    mainImage: '/images/services/printing.jpg',
-  },
-  {
-    title: 'Packaging',
-    description: 'Innovative packaging solutions that make your products stand out on the shelf and engage customers.',
-    tags: ['Packaging', 'Design'],
     slug: 'packaging-design',
-    mainImage: '/images/services/packaging.jpg',
+    tag: 'Shelf & retail',
+    title: 'Packaging Design',
+    description:
+      'Packaging that protects the product and helps it sell, sized to fit and produced in the right material.',
+    images: [
+      { src: '/images/services/packaging.jpg', alt: 'Kraft paper bag and food containers', pos: 'center' },
+      { src: '/images/hero/hero6.jpg', alt: 'Branded product packaging on a teal background', pos: 'center 60%' },
+    ],
+    listLabel: 'What we make',
+    items: ['Product boxes and pouches', 'Kraft, jute and tote bags', 'Labels and product stickers', 'Gift and wine bags'],
+    output: 'Shelf-ready packaging, proofed and produced.',
   },
   {
-    title: 'Display',
-    description: 'Custom display solutions for retail, trade shows, and exhibitions that showcase your brand effectively.',
-    tags: ['Display', 'Retail'],
+    slug: 'printing-services',
+    tag: 'Print production',
+    title: 'Printing',
+    description:
+      'Offset, digital and large-format print, with colour checked against your brand before anything goes to press.',
+    images: [
+      { src: '/images/services/printing.jpg', alt: 'Large-format printer producing a print run', pos: 'center' },
+      { src: '/images/hero/hero1.jpg', alt: 'Custom notebooks in a leather tray', pos: 'center 65%' },
+    ],
+    listLabel: 'What we print',
+    items: [
+      'Business cards, letterheads and envelopes',
+      'Company profiles, brochures and flyers',
+      'Notebooks, calendars and certificates',
+      'Invoice, receipt and delivery books',
+    ],
+    output: 'Press-ready files to finished run.',
+  },
+  {
     slug: 'display',
-    mainImage: '/images/services/display.jpg',
+    tag: 'Events & retail',
+    title: 'Display & Signage',
+    description:
+      'Displays that can be seen from across a busy hall and go up in minutes when the doors open.',
+    images: [
+      { src: '/images/services/display.jpg', alt: 'Person setting up a display board in a retail space', pos: 'center' },
+      { src: '/images/hero/hero4.jpg', alt: 'Illuminated storefront signage at night', pos: 'center' },
+    ],
+    listLabel: 'What we produce',
+    items: ['Pull-up, teardrop and X-banners', 'Backdrops and stage banners', 'Pop-ups and A-frames', 'Gazebo tents, flags and parasols'],
+    output: 'Event-ready displays, produced & installed.',
   },
 ]
 
-// Horizontal Scrolling Showcase Component
-function ShowcaseGallery({ items, isInView }: { items: Array<{ image: string; service: string }>, isInView: boolean }) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
-  
-  // Mobile detection
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-  
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  })
+const pad = (n: number) => String(n).padStart(3, '0')
 
-  const x = useTransform(scrollYProgress, [0, 1], ['0%', '-60%'])
-
+function StepBadge({ active, total }: { active: number; total: number }) {
+  const ring = 'DESIGN · PRINT · DELIVER · DESIGN · PRINT · DELIVER · '
   return (
-    <motion.div
-      ref={containerRef}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-      className="relative w-full overflow-hidden"
-    >
-      <div className="mb-8">
-        <h3 className="text-2xl md:text-3xl font-light mb-2">
-          Our <span className="gradient-text">Work</span>
-        </h3>
-        <p className="text-gray-600 font-light text-sm md:text-base">
-          Scroll to explore our branded products
-        </p>
-      </div>
-      
-      <div className="relative overflow-x-hidden">
-        <motion.div
-          style={{ x }}
-          className="flex gap-6 md:gap-8"
-        >
-          {items.map((item, index) => (
-            <motion.div
-              key={`${item.service}-${index}`}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.6, delay: 0.5 + index * 0.1 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className="flex-shrink-0 relative w-[280px] md:w-[380px] h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-xl cursor-pointer group"
+    <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-paper">
+      <motion.svg
+        viewBox="0 0 100 100"
+        className="absolute inset-0 h-full w-full"
+        animate={{ rotate: 360 }}
+        transition={{ duration: 22, ease: 'linear', repeat: Infinity }}
+        aria-hidden
+      >
+        <defs>
+          <path id="svc-ring" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" />
+        </defs>
+        <text className="fill-primary font-mono text-[7.4px] uppercase tracking-[0.12em]">
+          <textPath href="#svc-ring">{ring}</textPath>
+        </text>
+      </motion.svg>
+      <span className="relative flex items-baseline font-display text-[1.6rem] font-semibold tracking-[-0.04em] text-ink">
+        <span className="relative inline-flex h-[1.9rem] w-[0.9rem] justify-center overflow-hidden">
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={active}
+              initial={{ y: '100%' }}
+              animate={{ y: '0%' }}
+              exit={{ y: '-100%' }}
+              transition={{ duration: 0.45, ease }}
+              className="absolute"
             >
-              <Image
-                src={item.image}
-                alt={`${item.service} showcase`}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-110"
-                quality={isMobile ? 75 : 90}
-                sizes="(max-width: 768px) 280px, 380px"
-              />
-              {/* Gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
-              
-              {/* Service label */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
-                <p className="text-xs uppercase tracking-widest text-primary/90 mb-2 font-light">
-                  {item.service}
-                </p>
-                <p className="text-xl md:text-2xl font-light">
-                  Premium Quality
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-        
-        {/* Gradient fade edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent pointer-events-none z-10" />
-        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent pointer-events-none z-10" />
-      </div>
-    </motion.div>
+              {active + 1}
+            </motion.span>
+          </AnimatePresence>
+        </span>
+        /{total}
+      </span>
+    </div>
   )
 }
 
 export default function Services() {
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
-  const shouldReduceMotion = useReducedMotion()
-  const [isMobile, setIsMobile] = useState(false)
-  
-  // Mobile detection
+  const [active, setActive] = useState(0)
+  const refs = useRef<(HTMLElement | null)[]>([])
+
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.index))
+        })
+      },
+      { rootMargin: '-50% 0px -50% 0px' },
+    )
+    refs.current.forEach((el) => el && io.observe(el))
+    return () => io.disconnect()
   }, [])
-  
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  })
-
-  // Disable parallax on mobile
-  const yDesktop = useTransform(scrollYProgress, [0, 1], [50, -50])
-  const yMobile = useTransform(scrollYProgress, [0, 1], [0, 0])
-  const y = (isMobile || shouldReduceMotion) ? yMobile : yDesktop
-  
-  const opacityDesktop = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
-  const opacityMobile = useTransform(scrollYProgress, [0, 1], [1, 1])
-  const opacity = (isMobile || shouldReduceMotion) ? opacityMobile : opacityDesktop
-  
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2,
-      },
-    },
-  }
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 60, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.7,
-        ease: [0.16, 1, 0.3, 1],
-      },
-    },
-  }
 
   return (
-    <section
-      id="services"
-      ref={ref}
-      className="pt-16 md:pt-20 pb-32 md:pb-40 px-6 md:px-12 bg-gradient-to-b from-white via-white to-gray-50/30 relative"
-    >
-      {/* Subtle background effect */}
-      <motion.div
-        className="absolute inset-0 opacity-30 pointer-events-none"
-        style={{ y, opacity }}
-      >
-        <div 
-          className="absolute inset-0"
-          style={{
-            background: `
-              radial-gradient(circle at 10% 20%, rgba(0, 128, 128, 0.08) 0%, transparent 50%),
-              radial-gradient(circle at 90% 80%, rgba(145, 120, 93, 0.08) 0%, transparent 50%)
-            `
-          }}
-        />
-      </motion.div>
+    <section id="services" className="relative bg-paper p-2.5 md:p-3">
+      <div className="relative grid grid-cols-1 lg:grid-cols-2">
+        {/* ── STICKY LEFT ── */}
+        <div className="relative z-10 lg:sticky lg:top-3 lg:h-[calc(100svh-1.5rem)]">
+          <div className="relative flex h-full min-h-[30rem] flex-col justify-center overflow-hidden rounded-[1.5rem] bg-chrome px-8 py-16 md:rounded-[1.75rem] md:px-14 lg:px-[clamp(3rem,6vw,6.5rem)]">
+            <ImageReveal>
+<Image
+              src="/images/hero/hero3.jpg"
+              alt=""
+              fill
+              sizes="50vw"
+              className="object-cover opacity-45"
+            />
+</ImageReveal>
+            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_50%,rgba(23,23,23,0.92),rgba(23,23,23,0.55)_70%)]" />
 
-      <div className="max-w-7xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-20"
-        >
-          <motion.span
-            initial={{ opacity: 0 }}
-            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-sm font-light text-gray-500 uppercase tracking-widest mb-4 block text-left"
-          >
-            Services
-          </motion.span>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-8 pb-8">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-left md:flex-1">
-              What We <span className="gradient-text">Do</span>
-            </h2>
-            <p className="text-lg md:text-xl font-light text-gray-600 leading-relaxed text-left md:border-b md:border-gray-200 md:pb-2 md:w-[20%]">
-              We Build Brands with Meaning and Momentum
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Service Cards with Images - Emulating Reference Design */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10"
-        >
-          {services.map((service, index) => (
             <motion.div
-              key={service.title}
-              variants={cardVariants}
-              whileHover={{ y: -8, scale: 1.02 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="group relative rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-500 cursor-pointer bg-white"
+              className="relative"
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             >
-              {/* Main Image at Top */}
-              <div className="relative h-[240px] md:h-[280px] lg:h-[300px] overflow-hidden">
-                <Image
-                  src={service.mainImage}
-                  alt={service.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                  quality={isMobile ? 75 : 90}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-              </div>
+              <p className="flex flex-col gap-1.5 font-mono text-[12px] uppercase tracking-[0.08em]">
+                <span className="flex items-center gap-2 text-paper/45">
+                  <span className="flex items-center gap-1" aria-hidden>
+                    <span className="h-3 w-3 rounded-[3px] border-[1.5px] border-primary" />
+                    <span className="h-2 w-2 rounded-full bg-primary" />
+                  </span>
+                  (BP® 03)
+                </span>
+                <span className="text-paper/90">Our services</span>
+              </p>
 
-              {/* Content Section Below Image */}
-              <div className="relative p-5 md:p-6 bg-white">
-                {/* Tags - Top Left */}
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {service.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1.5 rounded-md bg-gray-900 text-white text-[10px] md:text-xs font-light"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+              <WordReveal as="h2" className="text-display mt-10 text-[clamp(2.75rem,5.4vw,5.5rem)] leading-[0.95] font-semibold tracking-[-0.045em] text-paper">
+                Brand, print
+                <br />& production.
+              </WordReveal>
 
-                {/* Title - Matching Portfolio size */}
-                <h3 className="text-lg md:text-xl lg:text-2xl font-light text-gray-900 mb-2 leading-tight">
-                  {service.title}
-                </h3>
+              <CharReveal className="mt-8 max-w-sm text-[15px] leading-relaxed text-paper/55 md:text-[17px]">
+                Four core services that take a brand from first sketch to finished piece, designed,
+                printed and delivered from Nairobi.
+              </CharReveal>
 
-                {/* Description */}
-                <p className="text-sm md:text-base font-light text-gray-700 leading-relaxed mb-5">
-                  {service.description}
-                </p>
-
-                {/* Learn More Link - Bottom Right */}
+              <div className="mt-10 flex flex-wrap items-center gap-5">
                 <Link
-                  href={`/services/${service.slug}`}
-                  className="absolute bottom-5 right-5 md:bottom-6 md:right-6"
+                  href="/contact"
+                  className="group inline-flex items-center gap-10 rounded-2xl border border-paper/10 bg-paper/8 px-7 py-4 font-mono text-[12px] uppercase tracking-[0.1em] text-paper backdrop-blur-md transition-colors hover:bg-paper/15"
                 >
-                  <motion.div
-                    whileHover={{ x: 4 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="text-primary font-light text-sm md:text-base flex items-center gap-1 hover:gap-2 transition-all duration-300"
-                  >
-                    <span>Learn More</span>
-                    <span>→</span>
-                  </motion.div>
+                  <RollText>Start a project</RollText>
+                  <ArrowSwap />
+                </Link>
+                <Link
+                  href="/services"
+                  className="font-mono text-[11px] uppercase tracking-[0.1em] text-paper/50 underline-offset-4 transition-colors hover:text-paper hover:underline"
+                >
+                  All services
                 </Link>
               </div>
             </motion.div>
-          ))}
-        </motion.div>
+          </div>
 
-        {/* Horizontal Scrolling Showcase Gallery - Reserved for future use */}
-        {/* Uncomment below when ready to use */}
-        {/* <ShowcaseGallery items={allShowcaseItems} isInView={isInView} /> */}
+          {/* rotating counter on the seam */}
+          <div className="absolute top-1/2 right-0 z-20 hidden translate-x-1/2 -translate-y-1/2 lg:block">
+            <StepBadge active={active} total={services.length} />
+          </div>
+        </div>
+
+        {/* ── SCROLLING RIGHT ── */}
+        <div className="relative">
+          {services.map((s, i) => (
+            <article
+              key={s.slug}
+              ref={(el) => {
+                refs.current[i] = el
+              }}
+              data-index={i}
+              className="flex flex-col justify-center px-4 py-16 md:px-10 md:py-20 lg:min-h-[calc(100svh-1.5rem)] lg:pr-[clamp(3rem,5vw,5.5rem)] lg:pl-[clamp(4rem,6vw,6.5rem)]"
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-15% 0px' }}
+                transition={{ duration: 0.75, ease }}
+              >
+                <p className="font-mono text-[12px] uppercase tracking-[0.08em]">
+                  <span className="text-primary/70">{pad(i + 1)}.</span>
+                  <span className="text-ink/85">{s.tag}</span>
+                </p>
+                <h3 className="text-display mt-4 text-[clamp(2.25rem,3.6vw,3.6rem)] font-semibold tracking-[-0.045em] text-ink">
+                  {s.title}
+                </h3>
+                <CharReveal className="mt-5 max-w-xl text-[15px] leading-relaxed text-ink/55 md:text-[17px]">{s.description}</CharReveal>
+
+                <div className="mt-10 grid grid-cols-2 gap-3">
+                  {s.images.map((img) => (
+                    <div key={img.src} className="relative aspect-[16/11] overflow-hidden rounded-[1.1rem] bg-mist">
+                      <ImageReveal>
+<Image
+                        src={img.src}
+                        alt={img.alt}
+                        fill
+                        sizes="(min-width: 1024px) 24vw, 50vw"
+                        className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.04]"
+                        style={{ objectPosition: img.pos }}
+                      />
+</ImageReveal>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-12 grid grid-cols-1 gap-4 font-mono text-[12px] uppercase tracking-[0.06em] sm:grid-cols-[minmax(0,0.7fr)_minmax(0,1fr)]">
+                  <p className="text-ink/85">{s.listLabel}</p>
+                  <ul>
+                    {s.items.map((item, j) => (
+                      <li key={item} className="flex gap-5 border-b border-ink/8 py-3 first:pt-0">
+                        <span className="text-primary/70">{pad(j + 1)}.</span>
+                        <span className="text-ink/80">{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-10 flex items-center gap-3">
+                  <Link
+                    href={`/services/${s.slug}`}
+                    aria-label={`Explore ${s.title}`}
+                    className="flex h-7 w-11 shrink-0 items-center justify-center rounded-lg bg-ink text-[13px] text-paper transition-colors hover:bg-primary"
+                  >
+                    →
+                  </Link>
+                  <p className="flex-1 bg-[repeating-linear-gradient(135deg,rgba(15,20,20,0.1)_0_1px,transparent_1px_6px)] py-1.5 pl-3 font-mono text-[11px] uppercase tracking-[0.05em] text-ink/80 min-[1400px]:text-[12px] min-[1400px]:tracking-[0.06em]">
+                    <span className="bg-paper pr-1">
+                      Output: {s.output}
+                      <span className="ml-1 inline-block h-3.5 w-2 animate-pulse bg-primary align-middle" aria-hidden />
+                    </span>
+                  </p>
+                </div>
+              </motion.div>
+            </article>
+          ))}
+
+          {/* progress dots */}
+          <div className="pointer-events-none absolute inset-y-0 right-1 hidden lg:block">
+            <div className="sticky top-1/2 flex -translate-y-1/2 flex-col items-center gap-2.5">
+              {services.map((s, i) => (
+                <span
+                  key={s.slug}
+                  className={`w-1.5 rounded-full transition-all duration-500 ${
+                    i === active ? 'h-5 bg-primary' : 'h-1.5 bg-ink/15'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   )
 }
-
-

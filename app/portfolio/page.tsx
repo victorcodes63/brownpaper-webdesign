@@ -1,1063 +1,173 @@
 'use client'
 
-import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring, useMotionValueEvent } from 'framer-motion'
-import { useInView } from 'framer-motion'
-import { useRef, useState, useMemo, useEffect } from 'react'
+import { useMemo, useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { motion, AnimatePresence } from 'motion/react'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
-
-// Animated counter component
-function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: string }) {
-  const [displayValue, setDisplayValue] = useState(0)
-  const motionValue = useMotionValue(0)
-  const springValue = useSpring(motionValue, {
-    damping: 60,
-    stiffness: 100,
-  })
-
-  useEffect(() => {
-    motionValue.set(value)
-  }, [motionValue, value])
-
-  useMotionValueEvent(springValue, 'change', (latest) => {
-    setDisplayValue(Math.round(latest))
-  })
-
-  return <span>{displayValue}{suffix}</span>
-}
-
-// Portfolio Stat Card Component
-function PortfolioStatCard({ 
-  stat, 
-  index 
-}: { 
-  stat: { number: number; suffix: string; label: string; icon: () => JSX.Element }; 
-  index: number 
-}) {
-  const statRef = useRef<HTMLDivElement>(null)
-  const isStatInView = useInView(statRef, { once: true, margin: '-50px' })
-  const IconComponent = stat.icon
-  
-  return (
-    <motion.div
-      ref={statRef}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="text-center p-6 md:p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl"
-    >
-      {/* Icon at top */}
-      <div className="flex justify-center mb-4">
-        <IconComponent />
-      </div>
-      
-      {/* Number with counter animation in middle */}
-      <motion.div
-        className="text-3xl md:text-4xl lg:text-5xl font-light mb-3 gradient-text"
-        initial={{ opacity: 0 }}
-        animate={isStatInView ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ 
-          duration: 0.6, 
-          delay: 0.3 + index * 0.1,
-          ease: [0.16, 1, 0.3, 1]
-        }}
-      >
-        {isStatInView && (
-          <AnimatedCounter value={stat.number} suffix={stat.suffix} />
-        )}
-      </motion.div>
-      
-      {/* Label below number */}
-      <div className="text-sm md:text-base font-light text-gray-600">{stat.label}</div>
-    </motion.div>
-  )
-}
+import FAQ, { type FaqItem } from '@/components/FAQ'
+import PageHero, { PageShell } from '@/components/PageHero'
+import { SectionLabel, Reveal, PillLink, Marquee, ease, pad, ImageReveal, WordReveal } from '@/components/home/ui'
 
 const projects = [
-  {
-    title: 'Brand Identity Design',
-    category: 'Branding',
-    image: '/images/services/branding.jpg',
-    description: 'Complete brand identity solutions including logo design, color palettes, and comprehensive brand guidelines for businesses across industries.',
-  },
-  {
-    title: 'Corporate Stationery',
-    category: 'Print Design',
-    image: '/images/indiv_services/office stationery.jpg',
-    description: 'Professional stationery sets including custom letterheads, envelopes, and business cards that represent your brand with sophistication.',
-  },
-  {
-    title: 'Product Packaging Design',
-    category: 'Packaging',
-    image: '/images/indiv_services/product_packaging.png',
-    description: 'Innovative packaging solutions that protect your products while creating memorable unboxing experiences for your customers.',
-  },
-  {
-    title: 'Graphic Design Services',
-    category: 'Graphic Design',
-    image: '/images/indiv_services/design.jpg',
-    description: 'Creative graphic design solutions for marketing materials, brochures, flyers, and digital assets that communicate your message effectively.',
-  },
-  {
-    title: 'Branding Solutions',
-    category: 'Branding',
-    image: '/images/services/branding2.jpg',
-    description: 'Comprehensive branding packages that establish a strong visual identity and consistent brand presence across all touchpoints.',
-  },
-  {
-    title: 'Packaging Solutions',
-    category: 'Packaging',
-    image: '/images/services/packaging.jpg',
-    description: 'Custom packaging designs that enhance product presentation and create lasting impressions for your customers.',
-  },
-  {
-    title: 'Printing Services',
-    category: 'Print Design',
-    image: '/images/indiv_services/printing.png',
-    description: 'High-quality printing services for all your business needs, from marketing materials to large format printing.',
-  },
-  {
-    title: 'Display Solutions',
-    category: 'Graphic Design',
-    image: '/images/indiv_services/display.png',
-    description: 'Eye-catching display designs and retail solutions that attract attention and drive customer engagement in physical spaces.',
-  },
-  {
-    title: 'Promotional Items',
-    category: 'Graphic Design',
-    image: '/images/indiv_services/promotional items .jpg',
-    description: 'Custom promotional products and branded merchandise that increase brand visibility and customer loyalty.',
-  },
+  { title: 'Brand Identity Design', category: 'Branding', image: '/images/services/branding.jpg', description: 'Logo design, colour palettes and brand guidelines for businesses across industries.' },
+  { title: 'Corporate Stationery', category: 'Print', image: '/images/services/stationery.jpg', description: 'Letterheads, envelopes and business cards that carry the brand with consistency.' },
+  { title: 'Product Packaging', category: 'Packaging', image: '/images/hero/hero6.jpg', description: 'Packaging that protects the product and makes the unboxing part of the brand.' },
+  { title: 'Graphic Design', category: 'Design', image: '/images/indiv_services/design.jpg', description: 'Campaign and marketing materials designed to communicate one clear message.' },
+  { title: 'Branding Collateral', category: 'Branding', image: '/images/hero/hero5.jpg', description: 'Printed brand collateral that keeps every touchpoint looking like one company.' },
+  { title: 'Retail Packaging', category: 'Packaging', image: '/images/services/packaging.jpg', description: 'Kraft bags, containers and labels built for the counter and the shelf.' },
+  { title: 'Print Production', category: 'Print', image: '/images/services/printing.jpg', description: 'Offset, digital and large-format runs, colour-checked before they go to press.' },
+  { title: 'Display & Signage', category: 'Display', image: '/images/services/display.jpg', description: 'Banners, backdrops and displays designed to be seen across a busy room.' },
+  { title: 'Custom Notebooks', category: 'Print', image: '/images/hero/hero1.jpg', description: 'Branded notebooks and desk items finished for gifting and everyday use.' },
 ]
 
-const categories = ['All', 'Branding', 'Print Design', 'Packaging', 'Graphic Design']
+const categories = ['All', ...Array.from(new Set(projects.map((p) => p.category)))]
 
-const featuredProjects = [
-  {
-    title: 'Complete Brand Identity Design',
-    category: 'Branding',
-    image: '/images/services/branding.jpg',
-    problem: 'A client needed a cohesive brand identity that would differentiate them in a competitive market. Their existing visual identity was inconsistent, failing to communicate their brand values and making it difficult to build brand recognition.',
-    solution: 'We developed a comprehensive brand identity system including logo design, color palette, typography, and brand guidelines. Through strategic design thinking and market research, we created a visual identity that authentically represented their brand values and resonated with their target audience. The cohesive system was applied across all touchpoints, creating a strong and memorable brand presence.',
-    client: 'Brown Paper Client',
-    year: '2024',
-    results: ['Cohesive brand identity', 'Enhanced brand recognition', 'Professional brand guidelines'],
-  },
-  {
-    title: 'Corporate Stationery Suite',
-    category: 'Print Design',
-    image: '/images/indiv_services/office stationery.jpg',
-    problem: 'A company needed professional stationery that would make a strong first impression and reflect their brand values. Their existing stationery was generic and didn\'t align with their brand identity, affecting their professional image.',
-    solution: 'We designed a complete stationery suite including letterheads, envelopes, and business cards that perfectly aligned with their brand identity. The design incorporated their brand colors and typography, creating a professional and cohesive set of materials that enhanced their corporate image.',
-    client: 'Brown Paper Client',
-    year: '2024',
-    results: ['Professional brand representation', 'Cohesive design system', 'Enhanced corporate image'],
-  },
-  {
-    title: 'Product Packaging Design',
-    category: 'Packaging',
-    image: '/images/indiv_services/product_packaging.png',
-    problem: 'A client needed packaging that would protect their products while also serving as an effective marketing tool. Their existing packaging was functional but lacked visual appeal and failed to communicate their brand story.',
-    solution: 'We created innovative packaging designs that combined functionality with compelling visual storytelling. The packaging solutions highlighted the product\'s unique features while maintaining brand consistency. The designs enhanced shelf presence and created a memorable unboxing experience for customers.',
-    client: 'Brown Paper Client',
-    year: '2024',
-    results: ['Enhanced shelf presence', 'Brand-aligned packaging', 'Improved customer experience'],
-  },
-  {
-    title: 'Graphic Design Solutions',
-    category: 'Graphic Design',
-    image: '/images/indiv_services/design.jpg',
-    problem: 'A business needed professional graphic design services for their marketing materials but lacked consistent visual identity across their communications. Their materials were inconsistent, reducing brand recognition and effectiveness.',
-    solution: 'We provided comprehensive graphic design services including marketing collateral, digital assets, and brand-consistent visual materials. Our designs maintained brand consistency while creating visually engaging materials that effectively communicated their message and enhanced their marketing efforts.',
-    client: 'Brown Paper Client',
-    year: '2024',
-    results: ['Consistent visual identity', 'Professional marketing materials', 'Enhanced brand communication'],
-  },
-  {
-    title: 'Branding Package',
-    category: 'Branding',
-    image: '/images/services/branding2.jpg',
-    problem: 'A company needed a complete branding solution to establish their presence in the market. They lacked a clear brand identity, making it difficult to connect with customers and stand out from competitors.',
-    solution: 'We delivered a comprehensive branding package that established a clear and compelling brand identity. The solution included logo design, brand guidelines, and application across various touchpoints. This created a strong foundation for their brand and helped them connect with their target audience effectively.',
-    client: 'Brown Paper Client',
-    year: '2024',
-    results: ['Strong brand foundation', 'Clear brand identity', 'Market differentiation'],
-  },
+const clients = [
+  { name: 'KenGen', logo: '/images/clients/Kengen Logo.png' },
+  { name: 'Nation Media Group', logo: '/images/clients/Nation Media Group Logo.png' },
+  { name: 'KIPPRA', logo: '/images/clients/KIPPRA-LOGO-.webp' },
+  { name: 'Eagle HR Consultants', logo: '/images/clients/logo_dark_ubxaCll.png' },
+  { name: 'Baraka Credit', logo: '/images/clients/baraka.png' },
+  { name: 'Ikigai', logo: '/images/clients/Ikigai Logo Black.png' },
+  { name: 'Verto', logo: '/images/clients/verto.svg' },
+  { name: 'ESSA', logo: '/images/clients/ESSA Logo.png' },
+  { name: 'Riara', logo: '/images/clients/riara.png' },
+  { name: 'Crown Dental', logo: '/images/clients/crowndent.png' },
+  { name: 'KAWI Restaurant', logo: '/images/clients/KAWI-150x150.png' },
+  { name: 'Jaza Capital', logo: '/images/clients/JAZA-150x150.png' },
 ]
 
-// SVG Icons - Solid Teal Color
-const ProjectsIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
-    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" fill="#008080" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M14 2V8H20" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-)
-
-const ClientsIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
-    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" fill="#008080" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-)
-
-const AwardsIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
-    <path d="M6 9C6 7.89543 6.89543 7 8 7H16C17.1046 7 18 7.89543 18 9V11C18 14.3137 15.3137 17 12 17C8.68629 17 6 14.3137 6 11V9Z" fill="#008080" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M12 17V21" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M8 21H16" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M8 5V7" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M16 5V7" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-)
-
-const RetentionIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
-    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#008080" stroke="#008080" strokeWidth="1.5" strokeLinejoin="round"/>
-  </svg>
-)
-
-const BrandingIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
-    <circle cx="12" cy="12" r="10" stroke="#008080" strokeWidth="1.5" fill="#008080" fillOpacity="0.1"/>
-    <circle cx="12" cy="12" r="5" fill="#008080"/>
-  </svg>
-)
-
-const PrintIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
-    <path d="M6 9V4C6 3.46957 6.21071 2.96086 6.58579 2.58579C6.96086 2.21071 7.46957 2 8 2H16C16.5304 2 17.0391 2.21071 17.4142 2.58579C17.7893 2.96086 18 3.46957 18 4V9" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M6 9H18V18C18 18.5304 17.7893 19.0391 17.4142 19.4142C17.0391 19.7893 16.5304 20 16 20H8C7.46957 20 6.96086 19.7893 6.58579 19.4142C6.21071 19.0391 6 18.5304 6 18V9Z" fill="#008080" fillOpacity="0.1" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M6 14H18" stroke="#008080" strokeWidth="1.5" strokeLinecap="round"/>
-  </svg>
-)
-
-const PackagingIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
-    <path d="M12 2L3 7L12 12L21 7L12 2Z" fill="#008080" stroke="#008080" strokeWidth="1.5" strokeLinejoin="round"/>
-    <path d="M3 17L12 22L21 17" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M3 12L12 17L21 12" stroke="#008080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-)
-
-const GraphicDesignIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" className="w-6 h-6 flex-shrink-0">
-    <path d="M12 2C13.1046 2 14 2.89543 14 4C14 5.10457 13.1046 6 12 6C10.8954 6 10 5.10457 10 4C10 2.89543 10.8954 2 12 2Z" fill="#008080"/>
-    <path d="M18 10C19.1046 10 20 10.8954 20 12C20 13.1046 19.1046 14 18 14C16.8954 14 16 13.1046 16 12C16 10.8954 16.8954 10 18 10Z" fill="#008080"/>
-    <path d="M6 10C7.10457 10 8 10.8954 8 12C8 13.1046 7.10457 14 6 14C4.89543 14 4 13.1046 4 12C4 10.8954 4.89543 10 6 10Z" fill="#008080"/>
-    <path d="M12 18C13.1046 18 14 18.8954 14 20C14 21.1046 13.1046 22 12 22C10.8954 22 10 21.1046 10 20C10 18.8954 10.8954 18 12 18Z" fill="#008080"/>
-    <path d="M8 4L16 12M16 4L8 12" stroke="#008080" strokeWidth="1.5" strokeLinecap="round"/>
-  </svg>
-)
-
-const portfolioStats = [
-  { number: 100, suffix: '+', label: 'Projects Completed', icon: ProjectsIcon },
-  { number: 50, suffix: '+', label: 'Happy Clients', icon: ClientsIcon },
-  { number: 15, suffix: '', label: 'Awards Won', icon: AwardsIcon },
-  { number: 95, suffix: '%', label: 'Client Retention', icon: RetentionIcon },
-]
-
-const categoryStats = [
-  {
-    category: 'Branding',
-    count: 35,
-    icon: BrandingIcon,
-    color: 'from-primary to-primary/80',
-  },
-  {
-    category: 'Print Design',
-    count: 28,
-    icon: PrintIcon,
-    color: 'from-secondary to-secondary/80',
-  },
-  {
-    category: 'Packaging',
-    count: 22,
-    icon: PackagingIcon,
-    color: 'from-primary/80 to-secondary/80',
-  },
-  {
-    category: 'Graphic Design',
-    count: 15,
-    icon: GraphicDesignIcon,
-    color: 'from-secondary/80 to-primary/80',
-  },
-]
-
-const portfolioFAQs = [
-  {
-    question: 'How do you approach a new project?',
-    answer: 'Every project begins with an in-depth consultation to understand your goals, target audience, and brand vision. We conduct market research, analyze competitors, and develop a strategic approach tailored to your unique needs before creating any designs.',
-  },
-  {
-    question: 'Can you work within our existing brand guidelines?',
-    answer: 'Absolutely! We excel at working within existing brand guidelines while finding opportunities to enhance and evolve your visual identity. Whether you have comprehensive guidelines or need them created, we ensure consistency across all deliverables.',
-  },
-  {
-    question: 'What\'s included in a typical project?',
-    answer: 'Project scope varies, but typically includes initial consultation, concept development, design iterations, final delivery files, and brand guidelines where applicable. We provide transparent timelines and include all necessary file formats for both print and digital use.',
-  },
-  {
-    question: 'How long does a portfolio project take?',
-    answer: 'Timelines depend on project complexity. A simple logo refresh may take 2-3 weeks, while a complete brand identity can take 4-8 weeks. Packaging projects typically range from 3-6 weeks. We provide detailed timelines during our initial consultation.',
-  },
-  {
-    question: 'Do you provide ongoing support after project completion?',
-    answer: 'Yes! We offer ongoing support packages for brand management, additional assets, and design maintenance. Many clients work with us long-term for seasonal campaigns, new product launches, and brand evolution needs.',
-  },
-  {
-    question: 'Can we see examples similar to our industry?',
-    answer: 'Definitely! During our consultation, we&apos;ll share relevant portfolio examples from your industry. We also provide case studies showing the problem-solution approach for similar projects, helping you visualize potential outcomes.',
-  },
+const faqs: FaqItem[] = [
+  { question: 'How do you approach a new project?', answer: 'Every project begins with a consultation to understand your goals, audience and brand. We look at the market and competitors and agree an approach before any design starts.' },
+  { question: 'Can you work within our existing brand guidelines?', answer: 'Yes. We work within established guidelines and look for chances to strengthen them, or create guidelines if you don’t have them yet.' },
+  { question: 'What’s included in a typical project?', answer: 'Usually a consultation, concept development, design rounds, final files for print and digital, and brand guidelines where relevant, with a clear timeline upfront.' },
+  { question: 'How long does a project take?', answer: 'A logo refresh may take 2 to 3 weeks; a full brand identity 4 to 8 weeks; packaging typically 3 to 6 weeks. You get a detailed timeline at the consultation.' },
+  { question: 'Do you provide support after the project?', answer: 'Yes. Many clients stay with us for seasonal campaigns, new product launches and ongoing brand assets.' },
+  { question: 'Can we see work from our industry?', answer: 'Yes. During the consultation we share relevant examples from your sector and walk through how similar projects were approached.' },
 ]
 
 export default function PortfolioPage() {
-  const ref = useRef<HTMLDivElement>(null)
-  const heroRef = useRef<HTMLDivElement>(null)
-  const portfolioRef = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, margin: '-100px' })
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [selectedCategory, setSelectedCategory] = useState('All')
-  const [isFAQHovered, setIsFAQHovered] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
-
-  // Mobile detection for FAQ
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
-  // Pre-calculate FAQ animation values
-  const cardWidth = 400
-  const gap = 24
-  const totalWidth = cardWidth + gap
-  const singleSetWidth = totalWidth * portfolioFAQs.length
-  const duplicatedFAQs = [...portfolioFAQs, ...portfolioFAQs]
-
-  const { scrollYProgress: heroScrollProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  })
-
-  const heroY = useTransform(heroScrollProgress, [0, 1], [0, 150])
-  const heroOpacity = useTransform(heroScrollProgress, [0, 1], [1, 0])
-
-  const filteredFeaturedProjects = useMemo(() => {
-    if (selectedCategory === 'All') {
-      return featuredProjects
-    }
-    return featuredProjects.filter(project => project.category === selectedCategory)
-  }, [selectedCategory])
-
-  const filteredProjects = useMemo(() => {
-    if (selectedCategory === 'All') {
-      return projects
-    }
-    return projects.filter(project => project.category === selectedCategory)
-  }, [selectedCategory])
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { opacity: 0, scale: 0.9 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: [0.6, -0.05, 0.01, 0.99],
-      },
-    },
-  }
+  const [cat, setCat] = useState('All')
+  const shown = useMemo(() => (cat === 'All' ? projects : projects.filter((p) => p.category === cat)), [cat])
 
   return (
-    <main className="relative overflow-hidden min-h-screen">
+    <main className="min-h-svh bg-chrome">
       <Navigation />
-      
-      {/* Hero Section */}
-      <section 
-        ref={heroRef}
-        className="relative pt-32 pb-16 px-6 md:px-12 bg-gradient-to-b from-white via-gray-50 to-white overflow-hidden"
+
+      <PageHero
+        code="01"
+        label="Selected work"
+        lead="A cross-section of identity, print, packaging and display work for brands across Kenya and East Africa."
+        title="Our work"
       >
-        {/* Animated background */}
-        <motion.div
-          className="absolute inset-0 opacity-30 pointer-events-none"
-          style={{ y: heroY, opacity: heroOpacity }}
-        >
-          <div 
-            className="absolute inset-0"
-            style={{
-              background: `
-                radial-gradient(circle at 20% 30%, rgba(0, 128, 128, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(145, 120, 93, 0.15) 0%, transparent 50%)
-              `
-            }}
-          />
-        </motion.div>
+        <PillLink href="/contact" dark>
+          Start a project
+        </PillLink>
+      </PageHero>
 
-        {/* Floating orbs */}
-        <motion.div
-          className="absolute top-20 left-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            x: [0, 120, 0],
-            y: [0, 80, 0],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-10 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.4, 1],
-            x: [0, -100, 0],
-            y: [0, -80, 0],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-
-        <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center"
-          >
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-sm font-light text-gray-500 uppercase tracking-widest mb-4 block"
-            >
-              Our Work
-            </motion.span>
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-light mb-6">
-              Our <span className="gradient-text">Portfolio</span>
-            </h1>
-            <p className="text-xl md:text-2xl font-light text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Showcasing excellence in every project we deliver. 
-              From branding to packaging, explore our creative journey.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Portfolio Stats Section */}
-      <section className="pt-16 md:pt-20 pb-32 md:pb-40 px-6 md:px-12 bg-gradient-to-b from-gray-50/30 via-white to-gray-50/30 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {portfolioStats.map((stat, index) => (
-              <PortfolioStatCard key={stat.label} stat={stat} index={index} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Filter Section */}
-      <section className="py-12 px-6 md:px-12 bg-gradient-to-b from-gray-50/30 via-white to-gray-50/30 sticky top-20 z-20 backdrop-blur-sm bg-white/80 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="flex flex-wrap justify-center gap-3"
-          >
-            {categories.map((category) => (
-              <motion.button
-                key={category}
-                onClick={() => {
-                  setSelectedCategory(category)
-                  setHoveredIndex(null)
-                }}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                className={`px-6 py-2.5 rounded-full font-light text-sm md:text-base transition-all duration-300 ${
-                  selectedCategory === category
-                    ? 'bg-primary text-white shadow-lg shadow-primary/30'
-                    : 'bg-white text-gray-600 border border-gray-200 hover:border-primary/30 hover:text-primary'
-                }`}
-              >
-                {category}
-              </motion.button>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Featured Projects Section */}
-      <section className="pt-16 md:pt-20 pb-32 md:pb-40 px-6 md:px-12 bg-gradient-to-b from-gray-50/30 via-white to-gray-50/30 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-20"
-          >
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-sm font-light text-gray-500 uppercase tracking-widest mb-4 block text-left"
-            >
-              Featured Work
-            </motion.span>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-8 pb-8">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-left md:flex-1">
-                Spotlight <span className="gradient-text">Projects</span>
-              </h2>
-              <p className="text-lg md:text-xl font-light text-gray-600 leading-relaxed text-left md:border-b md:border-gray-200 md:pb-2 md:w-[20%]">
-                Client success stories with measurable results
-              </p>
-            </div>
-          </motion.div>
-
-          <AnimatePresence mode="popLayout">
-            <motion.div
-              key={selectedCategory}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-              className="space-y-16"
-            >
-              {filteredFeaturedProjects.map((project, index) => (
-              <motion.div
-                key={project.title}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: index * 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center"
-              >
-                {/* Image Side */}
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  className="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl group"
-                >
-                  <Image
-                    src={project.image}
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    quality={90}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <span className="text-xs font-light text-primary/90 uppercase tracking-wider mb-2 inline-block">
-                      {project.category}
-                    </span>
-                    <h3 className="text-2xl md:text-3xl font-normal text-white mb-2">{project.title}</h3>
-                    <div className="flex items-center gap-4 text-sm font-light text-gray-300">
-                      <span>{project.client}</span>
-                      <span>•</span>
-                      <span>{project.year}</span>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* Content Side */}
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="text-sm font-light text-primary uppercase tracking-wider mb-3">The Challenge</h4>
-                    <p className="text-base md:text-lg font-light text-gray-700 leading-relaxed">
-                      {project.problem}
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-light text-primary uppercase tracking-wider mb-3">Our Solution</h4>
-                    <p className="text-base md:text-lg font-light text-gray-700 leading-relaxed">
-                      {project.solution}
-                    </p>
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-light text-primary uppercase tracking-wider mb-3">Results</h4>
-                    <ul className="space-y-2">
-                      {project.results.map((result, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-base font-light text-gray-700">
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
-                          <span>{result}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </motion.div>
-              ))}
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </section>
-
-      {/* Portfolio Grid */}
-      <section
-        ref={portfolioRef}
-        className="pt-16 md:pt-20 pb-32 md:pb-40 px-6 md:px-12 bg-gradient-to-b from-gray-50/30 via-white to-gray-50/30 relative overflow-hidden"
-      >
-        <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-20"
-          >
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-sm font-light text-gray-500 uppercase tracking-widest mb-4 block text-left"
-            >
-              Our Work
-            </motion.span>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-8 pb-8">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-left md:flex-1">
-                All <span className="gradient-text">Projects</span>
-              </h2>
-              <p className="text-lg md:text-xl font-light text-gray-600 leading-relaxed text-left md:border-b md:border-gray-200 md:pb-2 md:w-[20%]">
-                Browse through our complete collection of work
-              </p>
-            </div>
-          </motion.div>
-
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            {projects.map((project, index) => (
-                <motion.div
-                  key={`${project.title}-${index}`}
-                  variants={itemVariants}
-                  onHoverStart={() => setHoveredIndex(index)}
-                  onHoverEnd={() => setHoveredIndex(null)}
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  className="group relative overflow-hidden rounded-3xl aspect-[4/5] cursor-pointer shadow-lg shadow-gray-900/5 hover:shadow-xl hover:shadow-gray-900/10 transition-shadow duration-500"
-                >
-                  <motion.div
-                    className="absolute inset-0"
-                    whileHover={{ scale: 1.08 }}
-                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+      <PageShell>
+        <section className="px-6 py-20 md:px-10 md:py-28 lg:px-14">
+          <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
+            <Reveal>
+              <SectionLabel code="02" title="Projects" />
+              <WordReveal as="h2" className="text-display mt-10 text-[clamp(2.5rem,5.2vw,5.25rem)] leading-[0.95] font-semibold tracking-[-0.05em] text-ink">
+                What leaves the <span className="text-kraft-fill">studio</span>
+              </WordReveal>
+            </Reveal>
+            <Reveal delay={0.05}>
+              <div className="flex flex-wrap gap-2" role="tablist" aria-label="Filter projects">
+                {categories.map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    role="tab"
+                    aria-selected={cat === c}
+                    onClick={() => setCat(c)}
+                    className={`rounded-full border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.06em] transition-colors ${
+                      cat === c ? 'border-ink bg-ink text-paper' : 'border-ink/15 text-ink/60 hover:border-ink/40'
+                    }`}
                   >
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover"
-                      quality={90}
-                    />
-                  </motion.div>
-                  
-                  {/* Gradient overlay with animation */}
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20"
-                    initial={false}
-                    animate={{
-                      opacity: hoveredIndex === index ? 0.8 : 0.7,
-                    }}
-                    transition={{ duration: 0.4 }}
-                  />
-                  
-                  <motion.div
-                    className="absolute inset-0 p-8 flex flex-col justify-end text-white"
-                    initial={false}
-                  >
-                    <motion.div
-                      className="mb-3"
-                      initial={false}
-                      animate={{
-                        y: hoveredIndex === index ? 0 : 8,
-                        opacity: hoveredIndex === index ? 1 : 0.8,
-                      }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      <motion.span
-                        className="text-xs font-light text-primary/90 uppercase tracking-wider mb-3 inline-block"
-                        initial={false}
-                        animate={{
-                          x: hoveredIndex === index ? 0 : -10,
-                          opacity: hoveredIndex === index ? 1 : 0.7,
-                        }}
-                        transition={{ duration: 0.4 }}
-                      >
-                        {project.category}
-                      </motion.span>
-                    </motion.div>
-                    
-                    <motion.h3
-                      className="text-2xl md:text-3xl font-light mb-4"
-                      initial={false}
-                      animate={{
-                        y: hoveredIndex === index ? 0 : 8,
-                      }}
-                      transition={{ duration: 0.4 }}
-                    >
-                      {project.title}
-                    </motion.h3>
-                    
-                    <motion.div
-                      className="h-[2px] bg-primary origin-left"
-                      initial={{ scaleX: 0 }}
-                      animate={{ 
-                        scaleX: hoveredIndex === index ? 1 : 0,
-                      }}
-                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                    />
-                  </motion.div>
-                </motion.div>
-              ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Category Breakdown Section */}
-      <section className="pt-16 md:pt-20 pb-32 md:pb-40 px-6 md:px-12 bg-gradient-to-b from-gray-50/30 via-white to-gray-50/30 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-20"
-          >
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-sm font-light text-gray-500 uppercase tracking-widest mb-4 block text-left"
-            >
-              Our Portfolio By Category
-            </motion.span>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-8 pb-8">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-left md:flex-1">
-                Project <span className="gradient-text">Breakdown</span>
-              </h2>
-              <p className="text-lg md:text-xl font-light text-gray-600 leading-relaxed text-left md:border-b md:border-gray-200 md:pb-2 md:w-[20%]">
-                A comprehensive look at our work across different creative disciplines
-              </p>
-            </div>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {categoryStats.map((stat, index) => {
-              const IconComponent = stat.icon
-              return (
-                <motion.div
-                  key={stat.category}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.7, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl text-center"
-                >
-                  <div className="flex items-center justify-center gap-3 mb-4">
-                    <IconComponent />
-                    <h3 className="text-xl md:text-2xl font-normal text-gray-900">{stat.category}</h3>
-                  </div>
-                  <div className="text-4xl md:text-5xl font-light gradient-text mb-2">{stat.count}</div>
-                  <p className="text-sm font-light text-gray-600">Projects</p>
-                </motion.div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Moving FAQ Section - Portfolio Unique */}
-      <section className="pt-16 md:pt-20 pb-32 md:pb-40 px-6 md:px-12 bg-gradient-to-b from-gray-50/30 via-white to-gray-50/30 relative overflow-hidden">
-        <div className="max-w-7xl mx-auto relative z-10">
-          {/* Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-20"
-          >
-            <motion.span
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-sm font-light text-gray-500 uppercase tracking-widest mb-4 block text-left"
-            >
-              Questions & Answers
-            </motion.span>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pt-8 pb-8">
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-normal text-left md:flex-1">
-                Portfolio <span className="gradient-text">FAQ</span>
-              </h2>
-              <p className="text-lg md:text-xl font-light text-gray-600 leading-relaxed text-left md:border-b md:border-gray-200 md:pb-2 md:w-[20%]">
-                Common questions about our work and process
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Moving FAQ Cards - Simplified for mobile */}
-          {isMobile ? (
-            // Simplified static layout for mobile - no animations
-            <div className="space-y-4">
-              {portfolioFAQs.map((faq, index) => (
-                <div
-                  key={index}
-                  className="w-full p-6 rounded-2xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 shadow-lg"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-lg font-normal text-gray-900 mb-3">{faq.question}</h3>
-                      <p className="text-sm font-light text-gray-600 leading-relaxed">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            // Desktop moving animation - pre-calculated values
-            <div 
-              className="relative overflow-hidden"
-              onMouseEnter={() => setIsFAQHovered(true)}
-              onMouseLeave={() => setIsFAQHovered(false)}
-            >
-              <motion.div
-                className="flex gap-6"
-                animate={
-                  !isFAQHovered
-                    ? {
-                        x: [0, -singleSetWidth],
-                      }
-                    : {}
-                }
-                transition={
-                  !isFAQHovered
-                    ? {
-                        duration: 40,
-                        repeat: Infinity,
-                        ease: 'linear',
-                      }
-                    : {}
-                }
-              >
-                {duplicatedFAQs.map((faq, index) => (
-                  <motion.div
-                    key={`${faq.question}-${index}`}
-                    whileHover={{ scale: 1.02, y: -4 }}
-                    className="flex-shrink-0 w-[400px] p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 border border-gray-200/50 hover:border-primary/30 transition-all duration-500 shadow-lg hover:shadow-xl"
-                  >
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg md:text-xl font-normal text-gray-900 mb-3">{faq.question}</h3>
-                        <p className="text-sm md:text-base font-light text-gray-600 leading-relaxed">
-                          {faq.answer}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
+                    {c}
+                  </button>
                 ))}
-              </motion.div>
-              
-              {/* Gradient fade edges */}
-              <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white via-white/50 to-transparent pointer-events-none z-10" />
-              <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white via-white/50 to-transparent pointer-events-none z-10" />
-            </div>
-          )}
-        </div>
-      </section>
+              </div>
+            </Reveal>
+          </div>
 
-      {/* Enhanced CTA Section - Portfolio Unique */}
-      <section className="py-24 md:py-32 px-6 md:px-12 bg-gradient-to-b from-gray-50/30 via-white to-gray-50/30 relative overflow-hidden">
-        {/* Unique Geometric Background Pattern */}
-        <div className="absolute inset-0 opacity-5 pointer-events-none">
-          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#008080" strokeWidth="1"/>
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-          </svg>
-        </div>
-
-        {/* Floating gradient orbs */}
-        <motion.div
-          className="absolute top-1/3 left-1/4 w-72 h-72 bg-primary/8 rounded-full blur-3xl pointer-events-none"
-          animate={{
-            x: [0, 60, 0],
-            y: [0, 40, 0],
-            scale: [1, 1.3, 1],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-secondary/8 rounded-full blur-3xl pointer-events-none"
-          animate={{
-            x: [0, -50, 0],
-            y: [0, -60, 0],
-            scale: [1, 1.4, 1],
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-
-        <div className="max-w-6xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="text-center"
-          >
-            {/* Portfolio-specific messaging */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary/10 border border-primary/20 mb-8"
-            >
-              <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-              </svg>
-              <span className="text-sm font-light text-primary">Ready to see your project here?</span>
-            </motion.div>
-
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-normal mb-6"
-            >
-              Let&apos;s Create Your Next <span className="gradient-text">Success Story</span>
-            </motion.h2>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-lg md:text-xl font-light text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed"
-            >
-              Every great project starts with a conversation. Share your vision with us, and let&apos;s turn it into 
-              a portfolio piece you&apos;ll be proud to showcase.
-            </motion.p>
-
-            {/* Unique Button Layout */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12"
-            >
-              <motion.a
-                href="/contact"
-                whileHover={{ scale: 1.05, y: -3 }}
-                whileTap={{ scale: 0.98 }}
-                className="group relative inline-flex items-center justify-center gap-2 px-10 md:px-14 py-5 md:py-6 bg-primary text-white font-light text-base md:text-lg rounded-full hover:bg-opacity-90 transition-all shadow-lg shadow-primary/30 overflow-hidden"
-              >
-                <span className="relative z-10">Start Your Project</span>
-                <motion.svg
-                  className="relative z-10 w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  initial={{ x: 0 }}
-                  whileHover={{ x: 5, rotate: 45 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
+          <motion.ul layout className="mt-14 grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+            <AnimatePresence mode="popLayout">
+              {shown.map((p, i) => (
+                <motion.li
+                  key={p.title}
+                  layout
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
+                  transition={{ duration: 0.5, ease }}
+                  className="group"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </motion.svg>
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-primary to-primary/70 opacity-0 group-hover:opacity-100 transition-opacity"
-                  initial={false}
-                />
-              </motion.a>
-              <motion.a
-                href="/services"
-                whileHover={{ scale: 1.05, y: -3 }}
-                whileTap={{ scale: 0.98 }}
-                className="inline-flex items-center justify-center gap-2 px-10 md:px-14 py-5 md:py-6 border-2 border-primary text-primary font-light text-base md:text-lg rounded-full hover:bg-primary hover:text-white transition-all bg-white/80 backdrop-blur-sm"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                Explore Services
-              </motion.a>
-            </motion.div>
+                  <div className={`relative overflow-hidden rounded-[1.25rem] bg-mist ${i % 3 === 1 ? 'aspect-[4/5]' : 'aspect-[4/4.4]'}`}>
+                    <ImageReveal>
+<Image
+                      src={p.image}
+                      alt={p.title}
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+                    />
+</ImageReveal>
+                    <span className="absolute top-4 left-4 rounded-full bg-paper/90 px-3 py-1.5 font-mono text-[10px] tracking-[0.08em] text-ink uppercase backdrop-blur">
+                      {p.category}
+                    </span>
+                  </div>
+                  <div className="mt-4 flex items-start justify-between gap-4 px-1">
+                    <div>
+                      <h3 className="text-display text-[1.5rem] font-semibold tracking-[-0.035em] text-ink">{p.title}</h3>
+                      <p className="mt-1.5 max-w-sm text-[14px] leading-relaxed text-ink/55">{p.description}</p>
+                    </div>
+                    <span className="font-mono text-[11px] text-primary/70">{pad(projects.indexOf(p) + 1)}.</span>
+                  </div>
+                </motion.li>
+              ))}
+            </AnimatePresence>
+          </motion.ul>
+        </section>
 
-            {/* Project showcase teaser */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="grid grid-cols-3 gap-4 max-w-md mx-auto mt-12 pt-8 border-t border-gray-200"
-            >
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-light text-primary mb-1">100+</div>
-                <div className="text-xs font-light text-gray-600">Projects</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-light text-primary mb-1">50+</div>
-                <div className="text-xs font-light text-gray-600">Clients</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl md:text-3xl font-light text-primary mb-1">95%</div>
-                <div className="text-xs font-light text-gray-600">Satisfaction</div>
-              </div>
-            </motion.div>
-          </motion.div>
+        {/* Client wall */}
+        <section className="px-2.5 md:px-3">
+          <div className="rounded-[1.75rem] bg-mist px-6 py-20 md:px-10 md:py-24 lg:px-14">
+            <div className="grid grid-cols-1 gap-10 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-8">
+              <Reveal>
+                <SectionLabel code="03" title="Clients" />
+              </Reveal>
+              <Reveal delay={0.05}>
+                <WordReveal as="h2" className="text-display text-[clamp(2.25rem,4.4vw,4.5rem)] leading-[0.98] font-semibold tracking-[-0.05em] text-ink">
+                  Trusted by 100+ organisations
+                </WordReveal>
+              </Reveal>
+            </div>
+            <ul className="mt-14 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-6">
+              {clients.map((c, i) => (
+                <Reveal key={c.name} delay={Math.min(0.03 * i, 0.15)}>
+                  <li className="flex aspect-[4/3] items-center justify-center rounded-[1.1rem] bg-white p-6">
+                    <span className="relative h-full w-full">
+                      <Image src={c.logo} alt={c.name} fill sizes="12rem" className="object-contain" />
+                    </span>
+                  </li>
+                </Reveal>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <FAQ code="04" items={faqs} title="Project questions" sub="How projects run, how long they take and what you get at the end." />
+        <div className="pb-2">
+          <Marquee />
         </div>
-      </section>
+      </PageShell>
 
       <Footer />
     </main>
   )
 }
-

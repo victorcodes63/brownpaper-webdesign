@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView } from 'motion/react'
 import { useRef } from 'react'
 import Image from 'next/image'
 
@@ -14,73 +14,50 @@ const clientLogos = [
   { name: 'Verto', logo: '/images/clients/verto.svg' },
 ]
 
-// Duplicate for seamless loop
 const duplicatedLogos = [...clientLogos, ...clientLogos]
+const ease = [0.16, 1, 0.3, 1] as const
 
 export default function ClientTicker() {
   const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, margin: '-50px' })
+  const isInView = useInView(ref, { once: true, margin: '-40px' })
 
   return (
-    <div ref={ref} className="relative w-full bg-transparent">
-      <div className="max-w-4xl mx-auto px-6">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center py-3 px-6"
+    <div ref={ref} className="w-full bg-paper">
+      <div className="mx-auto max-w-[1400px] px-6 py-8 md:px-12 lg:px-16">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+          transition={{ duration: 0.6, ease }}
+          className="mb-6 text-center text-[11px] uppercase tracking-[0.2em] text-ink/40"
         >
-          <p className="text-xs font-light text-gray-500 uppercase tracking-wider">
-            Trusted by Leading Organizations
-          </p>
-        </motion.div>
+          Trusted by leading organizations
+        </motion.p>
 
-        {/* Ticker */}
-        <div className="relative w-full overflow-hidden py-2">
-        <motion.div
-          className="flex gap-8 md:gap-12 items-center whitespace-nowrap"
-          animate={{
-            x: [0, -(120 + 32) * clientLogos.length], // Move by width of one set (logo width + gap) * number of logos
-          }}
-          transition={{
-            duration: 60,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
-        >
-        {duplicatedLogos.map((client, index) => (
-          <div
-            key={`${client.name}-${index}`}
-            className="flex-shrink-0 flex items-center justify-center opacity-70 hover:opacity-100 transition-opacity"
-            style={{ width: '120px', height: '50px' }}
+        <div className="relative overflow-hidden">
+          <motion.div
+            className="flex items-center gap-12 whitespace-nowrap md:gap-16"
+            animate={{ x: [0, -(132) * clientLogos.length] }}
+            transition={{ duration: 50, repeat: Infinity, ease: 'linear' }}
           >
-            <Image
-              src={client.logo}
-              alt={client.name}
-              width={120}
-              height={60}
-              className="object-contain grayscale hover:grayscale-0 transition-all"
-              style={{ 
-                width: '120px', 
-                height: '50px', 
-                objectFit: 'contain',
-                maxWidth: '120px',
-                maxHeight: '50px'
-              }}
-              onError={(e) => {
-                // Fallback if image doesn't exist
-                const target = e.target as HTMLImageElement
-                target.style.display = 'none'
-              }}
-            />
-          </div>
-        ))}
-      </motion.div>
+            {duplicatedLogos.map((client, index) => (
+              <div
+                key={`${client.name}-${index}`}
+                className="relative h-10 w-[110px] shrink-0 opacity-50 grayscale transition-opacity hover:opacity-90 hover:grayscale-0"
+              >
+                <Image
+                  src={client.logo}
+                  alt={client.name}
+                  fill
+                  sizes="110px"
+                  className="object-contain"
+                />
+              </div>
+            ))}
+          </motion.div>
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-linear-to-r from-paper to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-paper to-transparent" />
         </div>
       </div>
     </div>
   )
 }
-
-
