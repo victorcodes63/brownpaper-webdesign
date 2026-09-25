@@ -1,25 +1,20 @@
 import type { Metadata } from 'next'
-import { Figtree, Plus_Jakarta_Sans, Fragment_Mono } from 'next/font/google'
+import localFont from 'next/font/local'
+import { JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import StructuredData from './structured-data'
 import SmoothScroll from '@/components/SmoothScroll'
 
-const figtree = Figtree({
-  subsets: ['latin'],
-  variable: '--font-figtree',
+const satoshi = localFont({
+  src: '../fonts/satoshi/Satoshi-Variable.woff2',
+  variable: '--font-satoshi',
   display: 'swap',
+  weight: '300 900',
 })
 
-const plusJakarta = Plus_Jakarta_Sans({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-plus-jakarta',
-  display: 'swap',
-})
-
-const fragmentMono = Fragment_Mono({
-  subsets: ['latin'],
-  weight: '400',
-  variable: '--font-fragment-mono',
+  variable: '--font-jetbrains-mono',
   display: 'swap',
 })
 
@@ -114,7 +109,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${figtree.variable} ${plusJakarta.variable} ${fragmentMono.variable}`}>
+    <html lang="en" className={`${satoshi.variable} ${jetbrainsMono.variable}`}>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
