@@ -10,10 +10,9 @@ const Work = lazy(() => import('@/components/home/Work'))
 const Impact = lazy(() => import('@/components/home/Impact'))
 const Process = lazy(() => import('@/components/home/Process'))
 const WhyUs = lazy(() => import('@/components/home/WhyUs'))
-const Journey = lazy(() => import('@/components/home/Journey'))
+const CtaBand = lazy(() => import('@/components/home/CtaBand'))
 const FAQ = lazy(() => import('@/components/FAQ'))
 const HomeContact = lazy(() => import('@/components/home/HomeContact'))
-const Principles = lazy(() => import('@/components/home/Principles'))
 
 const SectionLoader = () => (
   <div className="flex w-full items-center justify-center bg-paper py-32">
@@ -49,16 +48,13 @@ export default function Home() {
             <WhyUs />
           </Suspense>
           <Suspense fallback={<SectionLoader />}>
-            <Journey />
+            <CtaBand />
           </Suspense>
           <Suspense fallback={<SectionLoader />}>
-            <FAQ />
+            <FAQ schema />
           </Suspense>
           <Suspense fallback={<SectionLoader />}>
             <HomeContact />
-          </Suspense>
-          <Suspense fallback={<SectionLoader />}>
-            <Principles />
           </Suspense>
         </div>
       </div>

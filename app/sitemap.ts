@@ -1,65 +1,25 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from 'next'
+import { site } from '@/lib/site'
+import { services } from '@/lib/services'
+import { publishedProjects } from '@/lib/projects'
 
+// Generated from the site's own data so new services and case studies are
+// never missing (Route to 10, item 033).
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://brownpaper.co.ke'
-  
+  const now = new Date()
+  const page = (path: string, priority: number, changeFrequency: 'weekly' | 'monthly' = 'monthly') => ({
+    url: `${site.url}${path}`,
+    lastModified: now,
+    changeFrequency,
+    priority,
+  })
   return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/services/printing-services`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/brand-identity`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/graphic-design`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/services/packaging-design`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/portfolio`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
+    page('', 1, 'weekly'),
+    page('/services', 0.9, 'weekly'),
+    ...services.map((s) => page(`/services/${s.slug}`, 0.9)),
+    page('/portfolio', 0.8, 'weekly'),
+    ...publishedProjects().map((p) => page(`/portfolio/${p.slug}`, 0.7)),
+    page('/about', 0.7),
+    page('/contact', 0.7),
   ]
 }
-
-
-

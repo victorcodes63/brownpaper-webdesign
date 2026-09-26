@@ -29,7 +29,7 @@ export default function Principles() {
             </p>
           </Reveal>
           <Reveal delay={0.1}>
-            <p className="text-display text-[clamp(1.6rem,2.6vw,2.6rem)] leading-[1.15] font-medium tracking-[-0.035em] text-ink/40">
+            <p className="text-display text-[clamp(1.6rem,2.6vw,2.6rem)] leading-[1.15] font-medium tracking-[-0.035em] text-ink/55">
               Our job is to make every part of a brand say the same thing clearly, wherever someone meets it.
             </p>
           </Reveal>

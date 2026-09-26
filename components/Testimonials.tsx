@@ -42,7 +42,7 @@ export default function Testimonials() {
           transition={{ duration: 0.75, ease }}
           className="mb-14 md:mb-20"
         >
-          <p className="mono-label mb-4 text-paper/40">
+          <p className="mono-label mb-4 text-paper/55">
             <span className="text-paper/55">(BP® — 05)</span> Clients
           </p>
           <h2 className="text-display max-w-2xl text-4xl md:text-5xl lg:text-6xl">
@@ -66,7 +66,7 @@ export default function Testimonials() {
               <footer className="mt-6">
                 <cite className="not-italic">
                   <span className="block text-sm font-medium text-paper">{item.name}</span>
-                  <span className="mt-1 block text-sm text-paper/45">{item.role}</span>
+                  <span className="mt-1 block text-sm text-paper/55">{item.role}</span>
                 </cite>
               </footer>
             </motion.blockquote>

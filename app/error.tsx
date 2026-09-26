@@ -50,7 +50,7 @@ export default function Error({
                 </CharReveal>
               </Reveal>
               {error.digest && (
-                <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/35">
+                <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/55">
                   Ref {error.digest}
                 </p>
               )}

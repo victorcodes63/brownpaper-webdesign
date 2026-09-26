@@ -43,7 +43,7 @@ export default function Journey() {
               <Reveal key={m.year} delay={0.1 * i} x={15} y={0}>
                 <li className="relative md:pt-10">
                   <span className="absolute top-0 left-0 hidden h-4 w-4 rounded-full border-[3px] border-paper bg-primary md:block" />
-                  <p className="font-mono text-[12px] tracking-[0.08em] text-ink/40">{m.year}</p>
+                  <p className="font-mono text-[12px] tracking-[0.08em] text-ink/55">{m.year}</p>
                   <h3 className="text-display mt-3 text-[clamp(1.5rem,2vw,2rem)] font-semibold tracking-[-0.04em] text-ink">
                     {m.title}
                   </h3>

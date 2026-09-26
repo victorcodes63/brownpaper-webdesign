@@ -1,34 +1,10 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { animate, useInView } from 'motion/react'
-import { Reveal, Marquee, ImageReveal } from './ui'
+import { site } from '@/lib/site'
+import { Reveal, Marquee, ImageReveal, CountUp } from './ui'
 
-function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-40px' })
-  const [val, setVal] = useState(0)
-  useEffect(() => {
-    if (!inView) return
-    const c = animate(0, to, { duration: 1.6, ease: [0.16, 1, 0.3, 1], onUpdate: (v) => setVal(Math.round(v)) })
-    return () => c.stop()
-  }, [inView, to])
-  return (
-    <span ref={ref}>
-      {val}
-      {suffix}
-    </span>
-  )
-}
-
-const faces = [
-  '/images/testimonials/amina.jpg',
-  '/images/testimonials/david.png',
-  '/images/testimonials/grace.jpg',
-  '/images/testimonials/michael.jpg',
-]
 
 const tile = 'relative overflow-hidden rounded-[1.5rem] bg-chrome text-paper'
 
@@ -44,9 +20,10 @@ export default function Impact() {
                 src="/images/hero/team.jpg"
                 alt="The Brown Paper team"
                 fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                quality={90}
-                className="object-cover object-[center_40%] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                sizes="(min-width: 1024px) 1024px, 100vw"
+                quality={100}
+                priority
+                className="object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
               />
             </ImageReveal>
             <div className="absolute inset-0 bg-linear-to-t from-chrome/85 via-chrome/10 to-transparent" />
@@ -54,7 +31,7 @@ export default function Impact() {
               <div>
                 <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-paper/60">Inside Brown Paper</p>
                 <p className="text-display mt-2 text-[clamp(1.75rem,2.6vw,2.6rem)] font-semibold tracking-[-0.04em]">
-                  Meet the studio
+                  About the studio
                 </p>
               </div>
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-paper text-ink transition-colors group-hover:bg-primary group-hover:text-paper">
@@ -70,15 +47,11 @@ export default function Impact() {
             <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-paper/50">Clients served</p>
             <div>
               <p className="text-display text-[clamp(3.5rem,5vw,5rem)] leading-none font-semibold tracking-[-0.05em]">
-                <CountUp to={100} suffix="+" />
+                <CountUp to={site.stats.clients} suffix="+" />
               </p>
-              <div className="mt-5 flex">
-                {faces.map((f, i) => (
-                  <span key={f} className="relative -ml-1.5 h-9 w-9 overflow-hidden rounded-[0.65rem] first:ml-0" style={{ zIndex: i }}>
-                    <Image src={f} alt="" fill sizes="72px" className="object-cover" />
-                  </span>
-                ))}
-              </div>
+              <p className="mt-4 max-w-[16rem] text-[14px] leading-snug text-paper/60">
+                From national institutions to growing Nairobi businesses.
+              </p>
             </div>
           </div>
         </Reveal>
@@ -89,10 +62,10 @@ export default function Impact() {
             <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-paper/70">Projects delivered</p>
             <div>
               <p className="text-display text-[clamp(3.5rem,5vw,5rem)] leading-none font-semibold tracking-[-0.05em]">
-                <CountUp to={150} suffix="+" />
+                <CountUp to={site.stats.projects} suffix="+" />
               </p>
               <p className="mt-4 max-w-[16rem] text-[14px] leading-snug text-paper/75">
-                Identity, packaging, print and display since 2022.
+                Identity, packaging, print and display since {site.foundedYear}.
               </p>
             </div>
           </div>
@@ -116,7 +89,7 @@ export default function Impact() {
               </span>
               <span className="flex flex-col gap-0.5 font-mono text-[11px] uppercase tracking-[0.08em]">
                 <span className="text-paper/90">Sarah Gachugi</span>
-                <span className="text-paper/45">Precision Credit Limited</span>
+                <span className="text-paper/55">Precision Credit Limited</span>
               </span>
             </figcaption>
           </figure>

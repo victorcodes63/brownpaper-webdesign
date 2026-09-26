@@ -1,18 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Display Solutions',
+  title: 'Banners, Displays & Signage in Nairobi',
   description: 'Professional display solutions in Kenya. Custom retail displays, trade show booths, exhibition stands, point of sale displays, and window displays. Expert design and installation services.',
-  keywords: [
-    'display solutions Kenya',
-    'retail displays Nairobi',
-    'trade show booths',
-    'exhibition stands',
-    'point of sale displays',
-    'window displays',
-    'custom displays Kenya',
-    'display installation',
-  ],
   openGraph: {
     title: 'Display Solutions | Brown Paper',
     description: 'Professional display solutions in Kenya. Custom retail displays, trade show booths, and exhibition stands.',

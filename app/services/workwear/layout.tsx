@@ -1,18 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Workwear Solutions',
+  title: 'Branded Workwear & Uniforms in Nairobi',
   description: 'Professional branded workwear and corporate uniforms in Kenya. Custom corporate uniforms, branded apparel, safety wear, and team shirts. Expert embroidery and printing services.',
-  keywords: [
-    'workwear Kenya',
-    'corporate uniforms Nairobi',
-    'branded apparel',
-    'safety wear Kenya',
-    'custom embroidery',
-    'team shirts',
-    'professional attire',
-    'workwear printing',
-  ],
   openGraph: {
     title: 'Workwear Solutions | Brown Paper',
     description: 'Professional branded workwear and corporate uniforms in Kenya. Custom workwear solutions for your team.',

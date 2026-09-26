@@ -2,58 +2,46 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
+import { faqs as faqsSource } from '@/lib/faqs'
 import { SectionLabel, Reveal, PillLink, ease, pad, CharReveal, WordReveal } from './home/ui'
 
 export type FaqItem = { question: string; answer: string }
 
-const defaultFaqs: FaqItem[] = [
-  {
-    question: 'What printing services do you offer?',
-    answer:
-      'Business cards, brochures, flyers, banners, stationery, catalogues, posters and large-format printing, using offset and digital presses.',
-  },
-  {
-    question: 'How long does a typical project take?',
-    answer:
-      'Simple print jobs often take 5 to 7 business days. Full brand identity work typically runs 4 to 6 weeks. We share a clear timeline upfront.',
-  },
-  {
-    question: 'Do you offer design services along with printing?',
-    answer:
-      'Yes. We are a full-service studio: logos, brand systems, marketing materials, packaging and digital assets, with or without print.',
-  },
-  {
-    question: 'What is your minimum order quantity?',
-    answer:
-      'It varies by product. Business cards usually start at 100 units. Specialty packaging may need higher minimums, so we quote per project.',
-  },
-  {
-    question: 'Can you work with my existing brand guidelines?',
-    answer:
-      'Absolutely. We work within established brand systems to keep every piece consistent across print and production.',
-  },
-  {
-    question: 'What payment methods do you accept?',
-    answer:
-      'Bank transfer, M-Pesa, Airtel Money, cards, and cash for local clients. Larger projects typically start with a 50% deposit.',
-  },
-]
+const defaultFaqs: FaqItem[] = faqsSource.general
 
 export default function FAQ({
   code = '08',
   items = defaultFaqs,
   title = 'Core questions',
   sub = 'Straight answers on timelines, minimums and how we work.',
+  schema = false,
 }: {
   code?: string
   items?: FaqItem[]
   title?: string
   sub?: string
+  schema?: boolean
 }) {
   const [open, setOpen] = useState<number | null>(0)
 
   return (
     <section id="faq" className="px-6 py-24 md:px-10 md:py-32 lg:px-14">
+      {schema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              mainEntity: items.map((f) => ({
+                '@type': 'Question',
+                name: f.question,
+                acceptedAnswer: { '@type': 'Answer', text: f.answer },
+              })),
+            }),
+          }}
+        />
+      )}
       <div className="grid grid-cols-1 gap-14 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
         <Reveal className="lg:sticky lg:top-24 lg:self-start">
           <SectionLabel code={code} title="Frequently asked questions" />
@@ -79,7 +67,7 @@ export default function FAQ({
                   aria-expanded={isOpen}
                   className="group grid w-full grid-cols-[3.5rem_minmax(0,1fr)_2rem] items-center gap-3 py-7 text-left md:grid-cols-[4.5rem_minmax(0,1fr)_2.5rem]"
                 >
-                  <span className="font-mono text-[12px] text-primary/70">{pad(i + 1)}.</span>
+                  <span className="font-mono text-[12px] text-primary">{pad(i + 1)}.</span>
                   <span className="font-mono text-[13px] uppercase tracking-[0.06em] text-ink transition-colors group-hover:text-primary md:text-[14px]">
                     {f.question}
                   </span>

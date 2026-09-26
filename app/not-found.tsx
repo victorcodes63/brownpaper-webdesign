@@ -73,7 +73,7 @@ export default function NotFound() {
                     <span className="text-display text-[clamp(1.5rem,2.8vw,2.5rem)] font-semibold tracking-[-0.04em] text-ink transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-2">
                       {item.name}
                     </span>
-                    <span className="text-lg text-ink/40 transition-colors group-hover:text-primary" aria-hidden>
+                    <span className="text-lg text-ink/55 transition-colors group-hover:text-primary" aria-hidden>
                       ↗
                     </span>
                   </Link>

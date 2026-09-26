@@ -1,6 +1,8 @@
 'use client'
 
 import Navigation from '@/components/Navigation'
+import JsonLd from '@/components/JsonLd'
+import { breadcrumbSchema } from '@/lib/schema'
 import Footer from '@/components/Footer'
 import FAQ from '@/components/FAQ'
 import PageHero, { PageShell } from '@/components/PageHero'
@@ -21,6 +23,7 @@ export default function ServicesIndex() {
   return (
     <main className="min-h-svh bg-chrome">
       <Navigation />
+      <JsonLd data={breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Services', path: '/services' }])} />
 
       <PageHero
         code="01"
@@ -54,7 +57,7 @@ export default function ServicesIndex() {
         <Process code="03" />
         <FAQ code="04" />
         <div className="pb-2">
-          <Marquee />
+          <Marquee items={services.map((x) => x.name)} />
         </div>
       </PageShell>
 

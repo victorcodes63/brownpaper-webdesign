@@ -1,5 +1,7 @@
 'use client'
 
+import { site } from '@/lib/site'
+
 import { motion, AnimatePresence } from 'motion/react'
 import { useState, useEffect, useRef, useSyncExternalStore } from 'react'
 import Link from 'next/link'
@@ -199,7 +201,7 @@ export default function Navigation({ variant = 'overlay' }: NavigationProps) {
                           <Link
                             href={link.href}
                             onClick={close}
-                            className="block py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-paper/40 transition-colors hover:text-paper"
+                            className="block py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-paper/55 transition-colors hover:text-paper"
                           >
                             {String(i + 1).padStart(2, '0')}
                           </Link>
@@ -215,7 +217,7 @@ export default function Navigation({ variant = 'overlay' }: NavigationProps) {
                     </div>
 
                     <div className="lg:col-span-4 lg:col-start-7">
-                      <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.16em] text-paper/35">
+                      <p className="mb-4 font-mono text-[10px] uppercase tracking-[0.16em] text-paper/55">
                         Services
                       </p>
                       <div className="flex flex-col gap-2">
@@ -232,12 +234,12 @@ export default function Navigation({ variant = 'overlay' }: NavigationProps) {
                       </div>
                     </div>
 
-                    <div className="mt-auto space-y-3 font-mono text-[11px] uppercase tracking-[0.12em] text-paper/45 lg:col-span-3 lg:col-start-11 lg:mt-0 lg:text-right">
-                      <a href="mailto:info@bpe.co.ke" className="block hover:text-paper">
-                        info@bpe.co.ke
+                    <div className="mt-auto space-y-3 font-mono text-[11px] uppercase tracking-[0.12em] text-paper/55 lg:col-span-3 lg:col-start-11 lg:mt-0 lg:text-right">
+                      <a href={`mailto:${site.email}`} className="block hover:text-paper">
+                        {site.email}
                       </a>
-                      <a href="tel:+254716286489" className="block hover:text-paper">
-                        +254 716 286 489
+                      <a href={site.phoneHref} className="block hover:text-paper">
+                        {site.phone}
                       </a>
                     </div>
                   </div>

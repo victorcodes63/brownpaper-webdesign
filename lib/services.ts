@@ -13,6 +13,13 @@ export type Service = {
   packages?: { name: string; features: string[] }[]
   deliverables?: string[]
   benefits?: ServiceItem[]
+  /** Commercial facts (client items B10/B11). Blocks render only when present. */
+  pricing?: {
+    fromKes?: number
+    unit?: string // e.g. "per 100 cards"
+    minimum?: string // e.g. "100 units"
+    turnaround?: { standard?: string; rush?: string }
+  }
 }
 
 export const services: Service[] = [
@@ -869,3 +876,13 @@ export const services: Service[] = [
 ]
 
 export const getService = (slug: string) => services.find((s) => s.slug === slug)
+
+/** Portfolio filter each service maps to (Route to 10, item 014). */
+export const serviceCategory: Record<string, string | undefined> = {
+  'brand-identity': 'Branding',
+  'graphic-design': 'Design',
+  'packaging-design': 'Packaging',
+  'printing-services': 'Print',
+  display: 'Display',
+  'office-stationery': 'Print',
+}

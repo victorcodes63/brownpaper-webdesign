@@ -2,18 +2,10 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about Brown Paper, a leading printing and design agency in Kenya. Founded in 2022, we combine traditional craftsmanship with modern innovation to deliver exceptional branding and printing solutions. Based in Nairobi, serving clients across East Africa.',
-  keywords: [
-    'about brown paper',
-    'printing company Kenya history',
-    'design agency Nairobi',
-    'branding team Kenya',
-    'creative agency about',
-    'printing services company',
-  ],
+  description: 'Brown Paper is a design, printing and branding studio in Nairobi, founded in 2022. Meet the studio, how we work and what drives us.',
   openGraph: {
     title: 'About Us | Brown Paper',
-    description: 'Learn about Brown Paper, a leading printing and design agency in Kenya. Founded in 2022, serving clients across East Africa.',
+    description: 'A design, printing and branding studio in Nairobi, founded in 2022.',
     url: 'https://brownpaper.co.ke/about',
     type: 'website',
   },

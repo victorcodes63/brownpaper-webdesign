@@ -86,7 +86,7 @@
 }
 
 @utility mono-label {
-  @apply font-mono text-[10px] uppercase tracking-[0.14em] text-ink/45 md:text-[11px];
+  @apply font-mono text-[10px] uppercase tracking-[0.14em] text-ink/55 md:text-[11px];
 }
 
 @utility page-shell {
@@ -166,7 +166,8 @@ select option {
  * fillets (radial-gradient pseudo-elements) so the paper curves into them.
  * No masks — the sockets live inside the animated card.
  */
-.hero-white-card {
+.hero-white-card,
+.hero-kraft-card {
   --notch-r: 1.5rem;
   --chrome: var(--color-chrome);
   --clients-w: 33rem; /* approx notch width; ticker stops here */
@@ -230,6 +231,47 @@ select option {
   background: radial-gradient(circle at 0 0, transparent calc(var(--notch-r) - 0.5px), var(--chrome) var(--notch-r));
 }
 
+/* Phones/tablets: clients strip runs the width of the kraft slab, leaving a
+   short shoulder of paper on the left for the fillet to curve into */
+.hero-clients-socket--wide {
+  width: calc(100% - 4.5rem);
+  max-width: none;
+  padding: 0.625rem 0 0.625rem 0.5rem;
+}
+/* Phones/tablets: notch flipped to the TOP-right of the kraft strip, so the
+   logos open up into the gap under the white card and the paper wraps below */
+.hero-clients-socket--top {
+  top: 0;
+  bottom: auto;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: var(--notch-r);
+}
+.hero-clients-socket--top::before {
+  top: 100%;
+  bottom: auto;
+  right: 0;
+  background: radial-gradient(circle at 0 100%, transparent calc(var(--notch-r) - 0.5px), var(--chrome) var(--notch-r));
+}
+.hero-clients-socket--top::after {
+  top: 0;
+  bottom: auto;
+  right: 100%;
+  background: radial-gradient(circle at 0 100%, transparent calc(var(--notch-r) - 0.5px), var(--chrome) var(--notch-r));
+}
+.hero-logo-marquee {
+  animation: hero-logo-loop 48s linear infinite;
+}
+@keyframes hero-logo-loop {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo-marquee {
+    animation: none;
+  }
+}
+
 /* ── Brand teal system details ── */
 ::selection {
   background: var(--color-primary);
@@ -240,3 +282,74 @@ select option {
   outline-offset: 3px;
   border-radius: 6px;
 }
+
+/* ── Print (Route to 10, item 020): a printing company's site should print well ── */
+@media print {
+  @page {
+    margin: 16mm;
+  }
+  html,
+  body,
+  main,
+  section,
+  .page-shell {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  body {
+    padding: 0 !important;
+    font-size: 11pt;
+  }
+  header,
+  nav[aria-label='Quick contact'],
+  canvas,
+  video,
+  footer .pointer-events-none,
+  [aria-hidden='true']:not(svg) {
+    display: none !important;
+  }
+  * {
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    color: #000 !important;
+    border-color: #ccc !important;
+  }
+  [style*='opacity'],
+  [style*='transform'],
+  [style*='clip-path'] {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+  .bg-chrome,
+  .bg-ink,
+  .bg-primary,
+  .bg-mist {
+    background: #fff !important;
+  }
+  .page-shell,
+  [class*='rounded-'] {
+    border-radius: 0 !important;
+  }
+  .sticky {
+    position: static !important;
+  }
+  section,
+  figure,
+  li,
+  article {
+    break-inside: avoid;
+  }
+  a[href^='http']::after {
+    content: ' (' attr(href) ')';
+    font-size: 9pt;
+    word-break: break-all;
+  }
+  .w-max {
+    width: auto !important;
+    flex-wrap: wrap !important;
+  }
+}
+

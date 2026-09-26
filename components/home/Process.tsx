@@ -78,7 +78,7 @@ export default function Process({ code = '05' }: { code?: string }) {
                   <ul className="mt-auto pt-8 font-mono text-[11px] uppercase tracking-[0.06em]">
                     {s.items.map((it, j) => (
                       <li key={it} className="flex gap-4 border-t border-ink/10 py-2.5">
-                        <span className="text-primary/70">{pad(j + 1)}.</span>
+                        <span className="text-primary">{pad(j + 1)}.</span>
                         <span className="text-ink/75">{it}</span>
                       </li>
                     ))}

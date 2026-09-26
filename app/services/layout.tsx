@@ -2,19 +2,10 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Our Services',
-  description: 'Comprehensive printing, design, and branding services in Kenya. From business cards and brochures to complete brand identity and packaging design. Expert solutions for businesses across East Africa.',
-  keywords: [
-    'printing services Kenya',
-    'design services Nairobi',
-    'branding services',
-    'graphic design Kenya',
-    'packaging design',
-    'brand identity services',
-    'marketing materials',
-  ],
+  description: 'Printing, design and branding services in Nairobi, from business cards and brochures to brand identity, packaging and event displays.',
   openGraph: {
     title: 'Our Services | Brown Paper',
-    description: 'Comprehensive printing, design, and branding services in Kenya. Expert solutions for businesses across East Africa.',
+    description: 'Printing, design and branding services in Nairobi.',
     url: 'https://brownpaper.co.ke/services',
     type: 'website',
   },

@@ -1,13 +1,17 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import PageHero, { PageShell } from '@/components/PageHero'
 import { SectionLabel, Reveal, PillLink, Marquee, pad, CharReveal, ImageReveal, WordReveal } from '@/components/home/ui'
 import ServiceIndexList from '@/components/ServiceIndexList'
-import { services, getService } from '@/lib/services'
+import { services, getService, serviceCategory } from '@/lib/services'
+import JsonLd from '@/components/JsonLd'
+import PricingFacts from '@/components/service/PricingFacts'
+import { breadcrumbSchema, serviceSchema } from '@/lib/schema'
 
 const px = 'px-6 md:px-10 lg:px-14'
 
@@ -16,11 +20,24 @@ export default function ServicePage({ slug }: { slug: string }) {
   if (!s) notFound()
   const index = services.findIndex((x) => x.slug === slug)
   const others = services.filter((x) => x.slug !== slug)
+  const prev = services[(index - 1 + services.length) % services.length]
+  const next = services[(index + 1) % services.length]
+  const workCategory = serviceCategory[slug]
   const compact = s.items.length > 8
 
   return (
     <main className="min-h-svh bg-chrome">
       <Navigation />
+      <JsonLd
+        data={[
+          serviceSchema(s),
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Services', path: '/services' },
+            { name: s.name, path: `/services/${s.slug}` },
+          ]),
+        ]}
+      />
 
       <PageHero code={`S${pad(index + 1).slice(1)}`} label={s.tag} lead={s.lead} title={s.name}>
         <PillLink href="/contact" dark>
@@ -29,6 +46,27 @@ export default function ServicePage({ slug }: { slug: string }) {
       </PageHero>
 
       <PageShell>
+        {/* Breadcrumbs */}
+        <nav aria-label="Breadcrumb" className="px-6 pt-6 md:px-10 lg:px-14">
+          <ol className="flex flex-wrap items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/55">
+            <li>
+              <Link href="/" className="hover:text-primary">
+                Home
+              </Link>
+            </li>
+            <li aria-hidden>/</li>
+            <li>
+              <Link href="/services" className="hover:text-primary">
+                Services
+              </Link>
+            </li>
+            <li aria-hidden>/</li>
+            <li aria-current="page" className="text-ink/85">
+              {s.name}
+            </li>
+          </ol>
+        </nav>
+
         {/* Overview */}
         <section className="grid grid-cols-1 gap-2.5 p-2.5 md:p-3 lg:grid-cols-2">
           <Reveal>
@@ -38,7 +76,6 @@ export default function ServicePage({ slug }: { slug: string }) {
                   src={s.image}
                   alt={s.name}
                   fill
-                  priority
                   quality={90}
                   sizes="(min-width: 1280px) 720px, (min-width: 1024px) 50vw, 100vw"
                   className={`object-cover ${s.slug === 'workwear' ? 'object-[center_82%]' : 'object-center'}`}
@@ -56,13 +93,18 @@ export default function ServicePage({ slug }: { slug: string }) {
                 {s.statement}
               </WordReveal>
             </Reveal>
+            {s.pricing && (
+              <Reveal delay={0.04}>
+                <PricingFacts pricing={s.pricing} />
+              </Reveal>
+            )}
             <Reveal delay={0.06}>
               <dl className="grid grid-cols-2 gap-2.5">
                 <div className="rounded-[1.25rem] border border-ink/8 p-6">
                   <dd className="text-display text-[clamp(2.25rem,3.6vw,3.5rem)] leading-none font-semibold tracking-[-0.05em] text-ink">
                     {s.items.length}
                   </dd>
-                  <dt className="mt-3 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45">
+                  <dt className="mt-3 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/55">
                     {s.slug === 'fun-times' ? 'Event formats' : 'Products & services'}
                   </dt>
                 </div>
@@ -70,7 +112,7 @@ export default function ServicePage({ slug }: { slug: string }) {
                   <dd className="text-display text-[clamp(2.25rem,3.6vw,3.5rem)] leading-none font-semibold tracking-[-0.05em] text-ink">
                     {s.steps.length}
                   </dd>
-                  <dt className="mt-3 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45">Step process</dt>
+                  <dt className="mt-3 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/55">Step process</dt>
                 </div>
               </dl>
             </Reveal>
@@ -106,7 +148,7 @@ export default function ServicePage({ slug }: { slug: string }) {
               {s.items.map((it, i) => (
                 <Reveal key={it.title} delay={Math.min(0.03 * (i % 6), 0.15)} className="h-full">
                   <li className="flex h-full flex-col rounded-[1.25rem] bg-mist p-6 md:p-7">
-                    <span className="font-mono text-[11px] text-primary/70">{pad(i + 1)}.</span>
+                    <span className="font-mono text-[11px] text-primary">{pad(i + 1)}.</span>
                     <h3 className="text-display mt-6 text-[1.4rem] leading-[1.1] font-semibold tracking-[-0.035em] text-ink">
                       {it.title}
                     </h3>
@@ -120,7 +162,7 @@ export default function ServicePage({ slug }: { slug: string }) {
               {s.items.map((it, i) => (
                 <Reveal key={it.title} delay={0.04 * i} x={-30} y={0}>
                   <li className="grid grid-cols-1 gap-3 border-t border-ink/10 py-8 md:grid-cols-[4rem_minmax(0,0.8fr)_minmax(0,1.2fr)] md:gap-8 md:py-10">
-                    <span className="font-mono text-[12px] text-primary/70">{pad(i + 1)}.</span>
+                    <span className="font-mono text-[12px] text-primary">{pad(i + 1)}.</span>
                     <h3 className="text-display text-[clamp(1.6rem,2.4vw,2.4rem)] leading-[1.05] font-semibold tracking-[-0.04em] text-ink">
                       {it.title}
                     </h3>
@@ -141,7 +183,7 @@ export default function ServicePage({ slug }: { slug: string }) {
                 {s.packages.map((p, i) => (
                   <Reveal key={p.name} delay={0.06 * i} className="h-full">
                     <article className={`flex h-full flex-col rounded-[1.5rem] p-8 ${i === 2 ? 'bg-chrome text-paper' : 'bg-mist text-ink'}`}>
-                      <span className={`font-mono text-[11px] ${i === 2 ? 'text-primary' : 'text-primary/70'}`}>{pad(i + 1)}.</span>
+                      <span className={`font-mono text-[11px] ${i === 2 ? 'text-primary' : 'text-primary'}`}>{pad(i + 1)}.</span>
                       <h3 className="text-display mt-6 text-[2.25rem] font-semibold tracking-[-0.045em]">{p.name}</h3>
                       <ul className="mt-8 font-mono text-[12px] uppercase tracking-[0.06em]">
                         {p.features.map((f) => (
@@ -175,7 +217,7 @@ export default function ServicePage({ slug }: { slug: string }) {
                 <ul className="grid grid-cols-1 gap-x-8 font-mono text-[12px] uppercase tracking-[0.05em] sm:grid-cols-2">
                   {s.deliverables.map((x, i) => (
                     <li key={x} className="flex gap-4 border-t border-ink/10 py-3.5">
-                      <span className="text-primary/70">{pad(i + 1)}.</span>
+                      <span className="text-primary">{pad(i + 1)}.</span>
                       <span className="text-ink/80">{x}</span>
                     </li>
                   ))}
@@ -253,6 +295,31 @@ export default function ServicePage({ slug }: { slug: string }) {
           </Reveal>
         </section>
 
+        {/* Previous / next service + related work */}
+        <nav aria-label="More services" className="grid grid-cols-1 gap-2.5 px-2.5 pt-2.5 md:grid-cols-3 md:px-3 md:pt-3">
+          <Link href={`/services/${prev.slug}`} className="group rounded-[1.5rem] border border-ink/10 p-7 transition-colors hover:border-primary">
+            <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-ink/55">← Previous service</span>
+            <span className="text-display mt-3 block text-[1.6rem] font-semibold tracking-[-0.035em] text-ink group-hover:text-primary">
+              {prev.name}
+            </span>
+          </Link>
+          <Link
+            href={workCategory ? `/portfolio?c=${encodeURIComponent(workCategory)}` : '/portfolio'}
+            className="group rounded-[1.5rem] bg-mist p-7 transition-colors hover:bg-ink hover:text-paper"
+          >
+            <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-ink/55 group-hover:text-paper/50">Proof of work</span>
+            <span className="text-display mt-3 block text-[1.6rem] font-semibold tracking-[-0.035em]">
+              See related work ↗
+            </span>
+          </Link>
+          <Link href={`/services/${next.slug}`} className="group rounded-[1.5rem] border border-ink/10 p-7 text-right transition-colors hover:border-primary">
+            <span className="font-mono text-[11px] uppercase tracking-[0.08em] text-ink/55">Next service →</span>
+            <span className="text-display mt-3 block text-[1.6rem] font-semibold tracking-[-0.035em] text-ink group-hover:text-primary">
+              {next.name}
+            </span>
+          </Link>
+        </nav>
+
         {/* Other services */}
         <section className={`${px} py-24 md:py-32`}>
           <div className="grid grid-cols-1 gap-10 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-8">
@@ -272,7 +339,7 @@ export default function ServicePage({ slug }: { slug: string }) {
         </section>
 
         <div className="pb-2">
-          <Marquee />
+          <Marquee items={s.items.slice(0, 6).map((x) => x.title)} />
         </div>
       </PageShell>
 

@@ -30,9 +30,9 @@ export default function About() {
               src="/images/hero/team.jpg"
               alt="Brown Paper team"
               fill
-              quality={90}
-              sizes="(max-width: 1024px) 100vw, 40vw"
-              className="object-cover object-[center_35%]"
+              quality={100}
+              sizes="(max-width: 1024px) 100vw, 1024px"
+              className="object-cover object-center"
             />
           </motion.div>
 

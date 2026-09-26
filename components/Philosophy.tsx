@@ -61,7 +61,7 @@ export default function Philosophy() {
           transition={{ duration: 0.6, ease }}
           className="flex flex-col gap-1.5 font-mono text-[12px] uppercase tracking-[0.08em]"
         >
-          <span className="flex items-center gap-2 text-paper/45">
+          <span className="flex items-center gap-2 text-paper/55">
             <span className="flex items-center gap-1" aria-hidden>
               <span className="h-3 w-3 rounded-[3px] border-[1.5px] border-primary" />
               <span className="h-2 w-2 rounded-full bg-primary" />
@@ -81,14 +81,15 @@ export default function Philosophy() {
             className="relative aspect-[4/5] w-full max-w-sm shrink-0 overflow-hidden rounded-[1.25rem] bg-ink lg:w-[clamp(18rem,24vw,26rem)] lg:max-w-none"
           >
             <ImageReveal>
-<Image
-              src="/images/services/branding.jpg"
-              alt="Designer reviewing colour swatches for a brand identity"
-              fill
-              sizes="(min-width: 1024px) 26rem, 90vw"
-              className="object-cover object-[45%_center]"
-            />
-</ImageReveal>
+              <Image
+                src="/images/philosophy/brand-system.jpg"
+                alt="Brand identity suite — kraft bag, packaging, business cards and letterhead in teal and tan"
+                fill
+                sizes="(min-width: 1024px) 26rem, 90vw"
+                quality={100}
+                className="object-cover object-center"
+              />
+            </ImageReveal>
             <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-chrome/40 via-transparent to-transparent" />
           </motion.div>
 
@@ -141,8 +142,8 @@ export default function Philosophy() {
                 <path d="M12 30h14M12 24h20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
               <span className="flex flex-col gap-1 font-mono text-[12px] uppercase tracking-[0.08em]">
-                <span className="text-paper/90">Brown Paper Studio</span>
-                <span className="text-paper/40">Design &amp; print · Nairobi</span>
+                <span className="text-paper/90">John Karuku</span>
+                <span className="text-paper/55">Founder, Brown Paper</span>
               </span>
             </motion.div>
           </div>

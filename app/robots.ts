@@ -1,19 +1,11 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from 'next'
+import { site } from '@/lib/site'
 
+// Non-production hosts are additionally blocked with an X-Robots-Tag header (proxy.ts).
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://brownpaper.co.ke'
-  
   return {
-    rules: [
-      {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/api/', '/_next/'],
-      },
-    ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    rules: [{ userAgent: '*', allow: '/', disallow: ['/api/'] }],
+    sitemap: `${site.url}/sitemap.xml`,
+    host: site.url,
   }
 }
-
-
-

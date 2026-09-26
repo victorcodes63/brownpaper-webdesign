@@ -4,6 +4,16 @@ import { JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import StructuredData from './structured-data'
 import SmoothScroll from '@/components/SmoothScroll'
+import Analytics from '@/components/Analytics'
+import ContactDock from '@/components/ContactDock'
+import { site } from '@/lib/site'
+
+const baseUrl =
+  process.env.VERCEL_ENV === 'production'
+    ? site.url
+    : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : 'http://localhost:3000'
 
 const satoshi = localFont({
   src: '../fonts/satoshi/Satoshi-Variable.woff2',
@@ -23,23 +33,7 @@ export const metadata: Metadata = {
     default: 'Brown Paper | Printing, Design & Branding Agency in Kenya',
     template: '%s | Brown Paper'
   },
-  description: 'Premium printing, design, and branding solutions in Kenya. Since 2018, we\'ve transformed ideas into impactful visual experiences. Expert services in printing, graphic design, brand identity, and packaging design. Based in Nairobi, serving clients across East Africa.',
-  keywords: [
-    'printing services Kenya',
-    'graphic design Nairobi',
-    'brand identity agency',
-    'packaging design Kenya',
-    'printing company Kenya',
-    'design agency Nairobi',
-    'branding services Kenya',
-    'logo design Kenya',
-    'marketing materials printing',
-    'business cards Kenya',
-    'brochures design',
-    'corporate branding',
-    'visual identity',
-    'print solutions Kenya'
-  ],
+  description: site.description,
   authors: [{ name: 'Brown Paper', url: 'https://brownpaper.co.ke' }],
   creator: 'Brown Paper',
   publisher: 'Brown Paper',
@@ -51,7 +45,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://brownpaper.co.ke'),
+  metadataBase: new URL(baseUrl),
   alternates: {
     canonical: '/',
     languages: {
@@ -65,24 +59,12 @@ export const metadata: Metadata = {
     url: 'https://brownpaper.co.ke',
     siteName: 'Brown Paper',
     title: 'Brown Paper | Printing, Design & Branding Agency in Kenya',
-    description: 'Premium printing, design, and branding solutions in Kenya. Since 2018, transforming ideas into impactful visual experiences.',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Brown Paper - Printing, Design & Branding Agency in Kenya',
-        type: 'image/jpeg',
-      },
-    ],
+    description: site.description,
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Brown Paper | Printing, Design & Branding Agency',
-    description: 'Premium printing, design, and branding solutions in Kenya. Transforming ideas into impactful visual experiences.',
-    images: ['/og-image.jpg'],
-    creator: '@brownpaper',
-    site: '@brownpaper',
+    description: site.description,
   },
   robots: {
     index: true,
@@ -95,10 +77,12 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  verification: {},
+  verification: process.env.NEXT_PUBLIC_GSC_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION }
+    : {},
   other: {
-    'contact:phone_number': '+254 716 286 489',
-    'contact:email': 'info@brownpaper.co.ke',
+    'contact:phone_number': site.phone,
+    'contact:email': site.email,
     'contact:website': 'https://brownpaper.co.ke',
   },
 }
@@ -115,13 +99,18 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#008080" />
-        <meta name="msapplication-TileColor" content="#008080" />
+        <meta name="theme-color" content="#0f1414" />
+        <meta name="msapplication-TileColor" content="#0f1414" />
         <StructuredData />
+        {/* Content must never depend on JS animations to become visible (item 021) */}
+        <noscript>
+          <style>{`[style*="opacity:0"],[style*="opacity: 0"]{opacity:1!important}[style*="transform"]{transform:none!important}[style*="clip-path"]{clip-path:none!important}`}</style>
+        </noscript>
       </head>
       <body className="font-sans antialiased">
         <SmoothScroll>{children}</SmoothScroll>
+        <ContactDock />
+        <Analytics />
       </body>
     </html>
   )

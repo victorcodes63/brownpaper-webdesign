@@ -1,5 +1,7 @@
 'use client'
 
+import { site } from '@/lib/site'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'motion/react'
@@ -19,18 +21,14 @@ const nav = [
 const groups = [
   {
     label: 'Socials',
-    links: [
-      { name: 'LinkedIn', href: 'https://linkedin.com/company/brownpaper', external: true },
-      { name: 'Instagram', href: 'https://instagram.com/brownpaperltd', external: true },
-      { name: 'TikTok', href: 'https://www.tiktok.com/@brownpaperenterprisesltd', external: true },
-    ],
+    links: site.socials.map((x) => ({ name: x.name, href: x.href, external: true })),
   },
   {
     label: 'Contact',
     links: [
-      { name: '+254 716 286 489', href: 'tel:+254716286489', external: false },
-      { name: 'info@bpe.co.ke', href: 'mailto:info@bpe.co.ke', external: false },
-      { name: 'Get directions', href: 'https://maps.app.goo.gl/oqN31Wxp6caDzvmD6', external: true },
+      { name: site.phone, href: site.phoneHref, external: false },
+      { name: site.email, href: `mailto:${site.email}`, external: false },
+      { name: 'Get directions', href: site.address.mapsUrl, external: true },
     ],
   },
   {
@@ -78,7 +76,7 @@ export default function Footer() {
         <Globe />
       </div>
 
-      <div className="relative px-6 pt-24 md:px-10 md:pt-32 lg:px-14">
+      <div className="relative px-6 pt-6 md:px-10 md:pt-10 lg:px-14 lg:pt-14">
         {/* ── Top ── */}
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.75fr)_minmax(0,1.1fr)] lg:gap-10">
           <Reveal>
@@ -87,8 +85,7 @@ export default function Footer() {
               Built to last.
             </p>
             <p className="mt-8 max-w-sm text-[15px] leading-relaxed text-paper/55 md:text-[17px]">
-              Bringing your ideas to life. Design, printing, branding and promotional items for brands and
-              events across Kenya and East Africa.
+              Design, printing and branding for businesses and events, from one studio in Nairobi.
             </p>
           </Reveal>
 
@@ -162,24 +159,24 @@ export default function Footer() {
         </div>
 
         {/* ── Bottom bar ── */}
-        <div className="mt-20 flex flex-col items-start gap-8 border-t border-paper/10 py-8 md:mt-24 lg:flex-row lg:items-center lg:justify-between">
+        <div className="mt-20 flex flex-col items-start gap-8 border-t border-paper/10 py-8 md:mt-24 md:mb-16 lg:flex-row lg:items-center lg:justify-between">
           <Link href="/" aria-label="Brown Paper home" className="flex items-center gap-1.5">
             <Logo className="h-8 w-auto text-paper md:h-9" />
             <span className="self-start text-[13px] text-paper/70">®</span>
           </Link>
 
-          <div className="flex flex-col gap-2 font-mono text-[11px] uppercase tracking-[0.08em] lg:items-center">
-            <p className="whitespace-nowrap text-paper/40">
-              © {year} Brown Paper Enterprises Ltd.{' '}
+          <div className="flex flex-col gap-2.5 lg:items-center">
+            <p className="font-mono text-[11px] whitespace-nowrap uppercase tracking-[0.08em] text-paper/55">
+              © {year} {site.legalName}.{' '}
               <span className="text-paper/80">All rights reserved.</span>
             </p>
             <a
               href="https://www.raventechgroup.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-paper/40 transition-colors hover:text-primary"
+              className="text-[13px] tracking-wide text-paper/55 transition-colors hover:text-paper/70"
             >
-              Built by Raven Tech
+              Website by Raven Tech Group
             </a>
           </div>
 

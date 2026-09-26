@@ -1,18 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Fun Times - Event Planning & Management',
+  title: 'Corporate Events & Team Building in Nairobi',
   description: 'Complete event planning and management services in Kenya. Office parties, team building, conferences, expos, and outdoor events. Professional event coordination and management.',
-  keywords: [
-    'event planning Kenya',
-    'office parties Nairobi',
-    'team building activities',
-    'conference management',
-    'expo management',
-    'outdoor events Kenya',
-    'corporate events',
-    'event coordination',
-  ],
   openGraph: {
     title: 'Fun Times - Event Planning & Management | Brown Paper',
     description: 'Complete event planning and management services in Kenya. Make your events memorable and engaging.',

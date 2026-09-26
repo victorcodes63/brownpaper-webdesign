@@ -1,11 +1,16 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import Link from 'next/link'
+import { visibleProjects } from '@/lib/projects'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'motion/react'
 import Navigation from '@/components/Navigation'
+import JsonLd from '@/components/JsonLd'
+import { breadcrumbSchema } from '@/lib/schema'
 import Footer from '@/components/Footer'
-import FAQ, { type FaqItem } from '@/components/FAQ'
+import FAQ from '@/components/FAQ'
+import { faqs } from '@/lib/faqs'
 import PageHero, { PageShell } from '@/components/PageHero'
 import { SectionLabel, Reveal, PillLink, Marquee, ease, pad, ImageReveal, WordReveal } from '@/components/home/ui'
 
@@ -38,27 +43,28 @@ const clients = [
   { name: 'Jaza Capital', logo: '/images/clients/JAZA-150x150.png' },
 ]
 
-const faqs: FaqItem[] = [
-  { question: 'How do you approach a new project?', answer: 'Every project begins with a consultation to understand your goals, audience and brand. We look at the market and competitors and agree an approach before any design starts.' },
-  { question: 'Can you work within our existing brand guidelines?', answer: 'Yes. We work within established guidelines and look for chances to strengthen them, or create guidelines if you don’t have them yet.' },
-  { question: 'What’s included in a typical project?', answer: 'Usually a consultation, concept development, design rounds, final files for print and digital, and brand guidelines where relevant, with a clear timeline upfront.' },
-  { question: 'How long does a project take?', answer: 'A logo refresh may take 2 to 3 weeks; a full brand identity 4 to 8 weeks; packaging typically 3 to 6 weeks. You get a detailed timeline at the consultation.' },
-  { question: 'Do you provide support after the project?', answer: 'Yes. Many clients stay with us for seasonal campaigns, new product launches and ongoing brand assets.' },
-  { question: 'Can we see work from our industry?', answer: 'Yes. During the consultation we share relevant examples from your sector and walk through how similar projects were approached.' },
-]
-
 export default function PortfolioPage() {
   const [cat, setCat] = useState('All')
+  const caseStudies = visibleProjects()
+  // Deep link from service pages: /portfolio?c=Packaging
+  useEffect(() => {
+    const c = new URLSearchParams(window.location.search).get('c')
+    if (c && categories.includes(c)) {
+      const id = requestAnimationFrame(() => setCat(c))
+      return () => cancelAnimationFrame(id)
+    }
+  }, [])
   const shown = useMemo(() => (cat === 'All' ? projects : projects.filter((p) => p.category === cat)), [cat])
 
   return (
     <main className="min-h-svh bg-chrome">
       <Navigation />
+      <JsonLd data={breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'Portfolio', path: '/portfolio' }])} />
 
       <PageHero
         code="01"
         label="Selected work"
-        lead="A cross-section of identity, print, packaging and display work for brands across Kenya and East Africa."
+        lead="A cross-section of identity, print, packaging and display work, produced in Nairobi."
         title="Our work"
       >
         <PillLink href="/contact" dark>
@@ -67,6 +73,36 @@ export default function PortfolioPage() {
       </PageHero>
 
       <PageShell>
+        {caseStudies.length > 0 && (
+          <section className="px-6 pt-20 md:px-10 md:pt-28 lg:px-14">
+            <Reveal>
+              <SectionLabel code="02" title="Case studies" />
+            </Reveal>
+            <ul className="mt-10 grid grid-cols-1 gap-2.5 md:grid-cols-2">
+              {caseStudies.map((c) => (
+                <li key={c.slug}>
+                  <Link href={`/portfolio/${c.slug}`} className="group block">
+                    <div className="relative aspect-[16/10] overflow-hidden rounded-[1.25rem] bg-mist">
+                      <Image src={c.cover} alt={c.title} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.03]" />
+                      {!c.published && (
+                        <span className="absolute top-4 left-4 rounded-full bg-primary px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.08em] text-paper">
+                          Draft
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/55">
+                      {c.client} · {c.year}
+                    </p>
+                    <h2 className="text-display mt-1 text-[1.5rem] font-semibold tracking-[-0.035em] text-ink group-hover:text-primary">
+                      {c.title}
+                    </h2>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         <section className="px-6 py-20 md:px-10 md:py-28 lg:px-14">
           <div className="flex flex-col gap-10 lg:flex-row lg:items-end lg:justify-between">
             <Reveal>
@@ -126,7 +162,7 @@ export default function PortfolioPage() {
                       <h3 className="text-display text-[1.5rem] font-semibold tracking-[-0.035em] text-ink">{p.title}</h3>
                       <p className="mt-1.5 max-w-sm text-[14px] leading-relaxed text-ink/55">{p.description}</p>
                     </div>
-                    <span className="font-mono text-[11px] text-primary/70">{pad(projects.indexOf(p) + 1)}.</span>
+                    <span className="font-mono text-[11px] text-primary">{pad(projects.indexOf(p) + 1)}.</span>
                   </div>
                 </motion.li>
               ))}
@@ -161,9 +197,9 @@ export default function PortfolioPage() {
           </div>
         </section>
 
-        <FAQ code="04" items={faqs} title="Project questions" sub="How projects run, how long they take and what you get at the end." />
+        <FAQ code="04" items={faqs.projects} title="Project questions" sub="How projects run, how long they take and what you get at the end." />
         <div className="pb-2">
-          <Marquee />
+          <Marquee items={clients.map((c) => c.name)} />
         </div>
       </PageShell>
 

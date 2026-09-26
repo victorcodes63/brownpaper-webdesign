@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { motion, useInView, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { animate, motion, useInView, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { Children, isValidElement, useEffect, useRef, useState, type ReactNode } from 'react'
 
 export const ease = [0.16, 1, 0.3, 1] as const
@@ -12,7 +12,7 @@ export const pad = (n: number) => String(n).padStart(3, '0')
 export function SectionLabel({ code, title, dark = false }: { code: string; title: string; dark?: boolean }) {
   return (
     <p className="flex flex-col gap-1.5 font-mono text-[12px] uppercase tracking-[0.08em]">
-      <span className={`flex items-center gap-2 ${dark ? 'text-paper/45' : 'text-ink/40'}`}>
+      <span className={`flex items-center gap-2 ${dark ? 'text-paper/55' : 'text-ink/55'}`}>
         <span className="flex items-center gap-1" aria-hidden>
           <span className="h-3 w-3 rounded-[3px] border-[1.5px] border-primary" />
           <span className="h-2 w-2 rounded-full bg-primary" />
@@ -316,36 +316,112 @@ export function ScrollScale({ children, className = '' }: { children: ReactNode;
 }
 
 export const principles = [
-  'Bringing your ideas to life',
   'Fast on-demand printing',
   'Tailor-made for every brief',
+  'Colour checked before every run',
   'Printed with clean energy',
   'Made in Nairobi',
 ]
 
-export function Marquee({ items = principles, dark = false }: { items?: string[]; dark?: boolean }) {
+/**
+ * Scroll-driven type band (replaces the old auto-scrolling dot marquee).
+ * Oversized ghost type in the same grey as the section titles, with a small
+ * mono index before each word. The row moves with the page scroll instead of
+ * looping on its own, and a word lights up on hover.
+ */
+export function Marquee({
+  items = principles,
+  dark = false,
+  reverse = false,
+}: {
+  items?: string[]
+  dark?: boolean
+  reverse?: boolean
+}) {
+  const ref = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
+  const progress = useMotionValue(0)
+
+  useEffect(() => {
+    if (reduce) return
+    let raf = 0
+    const update = () => {
+      raf = 0
+      const el = ref.current
+      if (!el) return
+      const vh = window.innerHeight
+      const r = el.getBoundingClientRect()
+      // 0 as the band enters from the bottom, 1 as it leaves at the top
+      const p = (vh - r.top) / (vh + r.height)
+      progress.set(Math.min(1, Math.max(0, p)))
+    }
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update)
+    }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [progress, reduce])
+
+  const x = useTransform(progress, [0, 1], reverse ? ['-30%', '0%'] : ['0%', '-30%'])
   const row = [...items, ...items]
+
   return (
-    <div className={`overflow-hidden border-y py-6 md:py-8 ${dark ? 'border-paper/10' : 'border-ink/8'}`}>
-      <motion.div
-        className="flex w-max items-center gap-10 md:gap-14"
-        animate={reduce ? undefined : { x: ['0%', '-50%'] }}
-        transition={reduce ? undefined : { duration: 40, ease: 'linear', repeat: Infinity }}
-      >
+    <div
+      ref={ref}
+      className={`overflow-hidden border-t py-8 md:py-12 ${dark ? 'border-paper/10' : 'border-ink/8'}`}
+    >
+      <motion.div style={reduce ? undefined : { x }} className="flex w-max items-start gap-12 md:gap-20" aria-hidden>
         {row.map((t, i) => (
-          <span key={i} className="flex items-center gap-10 md:gap-14">
+          <span key={i} className="group flex items-start gap-3 md:gap-4">
             <span
-              className={`text-display text-[clamp(1.75rem,3.2vw,3rem)] font-semibold tracking-[-0.04em] whitespace-nowrap ${
-                dark ? 'text-paper' : 'text-ink'
+              className={`mt-[0.6em] font-mono text-[11px] tracking-[0.06em] md:text-[12px] ${
+                dark ? 'text-paper/45' : 'text-ink/45'
+              }`}
+            >
+              ({pad((i % items.length) + 1)})
+            </span>
+            <span
+              className={`text-display text-[clamp(3rem,8vw,8.5rem)] leading-[0.95] font-medium tracking-[-0.05em] whitespace-nowrap transition-colors duration-500 ${
+                dark ? 'text-paper/20 group-hover:text-paper' : 'text-ink/15 group-hover:text-ink'
               }`}
             >
               {t}
             </span>
-            <span className="h-2.5 w-2.5 rounded-full bg-primary" aria-hidden />
           </span>
         ))}
       </motion.div>
+      <p className="sr-only">{items.join(', ')}</p>
     </div>
   )
 }
+
+/**
+ * Stat counter. Server-renders the real figure (never "0+"); the count-up is a
+ * progressive enhancement that only runs once in view (Route to 10, item 001).
+ */
+export function CountUp({ to, suffix = '' }: { to: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-40px' })
+  const reduce = useReducedMotion()
+  const [val, setVal] = useState(to)
+  useEffect(() => {
+    if (!inView || reduce) return
+    const c = animate(0, to, { duration: 1.4, ease, onUpdate: (v) => setVal(Math.round(v)) })
+    return () => c.stop()
+  }, [inView, reduce, to])
+  return (
+    <span ref={ref} aria-label={`${to}${suffix}`}>
+      <span aria-hidden>
+        {val}
+        {suffix}
+      </span>
+    </span>
+  )
+}
+

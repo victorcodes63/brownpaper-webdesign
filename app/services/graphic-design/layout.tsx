@@ -1,18 +1,8 @@
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Graphic Design Services',
+  title: 'Graphic Design Services in Nairobi',
   description: 'Creative graphic design services in Kenya. Marketing materials, social media graphics, infographics, web design, presentations, and digital assets. Professional design that captures attention.',
-  keywords: [
-    'graphic design Kenya',
-    'marketing materials design',
-    'social media graphics',
-    'infographic design',
-    'web design Nairobi',
-    'presentation design',
-    'digital assets',
-    'graphic designer Kenya',
-  ],
   openGraph: {
     title: 'Graphic Design Services | Brown Paper',
     description: 'Creative graphic design services in Kenya. Marketing materials, social media graphics, and more.',

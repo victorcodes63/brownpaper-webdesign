@@ -156,7 +156,7 @@ export default function Services() {
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
             >
               <p className="flex flex-col gap-1.5 font-mono text-[12px] uppercase tracking-[0.08em]">
-                <span className="flex items-center gap-2 text-paper/45">
+                <span className="flex items-center gap-2 text-paper/55">
                   <span className="flex items-center gap-1" aria-hidden>
                     <span className="h-3 w-3 rounded-[3px] border-[1.5px] border-primary" />
                     <span className="h-2 w-2 rounded-full bg-primary" />
@@ -218,7 +218,7 @@ export default function Services() {
                 transition={{ duration: 0.75, ease }}
               >
                 <p className="font-mono text-[12px] uppercase tracking-[0.08em]">
-                  <span className="text-primary/70">{pad(i + 1)}.</span>
+                  <span className="text-primary">{pad(i + 1)}.</span>
                   <span className="text-ink/85">{s.tag}</span>
                 </p>
                 <h3 className="text-display mt-4 text-[clamp(2.25rem,3.6vw,3.6rem)] font-semibold tracking-[-0.045em] text-ink">
@@ -248,7 +248,7 @@ export default function Services() {
                   <ul>
                     {s.items.map((item, j) => (
                       <li key={item} className="flex gap-5 border-b border-ink/8 py-3 first:pt-0">
-                        <span className="text-primary/70">{pad(j + 1)}.</span>
+                        <span className="text-primary">{pad(j + 1)}.</span>
                         <span className="text-ink/80">{item}</span>
                       </li>
                     ))}

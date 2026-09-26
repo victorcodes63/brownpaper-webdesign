@@ -4,23 +4,6 @@ import type { CSSProperties } from 'react'
 import Image from 'next/image'
 import { motion, useReducedMotion } from 'motion/react'
 import { SectionLabel, Reveal, PillLink, CharReveal, WordReveal, ScrollScale } from './ui'
-import ServiceIndexList from '@/components/ServiceIndexList'
-
-const disciplines = [
-  { title: 'Brand Identity', meta: 'Logos · Guidelines · Systems', slug: 'brand-identity', image: '/images/hero/hero5.jpg' },
-  { title: 'Packaging Design', meta: 'Boxes · Bags · Labels', slug: 'packaging-design', image: '/images/hero/hero6.jpg' },
-  { title: 'Printing', meta: 'Stationery · Brochures · Books', slug: 'printing-services', image: '/images/indiv_services/printing.png' },
-  { title: 'Display & Signage', meta: 'Banners · Backdrops · Pop-ups', slug: 'display', image: '/images/indiv_services/display.png' },
-  { title: 'Office Stationery', meta: 'Letterheads · Notebooks · Folders', slug: 'office-stationery', image: '/images/indiv_services/office-stationery.jpg' },
-  {
-    title: 'Workwear',
-    meta: 'Uniforms · Branded apparel',
-    slug: 'workwear',
-    image: '/images/services/workwear.jpg',
-    imagePosition: 'object-[center_82%]',
-  },
-  { title: 'Promotional Items', meta: 'Merchandise · Giveaways', slug: 'promotional-items', image: '/images/indiv_services/promotional-items.jpg' },
-]
 
 /** Mono marks (white on black) — screen-blend so black drops out on chrome */
 const alsoTrusted = [
@@ -82,17 +65,17 @@ export default function Work() {
 
             <dl className="grid grid-cols-1 gap-x-8 gap-y-5 font-mono text-[12px] uppercase tracking-[0.06em] sm:grid-cols-2">
               <div className="border-t border-paper/10 pt-3">
-                <dt className="text-paper/40">Sector</dt>
+                <dt className="text-paper/55">Sector</dt>
                 <dd className="mt-1 text-paper/85">Energy &amp; power generation</dd>
               </div>
               <div className="border-t border-paper/10 pt-3">
-                <dt className="text-paper/40">Scale</dt>
+                <dt className="text-paper/55">Scale</dt>
                 <dd className="mt-1 text-paper/85">Listed on the NSE</dd>
               </div>
             </dl>
 
             <div>
-              <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-paper/40">Also trusted by</p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-paper/55">Also trusted by</p>
               <div
                 className="mt-4 overflow-hidden"
                 style={{
@@ -139,14 +122,6 @@ export default function Work() {
         </article>
       </ScrollScale>
 
-      {/* More work — discipline index with hover preview */}
-      <div className="mt-24 grid grid-cols-1 gap-10 lg:grid-cols-[14rem_minmax(0,1fr)] lg:gap-8">
-        <Reveal>
-          <p className="font-mono text-[12px] uppercase tracking-[0.08em] text-ink/85">More from the studio</p>
-        </Reveal>
-
-        <ServiceIndexList items={disciplines} />
-      </div>
     </section>
   )
 }

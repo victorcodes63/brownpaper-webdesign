@@ -1,30 +1,33 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useRef, useState } from 'react'
-import { motion, animate, useInView, useScroll, useTransform } from 'motion/react'
+import { useEffect, useRef } from 'react'
+import { motion, useMotionValue, useTransform } from 'motion/react'
 import Navigation from '@/components/Navigation'
+import JsonLd from '@/components/JsonLd'
+import { breadcrumbSchema } from '@/lib/schema'
+import { site, yearsInBusiness } from '@/lib/site'
 import Footer from '@/components/Footer'
 import FitTitle from '@/components/FitTitle'
 import DotField from '@/components/DotField'
 import FAQ from '@/components/FAQ'
-import { SectionLabel, Reveal, PillLink, Marquee, ease, pad, CharReveal, ImageReveal, WordReveal } from '@/components/home/ui'
+import { SectionLabel, Reveal, PillLink, Marquee, ease, pad, CharReveal, ImageReveal, WordReveal, CountUp } from '@/components/home/ui'
 
-const foundedYear = 2022
-const years = Math.max(1, new Date().getFullYear() - foundedYear)
+const foundedYear = site.foundedYear
+const years = yearsInBusiness()
 
 const milestones = [
   { year: '2022', title: 'Founded in Nairobi', body: 'Started in June 2022 to change how businesses in Kenya approach print and design.' },
   { year: '2023', title: 'Studio growth', body: 'Expanded the team and services, building long-term client relationships.' },
   { year: '2024', title: '150+ projects', body: 'Passed 150 completed projects for more than 100 clients.' },
-  { year: '2026 to today', title: 'Full-service studio', body: 'Design, print, packaging and display for brands across Kenya and East Africa.' },
+  { year: 'Today', title: 'Full-service studio', body: 'Design, print, packaging and display, all from one studio in Nairobi.' },
 ]
 
 const metrics = [
-  { value: 150, suffix: '+', label: 'Projects completed' },
-  { value: 100, suffix: '+', label: 'Clients served' },
+  { value: site.stats.projects, suffix: '+', label: 'Projects completed' },
+  { value: site.stats.clients, suffix: '+', label: 'Clients served' },
   { value: years, suffix: '+', label: 'Years in business' },
-  { value: 8, suffix: '', label: 'Awards won' },
+  { value: site.stats.awards, suffix: '', label: 'Awards won' },
 ]
 
 const purpose = [
@@ -49,11 +52,40 @@ const values = [
 ]
 
 const collage = [
-  { src: '/images/services/branding.jpg', caption: 'Choosing the palette', sub: 'Colour decisions checked on paper' },
-  { src: '/images/services/printing.jpg', caption: 'Running the press', sub: 'Large-format print, checked as it comes off the machine' },
-  { src: '/images/services/display.jpg', caption: 'Setting up on site', sub: 'Displays built to go up fast when the doors open' },
-  { src: '/images/services/packaging.jpg', caption: 'Packing the order', sub: 'Finished work, ready for the shelf and the street' },
-  { src: '/images/hero/team.jpg', caption: 'Reviewing the brief together', sub: 'Agreeing on what the work has to do' },
+  {
+    src: '/images/about/drives-palette.jpg',
+    caption: 'Choosing the palette',
+    sub: 'Colour decisions checked on paper',
+    alt: 'Designer at a wooden desk reviewing a fan of neutral colour swatches over printed mockups',
+    pos: 'center 30%',
+  },
+  {
+    src: '/images/about/drives-press.jpg',
+    caption: 'Running the press',
+    sub: 'Large-format print, checked as it comes off the machine',
+    alt: 'Printer in a dark apron checking a colourful large-format print as it leaves the press',
+    pos: 'center 20%',
+  },
+  {
+    src: '/images/about/drives-onsite.jpg',
+    caption: 'Setting up on site',
+    sub: 'Displays built to go up fast when the doors open',
+    alt: 'Team member in a tan jacket raising a pull-up banner in a warehouse studio',
+    pos: 'center 18%',
+  },
+  {
+    src: '/images/about/drives-packing.jpg',
+    caption: 'Packing the order',
+    sub: 'Finished work, ready for the shelf and the street',
+    alt: 'Two people packing printed cards and gift boxes into a kraft shipping carton on a workbench',
+  },
+  {
+    src: '/images/about/drives-brief.jpg',
+    caption: 'Reviewing the brief together',
+    sub: 'Agreeing on what the work has to do',
+    alt: 'Three designers reviewing printed layouts and stationery together under a pendant lamp',
+    pos: 'center 28%',
+  },
 ]
 
 /**
@@ -62,9 +94,34 @@ const collage = [
  */
 function DrivesSection({ children }: { children: React.ReactNode }) {
   const ref = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
-  const fade = useTransform(scrollYProgress, [0, 0.35], [1, 0.22])
-  const sink = useTransform(scrollYProgress, [0, 0.35], [0, 30])
+  // 0 when the section top reaches the viewport top, 1 one viewport later.
+  // Measured by hand so it stays reliable alongside Lenis smooth scroll.
+  const progress = useMotionValue(0)
+  useEffect(() => {
+    let raf = 0
+    const update = () => {
+      raf = 0
+      const el = ref.current
+      if (!el) return
+      const vh = window.innerHeight
+      const top = el.getBoundingClientRect().top
+      const p = (vh * 0.15 - top) / (vh * 1.1)
+      progress.set(Math.min(1, Math.max(0, p)))
+    }
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update)
+    }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [progress])
+  const fade = useTransform(progress, [0, 1], [1, 0.2])
+  const sink = useTransform(progress, [0, 1], [0, 40])
 
   return (
     <section ref={ref} className="relative px-6 pt-24 pb-24 text-paper [overflow:clip] md:px-10 md:pt-32 md:pb-32 lg:px-14">
@@ -72,7 +129,7 @@ function DrivesSection({ children }: { children: React.ReactNode }) {
         <DotField />
       </div>
       <motion.div style={{ opacity: fade, y: sink }} className="sticky top-[12vh] z-0">
-        <FitTitle as="h2" tone="text-paper/75">What drives us</FitTitle>
+        <FitTitle as="h2" tone="text-paper/80">What drives us</FitTitle>
         <div className="mt-12 grid grid-cols-1 gap-8 md:mt-16 lg:grid-cols-2">
           <Reveal>
             <SectionLabel code="05" title="Built around real use" dark />
@@ -93,12 +150,16 @@ function Shot({
   src,
   caption,
   sub,
+  alt,
+  pos,
   aspect,
   className = '',
 }: {
   src: string
   caption: string
   sub: string
+  alt: string
+  pos?: string
   aspect: string
   className?: string
 }) {
@@ -106,12 +167,20 @@ function Shot({
     <figure className={className}>
       <div className={`relative overflow-hidden rounded-[1.25rem] bg-ink ${aspect}`}>
         <ImageReveal>
-          <Image src={src} alt={caption} fill sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" />
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            quality={90}
+            className="object-cover"
+            style={pos ? { objectPosition: pos } : undefined}
+          />
         </ImageReveal>
       </div>
       <figcaption className="mt-5 flex flex-col gap-1 font-mono text-[12px] uppercase tracking-[0.06em]">
         <span className="text-paper/90">{caption}</span>
-        <span className="text-paper/40">{sub}</span>
+        <span className="text-paper/55">{sub}</span>
       </figcaption>
     </figure>
   )
@@ -144,22 +213,6 @@ const commitments = [
   },
 ]
 
-function CountUp({ to, suffix }: { to: number; suffix: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-40px' })
-  const [v, setV] = useState(0)
-  useEffect(() => {
-    if (!inView) return
-    const c = animate(0, to, { duration: 1.6, ease, onUpdate: (n) => setV(Math.round(n)) })
-    return () => c.stop()
-  }, [inView, to])
-  return (
-    <span ref={ref}>
-      {v}
-      {suffix}
-    </span>
-  )
-}
 
 const shellPad = 'px-6 md:px-10 lg:px-14'
 
@@ -167,6 +220,7 @@ export default function AboutPage() {
   return (
     <main className="min-h-svh bg-chrome">
       <Navigation />
+      <JsonLd data={breadcrumbSchema([{ name: 'Home', path: '/' }, { name: 'About', path: '/about' }])} />
 
       {/* ── 01 HERO ── */}
       <section className={`relative overflow-hidden ${shellPad} pt-32 pb-0 text-paper md:pt-40`}>
@@ -202,12 +256,13 @@ export default function AboutPage() {
             <Reveal>
               <div className="relative flex min-h-[32rem] flex-col justify-end overflow-hidden rounded-[1.5rem] bg-chrome p-8 text-paper md:p-12 lg:min-h-[44rem]">
                 <ImageReveal>
-<Image
+                <Image
                   src="/images/hero/about.jpg"
-                  alt="The Brown Paper team outside the studio"
+                  alt="The Brown Paper team in the studio"
                   fill
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                  className="object-cover"
+                  sizes="(min-width: 1024px) 1024px, 100vw"
+                  quality={100}
+                  className="object-cover object-center"
                 />
 </ImageReveal>
                 <div className="absolute inset-0 bg-linear-to-t from-chrome/90 via-chrome/45 to-chrome/10" />
@@ -235,7 +290,7 @@ export default function AboutPage() {
                 </p>
               </Reveal>
               <Reveal delay={0.08}>
-                <p className="text-display text-[clamp(1.6rem,2.5vw,2.5rem)] leading-[1.15] font-medium tracking-[-0.035em] text-ink/40">
+                <p className="text-display text-[clamp(1.6rem,2.5vw,2.5rem)] leading-[1.15] font-medium tracking-[-0.035em] text-ink/55">
                   We make sure every business card, box and banner looks like it came from the same company.
                 </p>
               </Reveal>
@@ -248,7 +303,7 @@ export default function AboutPage() {
                   </svg>
                   <span className="flex flex-col gap-1 font-mono text-[11px] uppercase tracking-[0.08em]">
                     <span className="text-ink/85">Brown Paper Studio</span>
-                    <span className="text-ink/40">Nairobi · Since {foundedYear}</span>
+                    <span className="text-ink/55">Nairobi · Since {foundedYear}</span>
                   </span>
                 </div>
               </Reveal>
@@ -286,7 +341,7 @@ export default function AboutPage() {
                   <Reveal key={m.year} delay={0.1 * i} x={15} y={0}>
                     <li className="relative md:pt-10">
                       <span className="absolute top-0 left-0 hidden h-4 w-4 rounded-full border-[3px] border-paper bg-primary md:block" />
-                      <p className="font-mono text-[12px] tracking-[0.08em] text-ink/40">{m.year}</p>
+                      <p className="font-mono text-[12px] tracking-[0.08em] text-ink/55">{m.year}</p>
                       <h3 className="text-display mt-3 text-[clamp(1.5rem,2vw,2rem)] leading-[1.05] font-semibold tracking-[-0.04em] text-ink">
                         {m.title}
                       </h3>
@@ -325,14 +380,15 @@ export default function AboutPage() {
               <Reveal delay={0.06}>
                 <div className="relative aspect-[16/11] overflow-hidden rounded-[1.5rem] bg-mist">
                   <ImageReveal>
-<Image
-                    src="/images/hero/offices.jpg"
-                    alt="Inside the Brown Paper studio"
-                    fill
-                    sizes="(min-width: 1024px) 60vw, 100vw"
-                    className="object-cover"
-                  />
-</ImageReveal>
+                    <Image
+                      src="/images/hero/offices.jpg"
+                      alt="Inside the Brown Paper studio — desks, print equipment and kraft paper rolls"
+                      fill
+                      sizes="(min-width: 1024px) 1024px, 100vw"
+                      quality={100}
+                      className="object-cover object-center"
+                    />
+                  </ImageReveal>
                   <span className="absolute top-5 left-5 rounded-full bg-paper/90 px-3 py-1.5 font-mono text-[11px] tracking-[0.08em] text-ink backdrop-blur">
                     THE STUDIO · NAIROBI
                   </span>
@@ -347,7 +403,7 @@ export default function AboutPage() {
                     <dd className="text-display text-[clamp(2.5rem,4.5vw,4.5rem)] leading-none font-semibold tracking-[-0.05em] text-ink">
                       <CountUp to={m.value} suffix={m.suffix} />
                     </dd>
-                    <dt className="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45">{m.label}</dt>
+                    <dt className="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/55">{m.label}</dt>
                   </div>
                 </Reveal>
               ))}
@@ -370,7 +426,7 @@ export default function AboutPage() {
                   {purpose.map((p, i) => (
                     <Reveal key={p.tag} delay={0.06 * i} x={-30} y={0}>
                       <li className="grid grid-cols-1 gap-4 border-t border-ink/10 py-10 md:grid-cols-[4rem_minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-8">
-                        <span className="font-mono text-[12px] text-primary/70">{pad(i + 1)}.</span>
+                        <span className="font-mono text-[12px] text-primary">{pad(i + 1)}.</span>
                         <div>
                           <p className="font-mono text-[11px] uppercase tracking-[0.08em] text-primary">{p.tag}</p>
                           <h3 className="text-display mt-2 text-[clamp(1.6rem,2.4vw,2.4rem)] leading-[1.05] font-semibold tracking-[-0.04em] text-ink">
@@ -390,7 +446,7 @@ export default function AboutPage() {
                   {values.map((v, i) => (
                     <Reveal key={v.title} delay={0.05 * i} className="h-full">
                       <li className="flex h-full flex-col rounded-[1.25rem] bg-mist p-6">
-                        <span className="font-mono text-[11px] text-primary/70">{pad(i + 1)}.</span>
+                        <span className="font-mono text-[11px] text-primary">{pad(i + 1)}.</span>
                         <h3 className="text-display mt-6 text-[1.35rem] leading-[1.1] font-semibold tracking-[-0.035em] text-ink">
                           {v.title}
                         </h3>
@@ -482,7 +538,7 @@ export default function AboutPage() {
           <FAQ code="07" />
 
           <div className="pb-2">
-            <Marquee />
+            <Marquee items={['Customer centric', 'Efficiency', 'Professionalism', 'Quality products', 'Creativity & innovation']} />
           </div>
         </div>
       </div>

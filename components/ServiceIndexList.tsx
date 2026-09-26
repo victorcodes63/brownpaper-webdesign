@@ -50,12 +50,12 @@ export default function ServiceIndexList({ items, compact = false }: ServiceInde
         return (
           <li key={item.slug}>
             <Link href={`/services/${item.slug}`} className={rowClass}>
-              <span className="font-mono text-[12px] text-primary/70">{pad(i + 1)}.</span>
+              <span className="font-mono text-[12px] text-primary">{pad(i + 1)}.</span>
 
               {item.description ? (
                 <span>
                   {item.meta && (
-                    <span className="block font-mono text-[11px] uppercase tracking-[0.08em] text-ink/40">
+                    <span className="block font-mono text-[11px] uppercase tracking-[0.08em] text-ink/55">
                       {item.meta}
                     </span>
                   )}
@@ -70,12 +70,12 @@ export default function ServiceIndexList({ items, compact = false }: ServiceInde
                   {item.description}
                 </span>
               ) : item.meta ? (
-                <span className="hidden font-mono text-[11px] uppercase tracking-[0.08em] text-ink/45 md:block">
+                <span className="hidden font-mono text-[11px] uppercase tracking-[0.08em] text-ink/55 md:block">
                   {item.meta}
                 </span>
               ) : null}
 
-              <span className="text-lg text-ink/40 transition-colors group-hover:text-primary" aria-hidden>
+              <span className="text-lg text-ink/55 transition-colors group-hover:text-primary" aria-hidden>
                 ↗
               </span>
 

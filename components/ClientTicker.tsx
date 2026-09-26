@@ -28,7 +28,7 @@ export default function ClientTicker() {
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : { opacity: 0 }}
           transition={{ duration: 0.6, ease }}
-          className="mb-6 text-center text-[11px] uppercase tracking-[0.2em] text-ink/40"
+          className="mb-6 text-center text-[11px] uppercase tracking-[0.2em] text-ink/55"
         >
           Trusted by leading organizations
         </motion.p>
