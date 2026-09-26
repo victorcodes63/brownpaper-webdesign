@@ -55,7 +55,7 @@ export default function PageHero({
 /** White rounded shell that rises over the bottom of the hero title. */
 export function PageShell({ children }: { children: ReactNode }) {
   return (
-    <div className="relative z-10 -mt-[clamp(1rem,2.6vw,2.75rem)] px-2.5 pb-2.5 md:px-3 md:pb-3 lg:px-3.5 lg:pb-3.5">
+    <div className="relative z-10 -mt-1.5 px-2.5 md:-mt-[clamp(1rem,2.6vw,2.75rem)] pb-2.5 md:px-3 md:pb-3 lg:px-3.5 lg:pb-3.5">
       <div className="page-shell">{children}</div>
     </div>
   )

@@ -48,8 +48,8 @@ export default function WhyUs() {
         <ul>
           {points.map((p, i) => (
             <Reveal key={p.title} delay={0.05 * i} x={-30} y={0}>
-              <li className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-4 border-t border-paper/10 py-8 md:grid-cols-[6rem_minmax(0,1fr)] md:py-10">
-                <span className="font-mono text-[12px] tracking-[0.06em] text-primary/80">{pad(i + 1)}.</span>
+              <li className="grid grid-cols-1 gap-3 border-t border-paper/10 py-8 sm:grid-cols-[4.5rem_minmax(0,1fr)] sm:gap-4 md:grid-cols-[6rem_minmax(0,1fr)] md:py-10">
+                <span className="font-mono text-[12px] tracking-[0.06em] text-primary">{pad(i + 1)}.</span>
                 <div>
                   <h3 className="text-display text-[clamp(1.5rem,2.2vw,2.25rem)] font-semibold tracking-[-0.04em]">
                     {p.title}

@@ -93,7 +93,7 @@ export function PillLink({
   return (
     <Link
       href={href}
-      className={`group inline-flex items-center gap-10 rounded-2xl px-7 py-4 font-mono text-[12px] uppercase tracking-[0.1em] transition-colors duration-500 ${
+      className={`group inline-flex items-center gap-6 rounded-2xl px-6 py-4 font-mono text-[12px] whitespace-nowrap uppercase tracking-[0.1em] transition-colors sm:gap-10 sm:px-7 duration-500 ${
         dark
           ? 'border border-paper/10 bg-paper/8 text-paper hover:bg-paper/15'
           : 'bg-ink text-paper hover:bg-primary'

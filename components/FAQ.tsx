@@ -65,7 +65,7 @@ export default function FAQ({
                   type="button"
                   onClick={() => setOpen(isOpen ? null : i)}
                   aria-expanded={isOpen}
-                  className="group grid w-full grid-cols-[3.5rem_minmax(0,1fr)_2rem] items-center gap-3 py-7 text-left md:grid-cols-[4.5rem_minmax(0,1fr)_2.5rem]"
+                  className="group grid w-full grid-cols-[2.5rem_minmax(0,1fr)_2rem] items-center gap-3 py-6 md:py-7 text-left md:grid-cols-[4.5rem_minmax(0,1fr)_2.5rem]"
                 >
                   <span className="font-mono text-[12px] text-primary">{pad(i + 1)}.</span>
                   <span className="font-mono text-[13px] uppercase tracking-[0.06em] text-ink transition-colors group-hover:text-primary md:text-[14px]">
@@ -89,7 +89,7 @@ export default function FAQ({
                       transition={{ duration: 0.45, ease }}
                       className="overflow-hidden"
                     >
-                      <p className="max-w-xl pb-8 pl-[3.5rem] text-[15px] leading-relaxed text-ink/60 md:pl-[4.5rem] md:text-base">
+                      <p className="max-w-xl pb-8 pl-[3.25rem] pr-2 text-[15px] leading-relaxed text-ink/60 md:pl-[5.25rem] md:text-base">
                         {f.answer}
                       </p>
                     </motion.div>

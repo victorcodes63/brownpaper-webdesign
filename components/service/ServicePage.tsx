@@ -50,13 +50,13 @@ export default function ServicePage({ slug }: { slug: string }) {
         <nav aria-label="Breadcrumb" className="px-6 pt-6 md:px-10 lg:px-14">
           <ol className="flex flex-wrap items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] text-ink/55">
             <li>
-              <Link href="/" className="hover:text-primary">
+              <Link href="/" className="-my-3 inline-block py-3 hover:text-primary">
                 Home
               </Link>
             </li>
             <li aria-hidden>/</li>
             <li>
-              <Link href="/services" className="hover:text-primary">
+              <Link href="/services" className="-my-3 inline-block py-3 hover:text-primary">
                 Services
               </Link>
             </li>

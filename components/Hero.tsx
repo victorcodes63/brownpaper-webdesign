@@ -183,7 +183,7 @@ export default function Hero() {
                   </span>
                   <span className="flex flex-col leading-tight">
                     <span>Contact us</span>
-                    <span className="text-[9px] tracking-[0.12em] text-ink/55 transition-colors group-hover:text-paper/55">
+                    <span className="text-[10px] tracking-[0.12em] text-ink/55 transition-colors group-hover:text-paper/55">
                       Start a project
                     </span>
                   </span>

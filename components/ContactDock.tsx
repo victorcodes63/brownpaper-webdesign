@@ -68,9 +68,9 @@ export default function ContactDock() {
             rel="noopener noreferrer"
             onClick={() => track('whatsapp_click', { from: 'floating' })}
             aria-label="Chat with Brown Paper on WhatsApp"
-            className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-[#0b3d20] shadow-xl shadow-black/30 transition-transform hover:-translate-y-0.5 md:h-auto md:w-auto md:justify-start md:gap-3 md:py-3 md:pr-5 md:pl-3"
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] text-[#0b3d20] shadow-xl shadow-black/30 transition-transform hover:-translate-y-0.5 md:h-auto md:w-auto md:justify-start md:gap-3 md:py-3 md:pr-5 md:pl-3"
           >
-            <WaIcon className="h-7 w-7" />
+            <WaIcon className="h-6 w-6 md:h-7 md:w-7" />
             <span className="hidden font-mono text-[11px] uppercase tracking-[0.08em] whitespace-nowrap md:inline">
               Chat for a quote
             </span>

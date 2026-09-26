@@ -186,7 +186,7 @@ export default function Services() {
                 </Link>
                 <Link
                   href="/services"
-                  className="font-mono text-[11px] uppercase tracking-[0.1em] text-paper/50 underline-offset-4 transition-colors hover:text-paper hover:underline"
+                  className="-my-3 inline-block py-3 font-mono text-[11px] uppercase tracking-[0.1em] text-paper/55 underline-offset-4 transition-colors hover:text-paper hover:underline"
                 >
                   All services
                 </Link>
@@ -259,7 +259,7 @@ export default function Services() {
                   <Link
                     href={`/services/${s.slug}`}
                     aria-label={`Explore ${s.title}`}
-                    className="flex h-7 w-11 shrink-0 items-center justify-center rounded-lg bg-ink text-[13px] text-paper transition-colors hover:bg-primary"
+                    className="flex h-10 w-12 shrink-0 items-center justify-center rounded-lg bg-ink text-[14px] md:h-7 md:w-11 md:text-[13px] text-paper transition-colors hover:bg-primary"
                   >
                     →
                   </Link>

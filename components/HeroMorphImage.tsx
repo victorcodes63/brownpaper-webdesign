@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { useReducedMotion } from 'motion/react'
+import Image from 'next/image'
 
 const VERT = `
 attribute vec2 a_pos;
@@ -79,6 +80,9 @@ export default function HeroMorphImage({ src, alt, className = '' }: HeroMorphIm
     const canvas = canvasRef.current
     const wrap = wrapRef.current
     if (!canvas || !wrap || shouldReduceMotion) return
+    // Phones, tablets and touch screens get the still image: the ripple follows
+    // a mouse they don't have, and WebGL costs battery for a small strip.
+    if (window.matchMedia('(max-width: 1023px), (pointer: coarse)').matches) return
 
     const gl = canvas.getContext('webgl', { premultipliedAlpha: false, alpha: false })
     if (!gl) return
@@ -189,11 +193,14 @@ export default function HeroMorphImage({ src, alt, className = '' }: HeroMorphIm
 
   return (
     <div ref={wrapRef} className={`absolute inset-0 ${className}`}>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      {/* Optimised still (resized per device by next/image); WebGL fades in over it on desktop */}
+      <Image
         src={src}
         alt={alt}
-        className={`absolute inset-0 h-full w-full object-cover object-center transition-opacity duration-500 ${
+        fill
+        priority
+        sizes="(min-width: 1024px) 30vw, 100vw"
+        className={`object-cover object-center transition-opacity duration-500 ${
           webglReady && !shouldReduceMotion ? 'opacity-0' : 'opacity-100'
         }`}
       />

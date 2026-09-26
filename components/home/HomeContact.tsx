@@ -18,7 +18,7 @@ type Status = 'idle' | 'sending' | 'error'
 type Errors = Partial<Record<'name' | 'email' | 'message' | 'files' | 'consent', string>>
 
 const field =
-  'w-full border-b border-paper/15 bg-transparent pt-2 pb-3 text-[15px] text-paper placeholder:text-paper/30 transition-colors focus:border-primary focus:outline-none aria-[invalid=true]:border-red-400'
+  'w-full border-b border-paper/15 bg-transparent pt-2 pb-3 text-base text-paper placeholder:text-paper/40 transition-colors focus:border-primary focus:outline-none aria-[invalid=true]:border-red-400'
 const lbl = 'font-mono text-[11px] uppercase tracking-[0.08em] text-paper/55'
 const err = 'mt-2 block font-mono text-[11px] tracking-[0.04em] text-red-300'
 
@@ -116,7 +116,7 @@ export default function HomeContact({
             <div>
               <dt className="text-paper/55">Call</dt>
               <dd className="mt-1.5">
-                <a href={site.phoneHref} onClick={() => track('phone_click', { from: 'contact_card' })} className="text-paper/90 hover:text-primary">
+                <a href={site.phoneHref} onClick={() => track('phone_click', { from: 'contact_card' })} className="-my-2 inline-block py-2 text-paper/90 hover:text-primary">
                   {site.phone}
                 </a>
               </dd>
@@ -124,7 +124,7 @@ export default function HomeContact({
             <div>
               <dt className="text-paper/55">Email</dt>
               <dd className="mt-1.5 normal-case">
-                <a href={`mailto:${site.email}`} className="text-paper/90 hover:text-primary">
+                <a href={`mailto:${site.email}`} className="-my-2 inline-block py-2 text-paper/90 hover:text-primary">
                   {site.email}
                 </a>
               </dd>
@@ -136,7 +136,7 @@ export default function HomeContact({
                   href={site.address.mapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-paper/90 hover:text-primary"
+                  className="-my-2 inline-block py-2 text-paper/90 hover:text-primary"
                 >
                   {site.address.floor}, {site.address.city} ↗
                 </a>

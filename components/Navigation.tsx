@@ -7,9 +7,9 @@ import { useState, useEffect, useRef, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import Logo from './Logo'
 import { createPortal } from 'react-dom'
-import ContactModal from './ContactModal'
 
 const serviceLinks = [
+  { name: 'Brand Identity', href: '/services/brand-identity' },
   { name: 'Graphic Design', href: '/services/graphic-design' },
   { name: 'Printing', href: '/services/printing-services' },
   { name: 'Packaging', href: '/services/packaging-design' },
@@ -18,6 +18,7 @@ const serviceLinks = [
   { name: 'Promotional Items', href: '/services/promotional-items' },
   { name: 'Office Stationery', href: '/services/office-stationery' },
   { name: 'Fun Times', href: '/services/fun-times' },
+  { name: 'All services', href: '/services' },
 ]
 
 const mainLinks = [
@@ -77,7 +78,6 @@ function MenuToggle({
 
 export default function Navigation({ variant = 'overlay' }: NavigationProps) {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [contactOpen, setContactOpen] = useState(false)
   const mounted = useSyncExternalStore(emptySubscribe, getClient, getServer)
   /** Home only: floating control appears after the hero scrolls away */
   const [pastHero, setPastHero] = useState(false)
@@ -244,19 +244,16 @@ export default function Navigation({ variant = 'overlay' }: NavigationProps) {
                     </div>
                   </div>
 
-                  <button
-                    type="button"
+                  <Link
+                    href="/contact"
                     className="btn-pill mt-10 w-full justify-center bg-paper text-ink hover:bg-primary hover:text-paper md:ml-auto md:w-auto"
-                    onClick={() => {
-                      close()
-                      setContactOpen(true)
-                    }}
+                    onClick={close}
                   >
                     Start a project
                     <span className="flex h-6 w-6 items-center justify-center rounded-sm bg-ink text-paper">
                       ↗
                     </span>
-                  </button>
+                  </Link>
                 </div>
               </motion.div>
             )}
@@ -264,7 +261,6 @@ export default function Navigation({ variant = 'overlay' }: NavigationProps) {
           document.body
         )}
 
-      <ContactModal isOpen={contactOpen} onClose={() => setContactOpen(false)} />
     </>
   )
 }

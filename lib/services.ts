@@ -28,7 +28,7 @@ export const services: Service[] = [
     "name": "Brand Identity",
     "tag": "Identity systems",
     "statement": "A brand is a system, not a logo.",
-    "lead": "Complete brand identity packages that make your business unforgettable. From logos to comprehensive brand systems, we create identities that resonate with your audience and set you apart from the competition.",
+    "lead": "Logos, colours, type and the guidelines that hold them together, so your brand looks the same on every card, sign and screen.",
     "image": "/images/hero/hero5.jpg",
     "items": [
       {
@@ -86,8 +86,8 @@ export const services: Service[] = [
     "name": "Graphic Design",
     "tag": "Visual communication",
     "statement": "Is your online presence felt?",
-    "lead": "Creative graphic design services that capture attention and communicate your message effectively. From marketing materials to digital assets, we bring your vision to life with designs that resonate and drive results.",
-    "image": "/images/services/design.jpg",
+    "lead": "Brochures, flyers, social graphics and campaign artwork, designed with print in mind so what you approve is what gets produced.",
+    "image": "/images/indiv_services/design.jpg",
     "items": [
       {
         "title": "Marketing Materials",
@@ -164,7 +164,7 @@ export const services: Service[] = [
     "name": "Packaging Design",
     "tag": "Shelf & retail",
     "statement": "The box is the first thing they hold.",
-    "lead": "Innovative packaging solutions that make your products stand out on the shelf",
+    "lead": "Boxes, bags, labels and sleeves designed around your product, then printed and finished in Nairobi.",
     "image": "/images/hero/hero6.jpg",
     "items": [
       {
@@ -258,8 +258,8 @@ export const services: Service[] = [
     "name": "Printing",
     "tag": "Print production",
     "statement": "Fast, on-demand printing.",
-    "lead": "High-quality offset and digital printing for all your business needs. From business cards to large format banners, we deliver exceptional quality with precision and care.",
-    "image": "/images/indiv_services/printing.png",
+    "lead": "Offset and digital printing, from a box of business cards to large-format banners, colour-checked before every run.",
+    "image": "/images/services/printing.jpg",
     "items": [
       {
         "title": "Business Cards",
@@ -362,8 +362,8 @@ export const services: Service[] = [
     "name": "Display & Signage",
     "tag": "Events & retail",
     "statement": "Seen across the room. Up in minutes.",
-    "lead": "Professional display solutions that showcase your products and brand. From retail displays to trade show booths, we create impactful visual experiences.",
-    "image": "/images/indiv_services/display.png",
+    "lead": "Roll-up banners, backdrops, stands and signage for shops, launches and exhibitions, built to go up fast.",
+    "image": "/images/services/display.jpg",
     "items": [
       {
         "title": "Pull Up Banners",
@@ -438,8 +438,8 @@ export const services: Service[] = [
     "name": "Office Stationery",
     "tag": "Business essentials",
     "statement": "Every document from the same company.",
-    "lead": "Professional stationery sets that create a cohesive brand identity across all business communications. From letterheads to business cards, we ensure consistent brand representation.",
-    "image": "/images/indiv_services/office-stationery.jpg",
+    "lead": "Letterheads, business cards, envelopes and notebooks, printed as one matching set.",
+    "image": "/images/services/stationery.jpg",
     "items": [
       {
         "title": "Tape Dispenser",
@@ -562,7 +562,7 @@ export const services: Service[] = [
     "name": "Workwear",
     "tag": "Uniforms & apparel",
     "statement": "Your team, wearing the brand well.",
-    "lead": "Professional branded workwear and corporate uniforms that represent your brand with style. From safety wear to team apparel, we create comfortable and durable workwear solutions.",
+    "lead": "Branded uniforms, T-shirts, caps and safety wear, printed or embroidered for teams of any size.",
     "image": "/images/services/workwear.jpg",
     "items": [
       {
@@ -699,7 +699,7 @@ export const services: Service[] = [
     "tag": "Branded merchandise",
     "statement": "Merchandise people actually keep.",
     "lead": "Branded merchandise that increases visibility and loyalty, from corporate gifts to event giveaways. The range changes with the season, type and brand, so ask for the latest items and we’ll guide you on what fits.",
-    "image": "/images/indiv_services/promotional-items.jpg",
+    "image": "/images/services/promotional_items.jpg",
     "items": [
       {
         "title": "Umbrellas",
@@ -834,7 +834,7 @@ export const services: Service[] = [
     "name": "Fun Times",
     "tag": "Events & team building",
     "statement": "Events that bring your brand to life.",
-    "lead": "Complete event planning and management services for corporate events, team building, conferences, and outdoor activities. We make your events memorable and engaging.",
+    "lead": "Team building, company days and outdoor events, planned and run from start to finish.",
     "image": "/images/services/funtimes.jpg",
     "items": [
       {

@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import { JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import StructuredData from './structured-data'
 import SmoothScroll from '@/components/SmoothScroll'
@@ -22,10 +21,12 @@ const satoshi = localFont({
   weight: '300 900',
 })
 
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ['latin'],
+// Self-hosted (OFL) so builds never depend on reaching Google Fonts
+const jetbrainsMono = localFont({
+  src: '../fonts/jetbrains-mono/JetBrainsMono-Variable.woff2',
   variable: '--font-jetbrains-mono',
   display: 'swap',
+  weight: '100 800',
 })
 
 export const metadata: Metadata = {

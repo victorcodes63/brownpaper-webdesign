@@ -166,9 +166,9 @@ export default function Footer() {
           </Link>
 
           <div className="flex flex-col gap-2.5 lg:items-center">
-            <p className="font-mono text-[11px] whitespace-nowrap uppercase tracking-[0.08em] text-paper/55">
+            <p className="font-mono text-[11px] uppercase leading-relaxed tracking-[0.08em] text-paper/55 lg:whitespace-nowrap">
               © {year} {site.legalName}.{' '}
-              <span className="text-paper/80">All rights reserved.</span>
+              <span className="block text-paper/80 lg:inline">All rights reserved.</span>
             </p>
             <a
               href="https://www.raventechgroup.com"

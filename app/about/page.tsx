@@ -103,6 +103,11 @@ function DrivesSection({ children }: { children: React.ReactNode }) {
       raf = 0
       const el = ref.current
       if (!el) return
+      // Phones/tablets: title isn't pinned there, so no fade
+      if (window.innerWidth < 1024) {
+        progress.set(0)
+        return
+      }
       const vh = window.innerHeight
       const top = el.getBoundingClientRect().top
       const p = (vh * 0.15 - top) / (vh * 1.1)
@@ -128,7 +133,7 @@ function DrivesSection({ children }: { children: React.ReactNode }) {
       <div aria-hidden className="pointer-events-none absolute inset-0 z-0">
         <DotField />
       </div>
-      <motion.div style={{ opacity: fade, y: sink }} className="sticky top-[12vh] z-0">
+      <motion.div style={{ opacity: fade, y: sink }} className="relative z-0 lg:sticky lg:top-[12vh]">
         <FitTitle as="h2" tone="text-paper/80">What drives us</FitTitle>
         <div className="mt-12 grid grid-cols-1 gap-8 md:mt-16 lg:grid-cols-2">
           <Reveal>
@@ -141,7 +146,7 @@ function DrivesSection({ children }: { children: React.ReactNode }) {
       </motion.div>
 
       {/* collage scrolls over the pinned title */}
-      <div className="relative z-10 mt-16 lg:mt-[22vh]">{children}</div>
+      <div className="relative z-10 mt-12 lg:mt-[22vh]">{children}</div>
     </section>
   )
 }
@@ -249,7 +254,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── WHITE SHELL (overlaps the heading) ── */}
-      <div className="relative z-10 -mt-[clamp(1rem,2.6vw,2.75rem)] px-2.5 pb-2.5 md:px-3 md:pb-3 lg:px-3.5 lg:pb-3.5">
+      <div className="relative z-10 -mt-1.5 px-2.5 md:-mt-[clamp(1rem,2.6vw,2.75rem)] pb-2.5 md:px-3 md:pb-3 lg:px-3.5 lg:pb-3.5">
         <div className="page-shell">
           {/* How we work */}
           <section className="grid grid-cols-1 gap-2.5 p-2.5 md:p-3 lg:grid-cols-2">
@@ -321,7 +326,7 @@ export default function AboutPage() {
                   From a small print shop to a full-service <span className="text-kraft-fill">studio</span>
                 </WordReveal>
                 <CharReveal className="mt-6 max-w-3xl text-[15px] leading-relaxed text-ink/55 md:text-[17px]">
-                  Four years of turning briefs into finished pieces for brands across the region.
+                  {yearsInBusiness()} years of turning briefs into finished pieces, from one studio in Nairobi.
                 </CharReveal>
               </Reveal>
             </div>
