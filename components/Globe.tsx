@@ -4,9 +4,13 @@ import { useEffect, useRef } from 'react'
 import createGlobe from 'cobe'
 
 const NAIROBI_LNG = 36.8219
-const NAIROBI_LAT = -1.2921
 
-/** Slowly rotating dotted globe. Pauses off-screen. */
+/**
+ * Slowly rotating dotted globe (screen-blended so only the dots show). Pauses off-screen.
+ * Performance: cobe multiplies width/height by devicePixelRatio itself, so we pass CSS
+ * pixels and cap the ratio at 1. The globe sits at 30% opacity, so extra resolution is
+ * invisible but was costing a ~4500px square canvas redrawn every frame.
+ */
 export default function Globe({ className = '' }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -15,8 +19,8 @@ export default function Globe({ className = '' }: { className?: string }) {
     if (!canvas) return
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const dpr = Math.min(window.devicePixelRatio || 1, 2)
-    let size = Math.max(canvas.offsetWidth, 1)
+    const dpr = Math.min(window.devicePixelRatio || 1, 1)
+    let size = canvas.offsetWidth
     // Start with Nairobi facing the viewer
     let phi = 4.7 - (NAIROBI_LNG * Math.PI) / 180
     let visible = true
@@ -24,40 +28,40 @@ export default function Globe({ className = '' }: { className?: string }) {
 
     const globe = createGlobe(canvas, {
       devicePixelRatio: dpr,
-      width: size * dpr,
-      height: size * dpr,
+      width: size,
+      height: size,
       phi,
-      theta: 0.28,
+      theta: 0.35,
       dark: 1,
-      diffuse: 0.85,
-      mapSamples: 160000,
-      mapBrightness: 12,
-      mapBaseBrightness: 0.05,
-      baseColor: [0.75, 0.75, 0.75],
-      markerColor: [0.2, 0.85, 0.75],
-      // Soft limb — bright enough to read the sphere, not a white streak
-      glowColor: [0.35, 0.35, 0.35],
+      diffuse: 1.2,
+      mapSamples: 140000,
+      mapBrightness: 2.4,
+      mapBaseBrightness: 0,
+      baseColor: [0.3, 0.3, 0.3],
+      markerColor: [0, 0, 0],
+      glowColor: [0.09, 0.09, 0.09],
       opacity: 1,
-      markers: [{ location: [NAIROBI_LAT, NAIROBI_LNG], size: 0.08 }],
+      markers: [],
     })
 
-    const tick = () => {
-      if (visible && !reduce) {
-        phi += 0.0012
+    // ~30 fps is plenty for a slow background rotation
+    let last = 0
+    const tick = (now: number) => {
+      if (visible && !reduce && now - last >= 33) {
+        phi += 0.0024
         globe.update({ phi })
+        last = now
       }
       raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
 
-    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting), {
-      rootMargin: '20% 0px',
-    })
+    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting))
     io.observe(canvas)
 
     const ro = new ResizeObserver(() => {
-      size = Math.max(canvas.offsetWidth, 1)
-      globe.update({ width: size * dpr, height: size * dpr })
+      size = canvas.offsetWidth
+      globe.update({ width: size, height: size })
     })
     ro.observe(canvas)
 
