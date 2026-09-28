@@ -4,8 +4,9 @@ import { useEffect, useRef } from 'react'
 import createGlobe from 'cobe'
 
 const NAIROBI_LNG = 36.8219
+const NAIROBI_LAT = -1.2921
 
-/** Slowly rotating dotted globe (screen-blended so only the dots show). Pauses off-screen. */
+/** Slowly rotating dotted globe. Pauses off-screen. */
 export default function Globe({ className = '' }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -14,8 +15,8 @@ export default function Globe({ className = '' }: { className?: string }) {
     if (!canvas) return
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
-    let size = canvas.offsetWidth
+    const dpr = Math.min(window.devicePixelRatio || 1, 2)
+    let size = Math.max(canvas.offsetWidth, 1)
     // Start with Nairobi facing the viewer
     let phi = 4.7 - (NAIROBI_LNG * Math.PI) / 180
     let visible = true
@@ -26,18 +27,18 @@ export default function Globe({ className = '' }: { className?: string }) {
       width: size * dpr,
       height: size * dpr,
       phi,
-      theta: 0.35,
+      theta: 0.28,
       dark: 1,
-      diffuse: 1.2,
-      mapSamples: 140000,
-      mapBrightness: 6,
-      mapBaseBrightness: 0.02,
-      baseColor: [0.55, 0.55, 0.55],
-      markerColor: [0, 0, 0],
-      // Must stay bright enough for mix-blend-screen on chrome (#171717)
-      glowColor: [0.55, 0.55, 0.55],
+      diffuse: 0.85,
+      mapSamples: 160000,
+      mapBrightness: 12,
+      mapBaseBrightness: 0.05,
+      baseColor: [0.75, 0.75, 0.75],
+      markerColor: [0.2, 0.85, 0.75],
+      // Soft limb — bright enough to read the sphere, not a white streak
+      glowColor: [0.35, 0.35, 0.35],
       opacity: 1,
-      markers: [],
+      markers: [{ location: [NAIROBI_LAT, NAIROBI_LNG], size: 0.08 }],
     })
 
     const tick = () => {
@@ -49,11 +50,13 @@ export default function Globe({ className = '' }: { className?: string }) {
     }
     raf = requestAnimationFrame(tick)
 
-    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting))
+    const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting), {
+      rootMargin: '20% 0px',
+    })
     io.observe(canvas)
 
     const ro = new ResizeObserver(() => {
-      size = canvas.offsetWidth
+      size = Math.max(canvas.offsetWidth, 1)
       globe.update({ width: size * dpr, height: size * dpr })
     })
     ro.observe(canvas)

@@ -68,10 +68,10 @@ export default function Footer() {
 
   return (
     <footer className="relative overflow-hidden bg-chrome text-paper">
-      {/* quarter globe — huge sphere centred just past the bottom-right corner */}
+      {/* quarter globe — sphere sits in the lower-right so continents stay in frame */}
       <div
         aria-hidden
-        className="pointer-events-none absolute right-[-75vw] bottom-[-78vw] w-[150vw] opacity-55 [mask-image:linear-gradient(to_bottom,transparent,#000_35%)] lg:right-[-68vw] lg:bottom-[-72vw] lg:w-[140vw]"
+        className="pointer-events-none absolute right-[-28%] bottom-[-42%] w-[min(920px,95vw)] opacity-70 sm:right-[-22%] sm:bottom-[-38%] sm:w-[min(1100px,85vw)] lg:right-[-18%] lg:bottom-[-45%] lg:w-[min(1280px,70vw)]"
       >
         <Globe />
       </div>
