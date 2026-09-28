@@ -244,20 +244,7 @@ export default function Hero() {
           className="hero-kraft-card relative z-10 h-[7.5rem] w-full overflow-hidden rounded-[1.5rem] bg-ink md:h-[8.5rem] md:rounded-[2rem] lg:h-auto lg:min-h-0 lg:rounded-[2.25rem]"
         >
           <HeroMorphImage src="/images/hero/hero3.jpg" alt="Close-up of folded brown kraft paper" />
-          <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-ink/25 via-transparent to-ink/40 lg:from-ink/80 lg:via-ink/20 lg:to-ink/35" />
-
-          {/* The name, literally: ties the kraft texture back to the brand */}
-          <div className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden p-7 lg:block">
-            <p className="mono-label text-paper/70">
-              <span className="text-paper/50">(BP®)</span> The name
-            </p>
-            <p className="text-display mt-4 max-w-[14ch] text-[clamp(1.9rem,7vw,2.75rem)] leading-[0.98] font-bold tracking-[-0.04em] text-paper lg:text-[clamp(1.5rem,2.1vw,2.25rem)]">
-              This is brown paper. It&rsquo;s also our name.
-            </p>
-            <p className="mt-4 max-w-[30ch] text-[14px] leading-relaxed text-paper/70 lg:text-[13px]">
-              Kraft, card and ink are where every job starts.
-            </p>
-          </div>
+          <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-ink/15 via-transparent to-ink/40" />
 
           {/* Clients notch (mobile and tablet: cut into the kraft slab) */}
           <ClientsNotch compact className="flex lg:hidden" />
