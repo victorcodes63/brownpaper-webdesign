@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import { animate, motion, useInView, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { animate, motion, useInView, useMotionValue, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { Children, isValidElement, useEffect, useRef, useState, type ReactNode } from 'react'
+import { useScrollSubscription } from '@/hooks/useScrollSubscription'
 
 export const ease = [0.16, 1, 0.3, 1] as const
 
@@ -239,8 +240,8 @@ export function CharReveal({
 
 /**
  * Wraps a `fill` <Image>: the layer wipes open from the bottom, then the
- * picture settles from a slight zoom and keeps a gentle scroll parallax.
- * Use `clarity` on large hero/service frames to avoid over-softening.
+ * picture settles from a slight zoom. Gentle scroll parallax only on large
+ * desktop clarity frames — dense grids and smaller viewports skip it.
  */
 export function ImageReveal({
   children,
@@ -256,13 +257,15 @@ export function ImageReveal({
   const reduce = useReducedMotion()
   const seen = useInView(ref, { once: true, margin: '-60px' })
   const [onScreenAtLoad, setOnScreenAtLoad] = useState(false)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end start'] })
-  const y = useTransform(scrollYProgress, [0, 1], clarity ? ['-2%', '2%'] : ['-4%', '4%'])
-  const [scrolledIn, setScrolledIn] = useState(false)
-  // Fallback trigger driven by scroll position (not IntersectionObserver).
-  useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    if (!scrolledIn && v > 0.06 && v < 1) setScrolledIn(true)
-  })
+  const [parallaxOk, setParallaxOk] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)')
+    const sync = () => setParallaxOk(mq.matches && clarity)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [clarity])
 
   // Images already on screen when the page loads reveal immediately.
   useEffect(() => {
@@ -273,7 +276,7 @@ export function ImageReveal({
     }
   }, [])
 
-  const show = seen || onScreenAtLoad || scrolledIn
+  const show = seen || onScreenAtLoad
   const insetClass = clarity ? 'absolute -inset-[1.5%]' : 'absolute -inset-[5%]'
   const fromScale = clarity ? 1.06 : 1.25
 
@@ -287,17 +290,50 @@ export function ImageReveal({
         animate={show ? { clipPath: 'inset(0% 0% 0% 0%)' } : undefined}
         transition={{ duration: 1.1, ease }}
       >
-        <motion.div
-          className={insetClass}
-          initial={{ scale: fromScale }}
-          animate={show ? { scale: 1 } : undefined}
-          transition={{ duration: 1.6, ease }}
-          style={{ y }}
-        >
-          {children}
-        </motion.div>
+        {parallaxOk ? (
+          <ImageRevealParallax target={ref} className={insetClass} fromScale={fromScale} show={show}>
+            {children}
+          </ImageRevealParallax>
+        ) : (
+          <motion.div
+            className={insetClass}
+            initial={{ scale: fromScale }}
+            animate={show ? { scale: 1 } : undefined}
+            transition={{ duration: 1.6, ease }}
+          >
+            {children}
+          </motion.div>
+        )}
       </motion.div>
     </div>
+  )
+}
+
+function ImageRevealParallax({
+  target,
+  className,
+  fromScale,
+  show,
+  children,
+}: {
+  target: React.RefObject<HTMLDivElement | null>
+  className: string
+  fromScale: number
+  show: boolean
+  children: ReactNode
+}) {
+  const { scrollYProgress } = useScroll({ target, offset: ['start end', 'end start'] })
+  const y = useTransform(scrollYProgress, [0, 1], ['-2%', '2%'])
+  return (
+    <motion.div
+      className={className}
+      initial={{ scale: fromScale }}
+      animate={show ? { scale: 1 } : undefined}
+      transition={{ duration: 1.6, ease }}
+      style={{ y }}
+    >
+      {children}
+    </motion.div>
   )
 }
 
@@ -342,31 +378,15 @@ export function Marquee({
   const reduce = useReducedMotion()
   const progress = useMotionValue(0)
 
-  useEffect(() => {
-    if (reduce) return
-    let raf = 0
-    const update = () => {
-      raf = 0
-      const el = ref.current
-      if (!el) return
-      const vh = window.innerHeight
-      const r = el.getBoundingClientRect()
-      // 0 as the band enters from the bottom, 1 as it leaves at the top
-      const p = (vh - r.top) / (vh + r.height)
-      progress.set(Math.min(1, Math.max(0, p)))
-    }
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update)
-    }
-    update()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      if (raf) cancelAnimationFrame(raf)
-    }
-  }, [progress, reduce])
+  useScrollSubscription(() => {
+    const el = ref.current
+    if (!el) return
+    const vh = window.innerHeight
+    const r = el.getBoundingClientRect()
+    // 0 as the band enters from the bottom, 1 as it leaves at the top
+    const p = (vh - r.top) / (vh + r.height)
+    progress.set(Math.min(1, Math.max(0, p)))
+  }, !reduce)
 
   const x = useTransform(progress, [0, 1], reverse ? ['-30%', '0%'] : ['0%', '-30%'])
   const row = [...items, ...items]

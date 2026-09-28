@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { motion, useMotionValue, useTransform } from 'motion/react'
 import Navigation from '@/components/Navigation'
 import JsonLd from '@/components/JsonLd'
@@ -11,6 +11,7 @@ import Footer from '@/components/Footer'
 import FitTitle from '@/components/FitTitle'
 import DotField from '@/components/DotField'
 import FAQ from '@/components/FAQ'
+import { useScrollSubscription } from '@/hooks/useScrollSubscription'
 import { SectionLabel, Reveal, PillLink, Marquee, ease, pad, CharReveal, ImageReveal, WordReveal, CountUp } from '@/components/home/ui'
 
 const foundedYear = site.foundedYear
@@ -97,34 +98,19 @@ function DrivesSection({ children }: { children: React.ReactNode }) {
   // 0 when the section top reaches the viewport top, 1 one viewport later.
   // Measured by hand so it stays reliable alongside Lenis smooth scroll.
   const progress = useMotionValue(0)
-  useEffect(() => {
-    let raf = 0
-    const update = () => {
-      raf = 0
-      const el = ref.current
-      if (!el) return
-      // Phones/tablets: title isn't pinned there, so no fade
-      if (window.innerWidth < 1024) {
-        progress.set(0)
-        return
-      }
-      const vh = window.innerHeight
-      const top = el.getBoundingClientRect().top
-      const p = (vh * 0.15 - top) / (vh * 1.1)
-      progress.set(Math.min(1, Math.max(0, p)))
+  useScrollSubscription(() => {
+    const el = ref.current
+    if (!el) return
+    // Phones/tablets: title isn't pinned there, so no fade
+    if (window.innerWidth < 1024) {
+      progress.set(0)
+      return
     }
-    const onScroll = () => {
-      if (!raf) raf = requestAnimationFrame(update)
-    }
-    update()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      if (raf) cancelAnimationFrame(raf)
-    }
-  }, [progress])
+    const vh = window.innerHeight
+    const top = el.getBoundingClientRect().top
+    const p = (vh * 0.15 - top) / (vh * 1.1)
+    progress.set(Math.min(1, Math.max(0, p)))
+  })
   const fade = useTransform(progress, [0, 1], [1, 0.2])
   const sink = useTransform(progress, [0, 1], [0, 40])
 

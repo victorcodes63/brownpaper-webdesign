@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
+import { useLenis } from 'lenis/react'
 import { whatsappLink } from '@/lib/site'
 import { track } from '@/lib/track'
+import { useScrollSubscription } from '@/hooks/useScrollSubscription'
 
 const WaIcon = ({ className = '' }: { className?: string }) => (
   <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
@@ -20,6 +22,8 @@ const KEY = 'bp-wa-dismissed'
  */
 export default function ContactDock() {
   const [show, setShow] = useState(false)
+  const [watchScroll, setWatchScroll] = useState(false)
+  const lenis = useLenis()
 
   useEffect(() => {
     let dismissed = false
@@ -34,16 +38,17 @@ export default function ContactDock() {
       const t = setTimeout(() => setShow(true), 1200)
       return () => clearTimeout(t)
     }
-    const onScroll = () => {
-      if (window.scrollY > window.innerHeight * 0.6) {
-        setShow(true)
-        window.removeEventListener('scroll', onScroll)
-      }
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    onScroll()
-    return () => window.removeEventListener('scroll', onScroll)
+    setWatchScroll(true)
   }, [])
+
+  useScrollSubscription(() => {
+    if (!watchScroll || show) return
+    const y = lenis?.scroll ?? window.scrollY
+    if (y > window.innerHeight * 0.6) {
+      setShow(true)
+      setWatchScroll(false)
+    }
+  }, watchScroll && !show)
 
   const dismiss = () => {
     setShow(false)

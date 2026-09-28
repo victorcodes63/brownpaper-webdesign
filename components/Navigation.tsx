@@ -7,6 +7,7 @@ import { useState, useEffect, useRef, useSyncExternalStore } from 'react'
 import Link from 'next/link'
 import Logo from './Logo'
 import { createPortal } from 'react-dom'
+import { useLenis } from 'lenis/react'
 
 const serviceLinks = [
   { name: 'Brand Identity', href: '/services/brand-identity' },
@@ -83,6 +84,7 @@ export default function Navigation({ variant = 'overlay' }: NavigationProps) {
   const [pastHero, setPastHero] = useState(false)
   const headerRef = useRef<HTMLElement>(null)
   const isInline = variant === 'inline'
+  const lenis = useLenis()
 
   useEffect(() => {
     if (!isInline) return
@@ -100,11 +102,18 @@ export default function Navigation({ variant = 'overlay' }: NavigationProps) {
   }, [isInline, mounted])
 
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : ''
-    return () => {
+    if (menuOpen) {
+      lenis?.stop()
+      document.body.style.overflow = 'hidden'
+    } else {
+      lenis?.start()
       document.body.style.overflow = ''
     }
-  }, [menuOpen])
+    return () => {
+      lenis?.start()
+      document.body.style.overflow = ''
+    }
+  }, [menuOpen, lenis])
 
   useEffect(() => {
     if (!menuOpen) return
