@@ -30,11 +30,12 @@ export default function Globe({ className = '' }: { className?: string }) {
       dark: 1,
       diffuse: 1.2,
       mapSamples: 140000,
-      mapBrightness: 2.4,
-      mapBaseBrightness: 0,
-      baseColor: [0.3, 0.3, 0.3],
+      mapBrightness: 6,
+      mapBaseBrightness: 0.02,
+      baseColor: [0.55, 0.55, 0.55],
       markerColor: [0, 0, 0],
-      glowColor: [0.09, 0.09, 0.09],
+      // Must stay bright enough for mix-blend-screen on chrome (#171717)
+      glowColor: [0.55, 0.55, 0.55],
       opacity: 1,
       markers: [],
     })

@@ -71,7 +71,7 @@ export default function Footer() {
       {/* quarter globe — huge sphere centred just past the bottom-right corner */}
       <div
         aria-hidden
-        className="pointer-events-none absolute right-[-75vw] bottom-[-78vw] w-[150vw] opacity-30 [mask-image:linear-gradient(to_bottom,transparent,#000_35%)] lg:right-[-68vw] lg:bottom-[-72vw] lg:w-[140vw]"
+        className="pointer-events-none absolute right-[-75vw] bottom-[-78vw] w-[150vw] opacity-55 [mask-image:linear-gradient(to_bottom,transparent,#000_35%)] lg:right-[-68vw] lg:bottom-[-72vw] lg:w-[140vw]"
       >
         <Globe />
       </div>
